@@ -1,0 +1,4 @@
+Exercice 3 TD1 CPO B
+
+	// Quel Design Pattern est instancié ?
+	// Le designe pattern instancié est le pattern Polymorphe 
