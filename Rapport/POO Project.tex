@@ -1,0 +1,289 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage[pages=some]{background}
+\usepackage{fancyhdr}
+\usepackage{lscape}
+\pagestyle{fancy}
+
+\backgroundsetup{
+scale=1,
+color=black,
+opacity=1,
+angle=0,
+contents={%
+  \includegraphics[width=\paperwidth,height=\paperheight]{page.jpg}
+  }
+}
+\geometry{includeheadfoot}
+
+
+ \renewcommand{\headrulewidth}{0pt}
+ \fancyhead[L]{IUT d'Orsay \\
+Département Informatique \\
+Resp. du cours : C. Reynaud}
+ \fancyhead[R]{2014/2015 \\
+ Conception Objets Avancée}
+ \fancyfoot[C]{\thepage}
+ \parskip 5mm
+ \parindent 5mm
+
+ \definecolor{Green}{RGB}{20,127,50}
+ \geometry{bottom = 2mm, headheight= 1cm, top=10mm, left=25mm, footskip=1cm, margin=1cm}
+ \fancyheadoffset{1cm}
+\author{Rodolphe \bsc{CARGNELLO}
+\and Kévin \bsc{VINCHON}
+\and Lino \bsc{TULLIEZ}
+\and \hspace{5mm}Swamy \bsc{CANDASSAMY}
+\and Corentin \bsc{FILOCHE}
+\and Steeve \bsc{VINCENT}}
+\title{\textbf{Projet de CPO \\ Tower Awakening}}
+
+
+\begin{document}
+{\fontfamily{cmr}\selectfont
+\maketitle
+\tableofcontents
+\BgThispage
+ \newgeometry{bottom = 14mm, headheight= 4cm, top=5cm, left=20mm, footskip=0.6cm, textwidth=\paperwidth - 4cm}
+\BgThispage
+\section{Introduction}
+	Le Tower Defense est un des différents types de jeux vidéo existants, le concept de ce jeu est un précurseur dans le monde du jeu vidéo. Les tout premiers jeux de Tower Defense ont fait leur apparition dans les années 1990, notamment avec le jeu Age of Empires qui proposait un éditeur de cartes permettant aux joueurs de créer des scénarios fantaisistes.
+L’objectif de ce type de jeu est de défendre une zone, contre des ennemis (Monstre, gobelins, etc…) se déplaçant suivant un itinéraire ou non, en construisant et en améliorant progressivement des tours défensives. Le joueur doit présenter un sens de la stratégie et doit gérer son budget afin de garder sa zone intact. Le joueur gagne après avoir résisté à un certains nombre de vague/d'assaut.
+Le mode de jeu de base est vraiment très simple, en effet il consiste seulement en l’affrontement de deux joueurs. Le gagnant est donc celui qui aura réduit les points de vie de son adversaire à zéro. Notre Tower Defense se jouera sous forme de jeu en ligne, en réseaux.
+
+\section{Cahier des charges}
+\subsection{Description du Jeu}
+
+\textbf{\Large{Règle du jeu :}} \newline \newline
+En début de partie, les deux adversaires, ont un nombre de points de vie donné. Le but du jeu est de détruire tous les points de vie de l’adversaire, Pour réduire la vie de l'adversaire, le joueur doit envoyer un monstre dans le camp adverse dans un point donné et à l'opposé il doit se protéger des monstres adverses en construisant des tours défensives.
+\newline
+\textbf{\underline{Gestion des attaques :}}
+Pour attaquer, le joueur doit aller dans la « Tool Shop » où il y trouvera différents monstres, possédant tous un certain coût. Le monstre qu’il aura acheté/recruté, se retrouvera aléatoirement sur le terrain adverse dans un point d’apparition. \newline
+\underline{Comportement Monstre :}
+Le monstre qui apparaît dans le camp adverse choisit le chemin le plus court entre le point d’apparition et le point d’arrivée tout en évitant les tours, et avance jusqu’au point d’arrivée. \newline
+\clearpage
+\BgThispage
+\noindent \textbf{\underline{Cas particulier Monstre :}}
+Si toutes les tours bloquent le chemin, le monstre rentre dans l’état « fou », il choisit alors le chemin le plus court et adopte un comportement particulier selon la spécificité du monstre (cf bestiaire)\newline
+\textbf{\underline{Gestion de la défense :}}
+Comme pour la partie attaque, on achète les tours dans la «tool shop» puis le joueur peut placer la tour où il le souhaite, sauf dans les points d’apparition, les points d’arrivée, les obstacles, dans les emplacements déjà occupés par une tour.\newline
+\textbf{\underline{Gestion du Budget :}}\newline
+Le joueur débute avec un budget initial, et il possède un revenu régulier durant toute la partie. Cependant il peut aussi augmenter son budget par les « incomes » qu’il reçoit lorsqu’il tue des monstres et détruit les tours du camp adverse.  Le joueur peut détruire volontairement l’une de ses tours, il gagne alors un certain pourcentage en fonction du prix de la tour de base et de son état.
+\newline
+\newline
+\textbf{\Large{Elément du jeu :}}
+
+\begin{itemize}
+\item
+    \textbf{Terrain :}
+
+    Un terrain dispose d'un point d'apparition et leur nombre est variable en fonction du niveau de difficulté. Le maximum de ces points d'apparition est de trois. Chaque joueur possède un terrain et un seul, dont il est propriétaire.\newline
+    Ces terrains peuvent être composés de différents types qui sont les suivants :
+    \begin{itemize}
+    \item[•] Montagne
+    \item[•] Neige
+    \item[•] Terre
+    \item[•] Pluie
+    \item[•] Plaine
+    \item[•] Forêt
+    \item[]
+    \end{itemize}
+
+    En option, l'utilisateur aura plusieurs choix possibles pour jouer.
+    \begin{itemize}
+    \item[•] Afficher ou non le quadrillage
+    \item[•] Choisir la forme des cases qu'auront les cases du plateau, au choix : Carrées / Hexagonales
+    \item[•] Choisir la carte en fonction de la difficulté choisie en début de partie
+    \item[]
+    \end{itemize}
+\item
+    \textbf{Monstre :} \textit{voir pdf ci-dessous}
+\item
+    \textbf{Tour :} \textit{voir pdf ci-dessous}
+\end{itemize}
+\includepdf[landscape]{Nom_Monstre.pdf}
+\includepdf[landscape]{Monstre_aeriens.pdf}
+\includepdf[landscape]{Tours_3.pdf}
+\clearpage
+\BgThispage
+
+\subsection{Action du Joueur}
+Le jeu est joué par deux individus qui représentent donc les joueurs.
+
+\subsection{Lancement du jeu}
+
+\noindent Système : Application Tower Defense\newline
+Acteur primaire :  Joueur\newline
+Objectif : Lancement d'une partie Multijoueur\newline
+Pré-condition : Connexion Ethernet\newline
+Scénario Nominale :
+\begin{enumerate}
+\item Joueur ouvre l’application.
+\item Application propose plusieurs choix entre Solo, Multijoueur, Options, Quitter.
+\item Joueur choisit le mode Multijoueur.
+\item Application propose : création de serveur, rejoindre serveur existant, précédent.
+\item	Joueur choisit création de serveur et définit les modalités de la partie : terrain, temps de jeu, budget initial, etc \dots .
+\item	Application  affiche état du serveur : "attente du 2\up{ème} joueur".
+\item	Joueur commence la partie.
+\end{enumerate}
+Alternative :
+
+\begin{itemize}
+\item[3a.]Joueur choisit mode Solo.
+\item[4.]Application propose : continuer partie existante ou nouvelle partie.
+\item[5.]Joueur crée une nouvelle partie et définit les caractéristiques de la partie, retour
+                   étape 7
+\item[]
+\item[5aa.]Joueur continue partie précédente
+\item[]
+\item[3b.]Joueur choisit mode Options.
+\item[4.]pplication propose : réglages Son, réglages Video, Control, Précédent.
+\item[5.] Joueur fait le réglage et retour étape 2.
+\item[]
+\item[3c.]Joueur choisit de quitter.
+\item[4]Application se ferme.
+\end{itemize}
+Exception :
+	
+\begin{itemize}
+\item[6a.]Echec "création du serveur", retour étape 5.
+\item[7.]Le joueur décide de quitter, à cause d'attente trop longue, retour étape 5
+\end{itemize}
+\clearpage
+\begin{landscape}
+\BgThispage
+\subsection{Déroulement d'une partie multijoueur}
+\includegraphics[height=\paperwidth - \hoffset - 10 cm,width=\paperheight - 10cm]{ProjetCOO15.PNG} \newline
+Le joueur lance la partie multijoueur et s'il trouve un autre joueur avec qui jouer, la partie se lance. Dans une partie, l'interface propose au joueur différents actions : Accèder au magasin, ce qui permet d'acheter une Tour ou des Monstres; capituler, voir son inventaire (Tours et Monstres). Le joueur choisit donc une de ces actions, mais il peut aussi rester passif.
+\clearpage
+\BgThispage
+\large{Lancement d'une partie multijoueur}\newline
+\includegraphics[height=\paperwidth - \hoffset - 8 cm,width=\paperheight - 8cm]{ProjetCOO7.PNG} \newline
+ Le joueur lance la partie à partir du menu principal. Le mode multijoueur neccessite de se connecter à un serveur ou d'en créer un afin de trouver un autre joueur en ligne. Si tout est en règle on lance l'écran, le control et la partie correspondant au mode multijoueur.
+
+\clearpage
+\BgThispage
+\large{Placement d'une tour} \newline
+\includegraphics[height=\paperwidth - \hoffset - 8 cm,width=\paperheight - 8cm]{ProjetCOO9.PNG} \newline
+L'achat d'une tour consiste à aller chercher une référence dans le magasins. Le magasin n'offre que les tours qui sont accessibles financièrement. Une fois qu'une tour est selectionné, le magasin offre une instance de cette tour et diminue le budget de le joueur. Le joueur n'aura plus qu'à placer sa tour
+\clearpage
+\BgThispage
+\large{Achat d'un monstre} \newline
+\includegraphics[height=\paperwidth - \hoffset - 8 cm,width=\paperheight - 8cm]{ProjetCOO10.PNG} \newline
+L'achat d'un monstre est similaire à celui d'une tour. On peut par-contre choisir le nombre de monstre que l'on souhaite acheté. Ensuite le ou les monstres se place aléatoirement dans un des points d'apparition.
+\clearpage
+\BgThispage
+\large{Vendre une tour} \newline
+\includegraphics[height=\paperwidth - \hoffset - 8 cm,width=\paperheight - 8cm]{ProjetCOO11.PNG} \newline
+Le joueur choisit une de ses tours en le selectionnant dans son terrain. Puis il peut choisir de la vendre ce qui implique d'augmenter son budget.
+\clearpage
+\end{landscape}
+\BgThispage
+\section{Analyse et Conception de l’application}
+
+\subsection{Diagrammes de classes}
+\includegraphics[width=\paperwidth - \hoffset - 2 cm, height=\paperheight/2]{ProjetCOO12.PNG} \newline
+Les classes sont divisés en trois packages :
+\begin{itemize}
+\item \textbf{ToolShop} : Ce package réunit les monstres, les tours, et la ToolShop, qui fait l'intermédiaire avec les autres packages.
+\item \textbf{Partie} : Ce package réunit les classes lié à une partie unique et temporaire.
+\item \textbf{Terrain} : Ce package définis ce qu'est un terrain.
+\end{itemize}
+\clearpage
+\BgThispage
+Design pattern utilisé: Création \newline
+$\rightarrow$ pattern Polymorphisme \newline
+$\rightarrow$ pattern Créateur \newline
+$\rightarrow$ pattern Expert \newline
+$\rightarrow$ pattern faible couplage \newline
+
+\large{Package Terrain} \newline
+\includegraphics[width=\paperwidth - \hoffset - 2 cm]{ProjetCOO1.PNG}\newline
+Un terrain se compose de plusieurs cases, dont des cases d'apparition et une case d'arrivée. Une case possède une référence vers la tour qui se trouve à cet emplacement. Si la référence est \textit{null} alors la case est inoccupée.
+\clearpage
+\BgThispage
+\large{Monstre et Tours} \newline
+\includegraphics[width=\paperwidth - \hoffset - 2 cm]{ProjetCOO2.PNG}
+\includegraphics[width=\paperwidth - \hoffset - 2 cm]{ProjetCOO3.PNG}\newline
+Les monstres et les tours possèdent les attributs décrites dans les bestiaires. \newline Les tests de portées diffèrent des spécialités des tours, ils attaquent soit des monstres terriens, soit des monstres aériens.
+\newline
+Le déplacement normal d'un monstre va appeler la recherche de chemin, s'il y en a pas, on appel le déplacement fou qui appel les spécialités du monstre en question.
+\clearpage
+\BgThispage
+\large{Joueur} \newline
+\includegraphics[width=\paperwidth - \hoffset - 2 cm, height=\paperheight/2]{ProjetCOO4.PNG} \newline
+\clearpage
+\BgThispage
+\large{Magasin/ToolShop} \newline
+\includegraphics[width=\paperwidth - \hoffset - 2 cm, height=10cm]{ProjetCOO5.PNG} \newline
+\large{Partie} \newline
+\includegraphics[width=\paperwidth - \hoffset - 2 cm, height=6cm]{ProjetCOO6.PNG} \newline
+On peut régler le rayon des cases à partir d'une partie.
+\clearpage
+\BgThispage
+
+\subsection{Interface du Jeu}
+
+\includegraphics[width=\paperwidth - \hoffset - 2 cm]{ProjetCOO8.PNG}\newline
+Lorsque que le joueur accède à un menu il peut acceder à d'autre menu, nottament le menu précedent. Et le controlleurMenu prend en charge le changement de menu. \newline
+Pour l'interface de jeu, le joueur peut accèder à l'interface du magasin qui lui permet d'acheter des tours et des monstres, il peut voir aussi les informations le concernant, nottament ses points de vie et son budget, enfin il doit voir principalement le terrain.
+\clearpage
+\BgThispage
+\section{Jeux de tests}
+\textbf{\underline{Test de recherche de serveur/client + envoie et réception de \newline données entre serveur/client :}} \newline
+Pour ce test, nous allons dans un premier temps vérifier qu’un client peut trouver le serveur et que ce client peut, une fois le serveur trouvé, s’y connecter. Ensuite, une testerons, une fois la connexion entre le serveur et le client établie, que les deux peuvent correctement communiquer (test d’échange de données entre les deux), et que le serveur fourni bien au client tous les services qu’il est censé fournir.
+
+\textbf{\underline{Calcul du chemin emprunté par le monstre :}} \newline
+Dans le test de calcul du chemin, nous vérification d’abord que le monstre prend bien en compte les obstacles du terrain. Ensuite, qu’il choisit bien le chemin le plus court en fonction des obstacles afin d’arriver au plus tôt à sa destination. Enfin nous vérifierons si le monstre évite les tours adverses et qu’il  entre bien en état de folie lorsqu’il est bloqué par les obstacles du terrain et les tours.
+
+\textbf{\underline{Test du comportement « fou » :}} \newline
+Nous testerons ici que le monstre se met à attaquer les tours adverses lorsqu’il devient fou, et qu’il adopte les caractéristiques lié à son état de folie (dépendant de chaque type de monstre défini dans le bestiaire).
+
+\textbf{\underline{Destruction de monstre/de tour :}} \newline
+Nous vérifierons qu’il y a bien un gain d’argent (income) lors de la destruction d’un monstre ou d’une tour par un adversaire et que ce gain revient au joueur qui a détruit le monstre/la tour.
+
+\textbf{\underline{Test de portée :}} \newline
+Il sera vérifié ici que la tour attaque dans sa zone prédéfinie, ni plus loin, ni dans une zone trop petite. Il sera également vérifié que le monstre attaque à une distance qui lui est propre et définie dans ses caractéristiques : impossible pour un monstre de corps à corps de tirer par exemple.
+
+\clearpage
+\BgThispage
+
+\textbf{\underline{Victoire d’un joueur :}} \newline
+Lors de la victoire d’un joueur, nous testerons que la partie se termine bien, et que la page de récapitulation de la partie s’ouvre, rappelant par exemple le vainqueur, les richesses de chacun des joueurs, le nombre de montre créé… Vérification également que la possibilité de refaire une partie est accessible.
+
+\textbf{\underline{Achat de tour/monstre:}} \newline
+Nous vérifierons ici qu’un joueur peut en effet acheter des tours ou des monstres mais également que le montre/la tour est bien créé et que le prix du montre/tour est bien débité lors de la création. De plus, il sera vérifié que le la somme débité correspond au prix affiché lors de l’achat.
+
+\section{Conclusion}
+Dès le début du projet, la MOA a réparti les différentes étapes de la conception et surtout les différents diagrammes à réaliser entre les différents membres de l’équipe (MOA : swamy) afin que tout le groupe ait une perception de la conception de notre jeu.
+
+Durant la réalisation de la conception, une interaction régulière entre la MOA, la MOE et les assistants a permis de bien cibler chaque détail afin de réaliser les diagrammes le plus précis possible.
+MOE : steeve
+
+Les principales contraintes sont de devoir recueillir suffisamment d’informations sur les besoins, c’est-à-dire faire l’analyse des besoins, c’est pourquoi cette étape dans la réalisation du cahier des charges était la plus contraignante. L’étude de la conception nous a apporté un nouveau regard sur le projet, de discuter des éventuels problèmes et de nous former au travail d’équipe.
+Toute cette phase de conception nous ont permis de bien distinguer les différentes phases de programmation.
+
+\clearpage
+\BgThispage
+
+Dans un premier temps, nous nous intéresserons au moteur du jeu, c’est-à-dire tout ce qui concerne les classes entités décrites dans le diagramme de classe, ainsi que toutes les algorithmes tels que le PathFinding des monstres. Nous devrons donc analyser le terrain de façon à déterminer le chemin le plus court ainsi que les divers obstacles rencontrés comme éventuellement les tours ou bien les décors. Par la suite nous pourrons développer un magasin pour que le joueur puisse acheter des monstres ou des tours. Il s’agit de la ToolShop. Nous devrons aussi spécifier toutes les caractéristiques des monstres et des tours pour déclencher les fonctions correspondantes aux événement voulus. Une fois le moteur de jeu terminé, nous nous occuperons de l’interface graphique et des contrôleurs liés au menu et aux autres interactions que peut effectuer le joueur.
+\clearpage
+\BgThispage
+\begin{landscape}
+\large{Répartition des Tâches : GANT} \newline
+\includegraphics[width=\paperwidth - \hoffset - 2 cm, height=5cm]{GANT1.PNG} \newline
+\includegraphics[width=\paperwidth - \hoffset - 2 cm, height=5cm]{GANT2.PNG} \newline
+\includegraphics[width=\paperwidth - \hoffset - 2 cm, height=5cm]{GANT3.PNG} \newline
+
+\end{landscape}
+\clearpage
+\end{document} 
