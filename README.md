@@ -19,12 +19,24 @@ A compléter (Résumé/description du projet)
  -----------------------------------------
 | System requirement for Tower Awakening  |
  -----------------------------------------
+--Java JDK 7
+--Eclipse
+--Libgdx
+-- Graddle
+
 
 A compléter (package à inclure et toutes autres dépendance pour compiler)
 
  --------------------------------
 | Compilation of Tower Awakening |
  --------------------------------
+--Eclipse : 
+- help --> install new Software
+- links for Graddle : http://dist.springsource.com/snapshot/TOOLS/gradle/nightly for Eclipse > 4.4
+- Eclipse < 4.4 : http://dist.springsource.com/release/TOOLS/gradle
+- modify the directory in local.properties file 
+- use the command line : set ANDROID_HOME=/my_current_way_to/sdk
+- import the projet 
 
 A compléter
 
