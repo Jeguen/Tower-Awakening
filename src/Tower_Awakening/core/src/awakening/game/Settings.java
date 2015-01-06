@@ -38,7 +38,7 @@ public class Settings
 	{
 		soundVolume = 1.0f;
 		musicVolume = 1.0f;
-		fullscreen = true;
+		fullscreen = false;
 		//display = Gdx.graphics.getDisplayModes()[0];
 		size = new Vector2(640,480);
 	}

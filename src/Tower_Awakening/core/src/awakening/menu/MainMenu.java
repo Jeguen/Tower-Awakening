@@ -14,6 +14,7 @@
 
 package awakening.menu;
 
+import awakening.game.PartieSolo;
 import awakening.game.TAGame;
 
 import com.badlogic.gdx.Gdx;
@@ -230,6 +231,8 @@ public class MainMenu implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
+						music.dispose();
+						game.setScreen(new PartieSolo());
 						return false;	
 					}
 				}

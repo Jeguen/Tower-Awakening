@@ -30,14 +30,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  */
 public class Controls implements Screen
 {
-	private Game game;
 	private Stage stage;
 	private Texture backgroundTexture;
 	private Image background;
 
 	public Controls(Game game)
 	{
-		this.game = game;
 		stage = new Stage();
 		backgroundTexture = new Texture(Gdx.files.internal("Background-1.png"));
 		background = new Image(backgroundTexture);
