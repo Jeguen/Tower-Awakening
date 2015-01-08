@@ -15,13 +15,14 @@ import javax.swing.JOptionPane;
 import ta.shape3D.Animator.TemporarilyAnimable;
 import ta.shape3D.Triangle3D;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -31,28 +32,48 @@ public class MeshTA implements TemporarilyAnimable{
 	final private ArrayList<MeshTA> sousMesh = new ArrayList<MeshTA>();
 	private float tX,tY,tZ,rX,rY,rZ,scaleX=1,scaleY=1,scaleZ=1;
 	private float animeTX, animeTY, animeTZ, animeRX, animeRY, animeRZ;
-	private Vector3 axeRX = Vector3.X, axeRY = Vector3.Y, axeRZ = Vector3.Z;
 	Texture image;
+	protected String name="Mesh TA" + nbMesh;
+	static int nbMesh;
+	
+	final public float getX() {
+		return tX;
+	}
+	final public float getY() {
+		return tY;
+	}
+	final public float getZ() {
+		return tZ;
+	}
+	final public float getrX() {
+		return rX;
+	}
+	final public float getrY() {
+		return rY;
+	}
+	final public float getrZ() {
+		return rZ;
+	}
+	final public float getScaleX() {
+		return scaleX;
+	}
+	final public float getScaleY() {
+		return scaleY;
+	}
+	final public float getScaleZ() {
+		return scaleZ;
+	}
 
-	public float getAnimationTX() {
-		return animeTX;
+	public MeshTA()
+	{
+		nbMesh++;
 	}
-	public float getAnimationTY() {
-		return animeTY;
+
+	final public void setName(String name)
+	{
+		this.name = name;
 	}
-	public float getAnimationTZ() {
-		return animeTZ;
-	}
-	public float getAnimationRX() {
-		return animeRX;
-	}
-	public float getAnimationRY() {
-		return animeRY;
-	}
-	public float getAnimationRZ() {
-		return animeRZ;
-	}
-	public Triangle3D addTriangle()
+	final public Triangle3D addTriangle()
 	{
 		Triangle3D t;
 		if(!triangles.isEmpty())
@@ -63,54 +84,59 @@ public class MeshTA implements TemporarilyAnimable{
 		triangles.add(t);
 		return t;
 	}
-	public MeshTA addSousMesh(){
+	final public MeshTA addSousMesh(){
 		MeshTA m = new MeshTA();
 		this.sousMesh.add(m);
+		m.copyFeatures(this);
 		return m;
 	}
-	public void removeSousMesh(MeshTA m)
+	final public void removeSousMesh(MeshTA m)
 	{
 		sousMesh.remove(m);
 	}
-	public MeshTA getSousMesh(int index)
+	final public MeshTA getSousMesh(int index)
 	{
 		return sousMesh.get(index);
 	}
 	
-	public void removeTriangle(Triangle3D t)
+	final public void removeTriangle(Triangle3D t)
 	{
 		triangles.remove(t);
 	}
-	public Triangle3D getTriangle(int index)
+	final public Triangle3D getTriangle(int index)
 	{
 		return triangles.get(index);
 	}
-	public void render(ImmediateModeRenderer20 rendu, Matrix4 projectionMatrix)
+	final public void render(ImmediateModeRenderer20 rendu, Matrix4 projectionMatrix)
 	{
 		projectionMatrix.translate(tX, tY, tZ);
-		projectionMatrix.rotateRad(axeRX, rX);
-		projectionMatrix.rotateRad(axeRY, rY);
-		projectionMatrix.rotateRad(axeRZ, rZ);
+		projectionMatrix.rotateRad(Vector3.X, rX);
+		projectionMatrix.rotateRad(Vector3.Y, rY);
+		projectionMatrix.rotateRad(Vector3.Z, rZ);
 		projectionMatrix.scale(scaleX,scaleY,scaleZ);
+		if(image!=null){
+			Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
+			Gdx.gl20.glBindTexture(image.glTarget, image.getTextureObjectHandle());
+		}
 		rendu.begin(projectionMatrix, GL20.GL_TRIANGLES);
 		for(Triangle3D t : triangles)
 		{
 			t.render(rendu);
 		}
-		
 		rendu.end();
+		Gdx.gl20.glDisable(GL20.GL_TEXTURE_BINDING_2D);
 		for(MeshTA m : sousMesh)
 		{
 			m.render(rendu, projectionMatrix);
 		}
-		projectionMatrix.scale(1, 1, 1);
-		projectionMatrix.rotateRad(axeRX, -rX);
-		projectionMatrix.rotateRad(axeRY, -rY);
-		projectionMatrix.rotateRad(axeRZ, -rZ);
+		projectionMatrix.scale(1/scaleX, 1/scaleY, 1/scaleZ);
+		projectionMatrix.rotateRad(Vector3.X, -rX);
+		projectionMatrix.rotateRad(Vector3.Y, -rY);
+		projectionMatrix.rotateRad(Vector3.Z, -rZ);
 		projectionMatrix.translate(-tX, -tY, -tZ);
 	}
 	
-	public void save(File f)
+	final public void save(File f)
 	{
 		try {
 			DataOutputStream bos = new DataOutputStream(new FileOutputStream(f));
@@ -126,19 +152,30 @@ public class MeshTA implements TemporarilyAnimable{
 			e.printStackTrace();
 		}
 	}
-	public void save(DataOutputStream bos, String filename) throws IOException
+	final public void save(DataOutputStream bos, String filename) throws IOException
 	{
+			bos.writeFloat(tX);
+			bos.writeFloat(tY);
+			bos.writeFloat(tZ);
+			bos.writeFloat(rX);
+			bos.writeFloat(rY);
+			bos.writeFloat(rZ);
+			bos.writeFloat(scaleX);
+			bos.writeFloat(scaleY);
+			bos.writeFloat(scaleZ);
+			bos.writeUTF(name);
 			bos.writeInt(triangles.size());
 			for(Triangle3D t : triangles)
 			{
 				t.save(bos, filename);
 			}
 			if(image != null){
-				String s = filename.split(".mta")[0] + "Image" + hashCode() +".png";
+				String s = filename.split(".mta")[0] + "Image" + name +".png";
+				FileHandle f = new FileHandle(s);
 				bos.writeUTF(s);
 				TextureData td = image.getTextureData();
 				td.prepare();
-				PixmapIO.writePNG(new FileHandle(s), image.getTextureData().consumePixmap());
+				PixmapIO.writePNG(f, image.getTextureData().consumePixmap());
 			}
 			else
 				bos.writeUTF(new String());
@@ -148,16 +185,16 @@ public class MeshTA implements TemporarilyAnimable{
 				m.save(bos,filename);
 			}
 	}
-	public LinkedList<Triangle3D> getTriangles()
+	final public LinkedList<Triangle3D> getTriangles()
 	{
 		return triangles;
 	}
-	public ArrayList<MeshTA> getSousMesh()
+	final public ArrayList<MeshTA> getSousMesh()
 	{
 		return sousMesh;
 	}
 	
-	public static MeshTA load(File f)
+	final public static MeshTA load(File f)
 	{
 		if(f.exists() && f.isFile())
 		{
@@ -167,7 +204,8 @@ public class MeshTA implements TemporarilyAnimable{
 					DataInputStream dis = new DataInputStream(new FileInputStream(f));
 					if(dis.readUTF().equals("MeshTowerAwakening"))
 					{
-						MeshTA retour = MeshTA.load(dis);
+						MeshTA retour = MeshTA.load(f,dis);
+						dis.close();
 						return retour;
 					}
 					dis.close();
@@ -184,24 +222,36 @@ public class MeshTA implements TemporarilyAnimable{
 				JOptionPane.ERROR_MESSAGE);
 		return null;
 	}
-	public static MeshTA load(DataInputStream dis) throws IOException
+	final private static MeshTA load(File f, DataInputStream dis) throws IOException
 	{
 		MeshTA retour = new MeshTA();
+		retour.tX = dis.readFloat();
+		retour.tY = dis.readFloat();
+		retour.tZ = dis.readFloat();
+		retour.rX = dis.readFloat();
+		retour.rY = dis.readFloat();
+		retour.rZ = dis.readFloat();
+		retour.scaleX = dis.readFloat();
+		retour.scaleY = dis.readFloat();
+		retour.scaleZ = dis.readFloat();
+		retour.name = dis.readUTF();
 		int nbTriangles = dis.readInt();
-		System.out.println(nbTriangles);
 		for(int cpt=0;cpt<nbTriangles;cpt++)
 		{
-			System.out.println(cpt);
 			retour.triangles.add(Triangle3D.load(dis));
 		}
 		String imageFile = dis.readUTF();
-		if(!imageFile.isEmpty()){
-			retour.setTexture(imageFile);
+		if(!imageFile.equals("")){
+			if(f.getParent()!=null)
+				retour.setTexture(f.getParent() +"\\"+ imageFile);
+			else
+				retour.setTexture(imageFile);
+
 		}
 		int nbMesh = dis.readInt();
 		for(int cpt=0;cpt<nbMesh;cpt++)
 		{
-			retour.sousMesh.add(MeshTA.load(dis));
+			retour.sousMesh.add(MeshTA.load(f,dis));
 		}
 		return retour;
 	}
@@ -213,10 +263,6 @@ public class MeshTA implements TemporarilyAnimable{
 		tX+=x;
 		tY+=y;
 		tZ+=z;
-		for(MeshTA m : sousMesh)
-		{
-			m.translate(x, y, z);
-		}
 	}
 	
 	public void rotate(float x, float y, float z)
@@ -224,10 +270,6 @@ public class MeshTA implements TemporarilyAnimable{
 		rX+=x;
 		rY+=y;
 		rZ+=z;
-		for(MeshTA m : sousMesh)
-		{
-			m.rotate(x, y, z);
-		}
 	}
 	
 	public void homethetie(float taux)
@@ -236,15 +278,15 @@ public class MeshTA implements TemporarilyAnimable{
 		scaleY*=taux;
 		scaleZ*=taux;
 	}
-	public void homethetieX(float taux)
+	final public void homethetieX(float taux)
 	{
 		scaleX*=taux;
 	}
-	public void homethetieY(float taux)
+	final public void homethetieY(float taux)
 	{
 		scaleY*=taux;
 	}
-	public void homethetieZ(float taux)
+	final public void homethetieZ(float taux)
 	{
 		scaleZ*=taux;
 	}
@@ -257,13 +299,15 @@ public class MeshTA implements TemporarilyAnimable{
 			Triangle3D triangle = addTriangle();
 			triangle.copy(t);
 		}
+		image = m.image;
 		for(MeshTA sousM : m.sousMesh)
 		{
 			MeshTA mesh = addSousMesh();
 			mesh.copy(sousM);
+			mesh.copyFeatures(sousM);
 		}
 	}
-	public void copyFeatures(MeshTA m)
+	final public void copyFeatures(MeshTA m)
 	{
 		rX=m.rX;
 		rY=m.rY;
@@ -274,9 +318,8 @@ public class MeshTA implements TemporarilyAnimable{
 		tX=m.tX;
 		tY=m.tY;
 		tZ=m.tZ;
-
 	}
-	public void removeAll()
+	final public void removeAll()
 	{
 		triangles.clear();
 		sousMesh.clear();
@@ -284,7 +327,7 @@ public class MeshTA implements TemporarilyAnimable{
 	
 	public String toString()
 	{
-		return "Mesh TA " + hashCode(); 
+		return name; 
 	}
 	@Override
 	public void anime() {
@@ -295,43 +338,30 @@ public class MeshTA implements TemporarilyAnimable{
 			m.anime();
 		}
 	}
-	public void animationTX(float tx)
+	final public void animationTX(float tx)
 	{
 		this.animeTX=tx;
 	}
-	public void animationTY(float ty)
+	final public void animationTY(float ty)
 	{
 		this.animeTY=ty;
 	}
-	public void animationTZ(float tz)
+	final public void animationTZ(float tz)
 	{
 		this.animeTZ=tz;
 	}
-	public void animationRX(float rx)
+	final public void animationRX(float rx)
 	{
 		this.animeRX=rx;
 	}
-	public void animationRY(float ry)
+	final public void animationRY(float ry)
 	{
 		this.animeRY=ry;
 
 	}
-	public void animationRZ(float rz)
+	final public void animationRZ(float rz)
 	{
 		this.animeRZ=rz;
-	}
-	
-	public void setAxeRotationX(Vector3 axe)
-	{
-		this.axeRX=axe;
-	}
-	public void setAxeRotationY(Vector3 axe)
-	{
-		this.axeRY=axe;
-	}
-	public void setAxeRotationZ(Vector3 axe)
-	{
-		this.axeRZ=axe;
 	}
 	
 	@Override
@@ -339,7 +369,7 @@ public class MeshTA implements TemporarilyAnimable{
 		return false;
 	}
 	
-	public void changeAllColor(Color c)
+	final public void changeAllColor(Color c)
 	{
 		for(Triangle3D t : triangles)
 		{
@@ -351,11 +381,45 @@ public class MeshTA implements TemporarilyAnimable{
 		}
 	}
 	
-	public void setTexture(String imagePath)
+	final public void setTexture(String imagePath)
 	{
 		image = new Texture(imagePath);
 		image.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
-		for(Triangle3D t : triangles) t.setTexture(image);
+	}
+	final public float getAnimationTX() {
+		return animeTX;
+	}
+	final public float getAnimationTY() {
+		return animeTY;
+	}
+	final public float getAnimationTZ() {
+		return animeTZ;
+	}
+	final public float getAnimationRX() {
+		return animeRX;
+	}
+	final public float getAnimationRY() {
+		return animeRY;
+	}
+	final public float getAnimationRZ() {
+		return animeRZ;
 	}
 
+	@Override
+	public void actionWhenInterruption() {
+	}
+	
+	final public void setAbsoluteFeature(float x, float y, float z, float rx, float rz, float ry,
+			float sx, float sy, float sz)
+	{
+		rX=rx;
+		rY=ry;
+		rZ=rz;
+		scaleX=sx;
+		scaleY=sy;
+		scaleZ=sz;
+		tX=x;
+		tY=y;
+		tZ=z;
+	}
 }

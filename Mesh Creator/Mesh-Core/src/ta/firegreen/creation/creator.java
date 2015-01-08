@@ -80,10 +80,10 @@ public final class creator extends ApplicationAdapter {
 		for(Triangle3D t : triangles)
 		{
 			Triangle3D newT = trianglesSelected.addTriangle();
+			newT.copy(t);
 			newT.setColor1(new Color(0.5f,0.5f,0.6f,0.4f));
 			newT.setColor2(new Color(0.5f,0.5f,0.6f,0.4f));
 			newT.setColor3(new Color(0.5f,0.5f,0.6f,0.4f));
-			newT.copy(t);
 		}
 	}
 	public void setSelectedTriangles(Triangle3D[] triangles)
@@ -93,10 +93,10 @@ public final class creator extends ApplicationAdapter {
 		for(Triangle3D t : triangles)
 		{
 			Triangle3D newT = trianglesSelected.addTriangle();
+			newT.copy(t);
 			newT.setColor1(new Color(0.5f,0.5f,0.6f,0.1f));
 			newT.setColor2(new Color(0.5f,0.5f,0.6f,0.1f));
 			newT.setColor3(new Color(0.5f,0.5f,0.6f,0.1f));
-			newT.copy(t);
 		}
 	}
 	public void unsetSelectedTriangle()
@@ -155,10 +155,10 @@ public final class creator extends ApplicationAdapter {
 		shape.setColor(Color.BLUE);
 		shape.line(new Vector3(0,0,-10), new Vector3(0,0,10));
 		shape.end();
-		cam.translate(0, 0, 0.05f);
+		cam.translate(0.05f, 0.05f, 0.05f);
 		cam.update();
 		trianglesSelected.render(rendu, cam.combined);
-		cam.translate(0, 0, -0.1f);
+		cam.translate(-0.1f, -0.1f, -0.1f);
 		cam.update();
 		trianglesSelected.render(rendu, cam.combined);
 		try {

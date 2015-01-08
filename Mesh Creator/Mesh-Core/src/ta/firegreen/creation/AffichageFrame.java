@@ -82,7 +82,7 @@ public final class AffichageFrame extends JInternalFrame {
 			public void stateChanged(ChangeEvent arg0) {
 				double d = distance(mainFrame.c.posX,mainFrame.c.posZ);
 				if(d>0){
-					double angle = Math.atan(mainFrame.c.posZ/mainFrame.c.posX);
+					double angle = Math.acos(mainFrame.c.posX/d);
 					angle += 0.1f * Math.signum(slideRotY.getValue()-rotY);
 					mainFrame.c.posX = (float) (Math.cos(angle)*d);
 					mainFrame.c.posZ = (float) (Math.sin(angle)*d);

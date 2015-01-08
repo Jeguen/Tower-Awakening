@@ -8,7 +8,6 @@ import ta.shape3D.Point.Point2D;
 import ta.shape3D.Point.Point3D;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 
@@ -81,9 +80,7 @@ public class Triangle3D {
 	}
 
 	public void render(ImmediateModeRenderer20 rendu){
-		if(image!=null)
-		{
-		image.bind(GL20.GL_TEXTURE_2D);
+		//if(image!=null) image.bind(GL20.GL_TEXTURE_2D);
 		rendu.texCoord(pointsTexture[0].x, pointsTexture[0].y);
 		rendu.color(couleurs[0]);
 		rendu.vertex(points[0].x, points[0].y, points[0].z);
@@ -93,16 +90,6 @@ public class Triangle3D {
 		rendu.texCoord(pointsTexture[2].x, pointsTexture[2].y);
 		rendu.color(couleurs[2]);
 		rendu.vertex(points[2].x, points[2].y, points[2].z);
-		}
-		else
-		{
-		rendu.color(couleurs[0]);
-		rendu.vertex(points[0].x, points[0].y, points[0].z);
-		rendu.color(couleurs[1]);
-		rendu.vertex(points[1].x, points[1].y, points[1].z);
-		rendu.color(couleurs[2]);
-		rendu.vertex(points[2].x, points[2].y, points[2].z);
-		}
 	}
 	
 	public void save(DataOutputStream bos, String fileName)
@@ -122,7 +109,10 @@ public class Triangle3D {
 			}
 			for(Color c : couleurs)
 			{
-				bos.writeInt(c.toIntBits());
+				bos.writeByte((int)(c.a*255));
+				bos.writeByte((int)(c.r*255));
+				bos.writeByte((int)(c.g*255));
+				bos.writeByte((int)(c.b*255));
 			}
 		} catch (IOException e) {
 		// TODO Auto-generated catch block
@@ -147,13 +137,12 @@ public class Triangle3D {
 			}
 			for(int cpt=0;cpt<3;cpt++)
 			{
-				byte a = dis.readByte();
-				byte r = dis.readByte();
-				byte g = dis.readByte();
-				byte b = dis.readByte();	
-				retour.couleurs[cpt]= new Color(Color.toIntBits(r, g, b, a));
+				int a = dis.readUnsignedByte();
+				int r = dis.readUnsignedByte();
+				int g = dis.readUnsignedByte();
+				int b = dis.readUnsignedByte();
+				retour.couleurs[cpt]= new Color(Color.toIntBits(a,b,g,r));
 			}
-			System.out.println(retour);
 		} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -205,16 +194,15 @@ public class Triangle3D {
 		this.getPoint3().x = t.getPoint3().x;
 		this.getPoint3().y = t.getPoint3().y;
 		this.getPoint3().z = t.getPoint3().z;
-		if(image!=null)
-		{
-			this.image = new Texture(t.image.getTextureData());
-			this.getPointTexture1().x = t.getPointTexture1().x;
-			this.getPointTexture1().y = t.getPointTexture1().y;
-			this.getPointTexture2().x = t.getPointTexture2().x;
-			this.getPointTexture2().y = t.getPointTexture2().y;
-			this.getPointTexture3().x = t.getPointTexture3().x;
-			this.getPointTexture3().y = t.getPointTexture3().y;
-		}
+		this.getPointTexture1().x = t.getPointTexture1().x;
+		this.getPointTexture1().y = t.getPointTexture1().y;
+		this.getPointTexture2().x = t.getPointTexture2().x;
+		this.getPointTexture2().y = t.getPointTexture2().y;
+		this.getPointTexture3().x = t.getPointTexture3().x;
+		this.getPointTexture3().y = t.getPointTexture3().y;
+		this.couleurs[0] = t.couleurs[0];
+		this.couleurs[1] = t.couleurs[1];
+		this.couleurs[2] = t.couleurs[2];
 	}
 	
 	public void changeAllColor(Color c)

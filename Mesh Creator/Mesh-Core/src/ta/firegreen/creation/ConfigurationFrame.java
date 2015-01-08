@@ -197,15 +197,72 @@ public class ConfigurationFrame extends JFrame {
 				
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
-					cf.c.mesh.homethetie((1+Math.signum(hometethie.getValue()-h)*0.2f));
+					int[] index = cf.toolConfig.tableTriangle.getSelectedRows();
+					if(index.length==0)
+					{
+						cf.c.mesh.homethetie((1+Math.signum(hometethie.getValue()-h)*0.2f));
+					}
+					else
+					{
+						for(int i : index)
+						{
+							Object o = cf.toolConfig.tableTriangle.getModel().getValueAt(i, 0);
+							if(o.getClass().equals(Triangle3D.class))
+							{
+								
+								Triangle3D t = ((Triangle3D)o);
+								t.getPoint1().x *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+								t.getPoint2().x *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+								t.getPoint3().x *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+								t.getPoint1().y *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+								t.getPoint2().y *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+								t.getPoint3().y *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+								t.getPoint1().z *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+								t.getPoint2().z *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+								t.getPoint3().z *= (1+Math.signum(hometethie.getValue()-h)*0.2f);
+
+							}
+							else
+							{
+								((MeshTA)o).homethetie((1+Math.signum(hometethie.getValue()-h)*0.2f));
+							}
+							cf.toolConfig.tableTriangle.repaint();
+						}
+					}
 					h= hometethie.getValue();
+					
 				}
 			});
 			hometethieX.addChangeListener(new ChangeListener() {
 				
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
-					cf.c.mesh.homethetieX((1+Math.signum(hometethieX.getValue()-hX)*0.2f));
+					int[] index = cf.toolConfig.tableTriangle.getSelectedRows();
+					if(index.length==0)
+					{
+						cf.c.mesh.homethetieX((1+Math.signum(hometethieX.getValue()-hX)*0.2f));
+					}
+					else
+					{
+						for(int i : index)
+						{
+							Object o = cf.toolConfig.tableTriangle.getModel().getValueAt(i, 0);
+							if(o.getClass().equals(Triangle3D.class))
+							{
+								
+								Triangle3D t = ((Triangle3D)o);
+								t.getPoint1().x *= (1+Math.signum(hometethieX.getValue()-hX)*0.2f);
+								t.getPoint2().x *= (1+Math.signum(hometethieX.getValue()-hX)*0.2f);
+								t.getPoint3().x *= (1+Math.signum(hometethieX.getValue()-hX)*0.2f);
+
+							}
+							else
+							{
+								((MeshTA)o).homethetieX((1+Math.signum(hometethieX.getValue()-hX)*0.2f));
+							}
+							cf.toolConfig.tableTriangle.repaint();
+						}
+					}
 					hX= hometethieX.getValue();
 				}
 			});
@@ -213,7 +270,32 @@ public class ConfigurationFrame extends JFrame {
 				
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
-					cf.c.mesh.homethetieY((1+Math.signum(hometethieY.getValue()-hY)*0.2f));
+					int[] index = cf.toolConfig.tableTriangle.getSelectedRows();
+					if(index.length==0)
+					{
+						cf.c.mesh.homethetieY((1+Math.signum(hometethieY.getValue()-hY)*0.2f));
+					}
+					else
+					{
+						for(int i : index)
+						{
+							Object o = cf.toolConfig.tableTriangle.getModel().getValueAt(i, 0);
+							if(o.getClass().equals(Triangle3D.class))
+							{
+								
+								Triangle3D t = ((Triangle3D)o);
+								t.getPoint1().y *= (1+Math.signum(hometethieY.getValue()-hY)*0.2f);
+								t.getPoint2().y *= (1+Math.signum(hometethieY.getValue()-hY)*0.2f);
+								t.getPoint3().y *= (1+Math.signum(hometethieY.getValue()-hY)*0.2f);
+
+							}
+							else
+							{
+								((MeshTA)o).homethetieY((1+Math.signum(hometethieY.getValue()-hY)*0.2f));
+							}
+							cf.toolConfig.tableTriangle.repaint();
+						}
+					}				
 					hY= hometethieY.getValue();
 				}
 			});
@@ -221,7 +303,32 @@ public class ConfigurationFrame extends JFrame {
 				
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
-					cf.c.mesh.homethetieZ((1+Math.signum(hometethieZ.getValue()-hZ)*0.2f));
+					int[] index = cf.toolConfig.tableTriangle.getSelectedRows();
+					if(index.length==0)
+					{
+						cf.c.mesh.homethetieZ((1+Math.signum(hometethieZ.getValue()-hZ)*0.2f));
+					}
+					else
+					{
+						for(int i : index)
+						{
+							Object o = cf.toolConfig.tableTriangle.getModel().getValueAt(i, 0);
+							if(o.getClass().equals(Triangle3D.class))
+							{
+								
+								Triangle3D t = ((Triangle3D)o);
+								t.getPoint1().z *= (1+Math.signum(hometethieZ.getValue()-hZ)*0.2f);
+								t.getPoint2().z *= (1+Math.signum(hometethieZ.getValue()-hZ)*0.2f);
+								t.getPoint3().z *= (1+Math.signum(hometethieZ.getValue()-hZ)*0.2f);
+
+							}
+							else
+							{
+								((MeshTA)o).homethetieZ((1+Math.signum(hometethieZ.getValue()-hZ)*0.2f));
+							}
+							cf.toolConfig.tableTriangle.repaint();
+						}
+					}			
 					hZ= hometethieZ.getValue();
 				}
 			});
@@ -343,6 +450,7 @@ public class ConfigurationFrame extends JFrame {
 	    });
 		final JMenuBar menu = new JMenuBar();
 		final JMenu fichier = new JMenu("Fichier");
+		final JMenuItem setName = new JMenuItem("Set name...");
 		final JMenuItem saveImg = new JMenuItem("Save as image...");
 		final JMenuItem saveMesh = new JMenuItem("Save as MeshTA...");
 		final JMenuItem addMesh = new JMenuItem("Add MeshTA...");
@@ -354,6 +462,7 @@ public class ConfigurationFrame extends JFrame {
 		final JMenuItem transform = new JMenuItem("Transformation...");
 		final JMenuItem setColor = new JMenuItem("Change Color....");
 		final JMenuItem setTexture = new JMenuItem("Set Texture...");
+		final JMenuItem reset = new JMenuItem("Reset Features");
 		final JMenuItem copy = new JMenuItem("Copy");
 		final JMenuItem paste = new JMenuItem("Paste");
 		final JMenu animation = new JMenu("Animation");
@@ -386,6 +495,9 @@ public class ConfigurationFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				c.unsetSelectedTriangle();
+				c.posX = c.posY = 0; c.posZ = 10;
+				c.cibleX = c.cibleY = c.cibleZ = 0;
 				while(!c.toolFrameQueue.isEmpty())
 				{
 					c.toolFrameQueue.pop().dispose();
@@ -403,12 +515,13 @@ public class ConfigurationFrame extends JFrame {
 				if(mtaDialog.showOpenDialog(moi) == JFileChooser.APPROVE_OPTION){
 					c.fileMTA=mtaDialog.getSelectedFile();
 					try {
-						Thread.sleep(40);
+						Thread.sleep(250);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					if(c.nouveau!=null) new ToolsFrame(moi,c.nouveau);
+					System.out.println(c.nouveau);
 					c.nouveau=null;
 				}
 			}
@@ -423,10 +536,10 @@ public class ConfigurationFrame extends JFrame {
 				int[] index = toolConfig.tableTriangle.getSelectedRows();
 				if(index.length>0)
 				{
-					MeshTA m = new MeshTA();
+					MeshTA m = c.mesh.addSousMesh();
 					for(int i=index.length-1;i>=0;i--)
 					{
-							Object o = toolConfig.tableTriangle.getModel().getValueAt(i, 0);
+							Object o = toolConfig.tableTriangle.getModel().getValueAt(index[i], 0);
 							if(o.getClass().equals(Triangle3D.class))
 							{
 								
@@ -441,7 +554,7 @@ public class ConfigurationFrame extends JFrame {
 								sousM.copy((MeshTA)o);
 								c.mesh.removeSousMesh((MeshTA)o);
 							}
-							((DefaultTableModel)toolConfig.tableTriangle.getModel()).removeRow(i);
+							((DefaultTableModel)toolConfig.tableTriangle.getModel()).removeRow(index[i]);
 
 					}
 					((DefaultTableModel)toolConfig.tableTriangle.getModel()).addRow(new Object[]{m});
@@ -609,6 +722,38 @@ public class ConfigurationFrame extends JFrame {
 				toolConfig.tableTriangle.repaint();
 			}
 		});
+		
+		setName.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				final JInternalFrame edit = new JInternalFrame("Nom Mesh");
+				edit.setBounds(100,50,200,70);
+				moi.getContentPane().add(edit);
+				final JTextField editTxt = new JTextField(toolConfig.mesh.toString());
+				final JButton btnValider = new JButton("Valider");
+				btnValider.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						toolConfig.mesh.setName(editTxt.getText());
+						toolConfig.setName(toolConfig.mesh.toString());
+						edit.dispose();
+					}
+					
+				});
+				edit.getContentPane().add(btnValider,BorderLayout.EAST);
+				edit.getContentPane().add(editTxt,BorderLayout.CENTER);
+				edit.setVisible(true);
+			}
+		});
+		reset.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toolConfig.mesh.setAbsoluteFeature(0, 0, 0, 0, 0, 0, 1, 1, 1);
+			}
+		});
 		}
 		edition.add(transform);
 		edition.add(deselectionner);
@@ -617,6 +762,8 @@ public class ConfigurationFrame extends JFrame {
 		edition.add(setTexture);
 		edition.add(copy);
 		edition.add(paste);
+		edition.add(reset);
+		fichier.add(setName);
 		fichier.add(saveImg);
 		fichier.add(saveMesh);
 		fichier.add(reinit);

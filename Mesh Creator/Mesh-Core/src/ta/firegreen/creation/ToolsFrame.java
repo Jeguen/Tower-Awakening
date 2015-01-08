@@ -117,12 +117,12 @@ public final class ToolsFrame extends JInternalFrame {
 		final JTextField x3 = new JTextField();
 		final JTextField y3 = new JTextField();
 		final JTextField z3 = new JTextField();
-		final JSlider xT1 =  new JSlider(JSlider.HORIZONTAL,0,10,0);
-		final JSlider yT1 =  new JSlider(JSlider.HORIZONTAL,0,10,0);
-		final JSlider xT2 =  new JSlider(JSlider.HORIZONTAL,0,10,10);
-		final JSlider yT2 =  new JSlider(JSlider.HORIZONTAL,0,10,0);
-		final JSlider xT3 =  new JSlider(JSlider.HORIZONTAL,0,10,0);
-		final JSlider yT3 =  new JSlider(JSlider.HORIZONTAL,0,10,10);
+		final JSlider xT1 =  new JSlider(JSlider.HORIZONTAL,0,20,0);
+		final JSlider yT1 =  new JSlider(JSlider.HORIZONTAL,0,20,0);
+		final JSlider xT2 =  new JSlider(JSlider.HORIZONTAL,0,20,10);
+		final JSlider yT2 =  new JSlider(JSlider.HORIZONTAL,0,20,0);
+		final JSlider xT3 =  new JSlider(JSlider.HORIZONTAL,0,20,0);
+		final JSlider yT3 =  new JSlider(JSlider.HORIZONTAL,0,20,10);
 		final ColorConfiguration c1;
 		final ColorConfiguration c2;
 		final ColorConfiguration c3;
@@ -133,7 +133,9 @@ public final class ToolsFrame extends JInternalFrame {
 			public void removeUpdate(DocumentEvent e) {}
 			
 			@Override
-			public void changedUpdate(DocumentEvent e) {}
+			public void changedUpdate(DocumentEvent e) {
+				insertUpdate(e);
+			}
 		}
 		
 		public EditeTriangleFrame(final ToolsFrame tf)
@@ -384,7 +386,6 @@ public final class ToolsFrame extends JInternalFrame {
 				}
 			});
 			c3.setColor(new Color(t.getColor3().r,t.getColor3().g,t.getColor3().b,t.getColor3().a));
-			xT1.setValue((int) (t.getPointTexture1().x*10));
 			if(xT1.getChangeListeners().length>0)
 				xT1.removeChangeListener(xT1.getChangeListeners()[0]);
 			xT1.addChangeListener(new ChangeListener() {
@@ -394,7 +395,7 @@ public final class ToolsFrame extends JInternalFrame {
 					t.getPointTexture1().x = xT1.getValue()/10f;
 				}
 			});
-			yT1.setValue((int) (t.getPointTexture1().y*10));
+			xT1.setValue((int) (t.getPointTexture1().x*10));
 			if(yT1.getChangeListeners().length>0)
 				yT1.removeChangeListener(yT1.getChangeListeners()[0]);
 			yT1.addChangeListener(new ChangeListener() {
@@ -404,7 +405,7 @@ public final class ToolsFrame extends JInternalFrame {
 					t.getPointTexture1().y = yT1.getValue()/10f;
 				}
 			});
-			xT2.setValue((int) (t.getPointTexture2().x*10));
+			yT1.setValue((int) (t.getPointTexture1().y*10));
 			if(xT2.getChangeListeners().length>0)
 				xT2.removeChangeListener(xT2.getChangeListeners()[0]);
 			xT2.addChangeListener(new ChangeListener() {
@@ -414,7 +415,7 @@ public final class ToolsFrame extends JInternalFrame {
 					t.getPointTexture2().x = xT2.getValue()/10f;
 				}
 			});
-			yT2.setValue((int) (t.getPointTexture2().y*10));
+			xT2.setValue((int) (t.getPointTexture2().x*10));
 			if(yT2.getChangeListeners().length>0)
 				yT2.removeChangeListener(yT2.getChangeListeners()[0]);
 			yT2.addChangeListener(new ChangeListener() {
@@ -424,7 +425,7 @@ public final class ToolsFrame extends JInternalFrame {
 					t.getPointTexture2().y = yT2.getValue()/10f;
 				}
 			});
-			xT3.setValue((int) (t.getPointTexture3().x*10));
+			yT2.setValue((int) (t.getPointTexture2().y*10));
 			if(xT3.getChangeListeners().length>0)
 				xT3.removeChangeListener(xT3.getChangeListeners()[0]);
 			xT3.addChangeListener(new ChangeListener() {
@@ -434,7 +435,7 @@ public final class ToolsFrame extends JInternalFrame {
 					t.getPointTexture3().x = xT3.getValue()/10f;
 				}
 			});
-			yT3.setValue((int) (t.getPointTexture3().y*10));
+			xT3.setValue((int) (t.getPointTexture3().x*10));
 			if(yT3.getChangeListeners().length>0)
 				yT3.removeChangeListener(yT3.getChangeListeners()[0]);
 			yT3.addChangeListener(new ChangeListener() {
@@ -444,7 +445,7 @@ public final class ToolsFrame extends JInternalFrame {
 					t.getPointTexture3().y = yT3.getValue()/10f;
 				}
 			});
-
+			yT3.setValue((int) (t.getPointTexture3().y*10));
 			this.repaint();
 		}
 	}
@@ -496,22 +497,31 @@ public final class ToolsFrame extends JInternalFrame {
 				((DefaultTableModel)tableTriangle.getModel()).addRow(new Object[]{t});
 			}
 		});
-		final JButton btnSupprimer = new JButton("Supprimer Triangle");
+		final JButton btnSupprimer = new JButton("Supprimer");
 		btnSupprimer.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(tableTriangle.getSelectedRow()>=0)
+				int[] index = tableTriangle.getSelectedRows();
+				if(index.length>0)
 				{
-					Triangle3D t =(Triangle3D) tableTriangle.getModel().
-							getValueAt(tableTriangle.getSelectedRow(), 0);
-					mesh.removeTriangle(t);
-					((DefaultTableModel)tableTriangle.getModel()).removeRow(tableTriangle.getSelectedRow());
+					for(int i=index.length-1;i>=0;i--)
+					{
+							Object o = tableTriangle.getModel().getValueAt(index[i], 0);
+							if(o.getClass().equals(Triangle3D.class))
+							{
+								
+								mesh.removeTriangle((Triangle3D)o);
+							
+							}
+							else
+							{
+								mesh.removeSousMesh((MeshTA)o);
+							}
+							((DefaultTableModel)tableTriangle.getModel()).removeRow(index[i]);
+					}
 					tableTriangle.repaint();
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null,"Selectionnez un triangle plz");
+
 				}
 			}
 		});

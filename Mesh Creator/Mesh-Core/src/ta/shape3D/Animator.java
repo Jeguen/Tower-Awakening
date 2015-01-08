@@ -1,7 +1,7 @@
 package ta.shape3D;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 public class Animator extends Thread {
 
@@ -10,13 +10,14 @@ public class Animator extends Thread {
 	}
 	public static interface TemporarilyAnimable extends Animable{
 		public boolean mustBeInterrupted();
+		public void actionWhenInterruption();
 	}
 	
 	private boolean isRunning=false;
 	private int interval;
 	private LinkedList<Animable> animeListe;
 	private LinkedList<TemporarilyAnimable> tempAnimeListe;
-	
+	public boolean onModification=false;
 	public void arret()
 	{
 		isRunning=false;
@@ -28,21 +29,26 @@ public class Animator extends Thread {
 		isRunning=true;
 		super.run();
 		try {
-			System.out.println("start");
 			while(isRunning)
 			{
 				for(Animable a : animeListe)
 				{
 					a.anime();
 				}
-				ListIterator<TemporarilyAnimable> iterat = tempAnimeListe.listIterator();
+				onModification = true;
+				Iterator<TemporarilyAnimable> iterat = tempAnimeListe.iterator();
 				while(iterat.hasNext())
 				{
 					TemporarilyAnimable ta = iterat.next();
-					if(ta.mustBeInterrupted()) iterat.remove();
+					if(ta.mustBeInterrupted())
+					{
+						iterat.remove();
+						ta.actionWhenInterruption();
+					}
 					else ta.anime();
+					
 				}
-	
+				onModification = false;
 				Thread.sleep(interval);
 			}
 		} catch (InterruptedException e) {
@@ -67,11 +73,20 @@ public class Animator extends Thread {
 	
 	public void addAnimable(Animable a)
 	{
-		this.animeListe.add(a);
+		this.animeListe.push(a);
 	}
-	public void addTemporarily(TemporarilyAnimable a)
+	public void addTemporarily(final TemporarilyAnimable a)
 	{
-		this.tempAnimeListe.add(a);
+		if(!onModification) this.tempAnimeListe.push(a);
+		else new Thread(){
+			
+			public void run()
+			{
+				while(onModification);
+				tempAnimeListe.push(a);
+			}
+			
+		}.start();
 	}
 	public void removeAnimable(Animable a)
 	{
