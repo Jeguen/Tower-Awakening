@@ -19,15 +19,27 @@ public class OffensivTower extends Tower {
 
 	@Override
 	public void action() {
-		
-		if(target.getX()>canonPosition.x)
+		float deltaZ = -(target.getZ()- getZ());
+		float deltaX = (target.getX()- getX());
+		float rotation = 0;
+		if(deltaZ>0){
+			rotation = -1;
+		}
+		else if(deltaZ<0)
 		{
-			animationRY(1);
+			rotation = 1;
 		}
 		else
 		{
-			animationRY(-1);
+			if(deltaX * canonPosition.x<0 || Math.abs(deltaZ-canonPosition.y)>1f)
+			{
+				 rotation = 1;
+			}
 		}
+		System.out.println("position Target : " + deltaX + " " + deltaZ);
+		System.out.println("position canon : " + canonPosition.x + " " + canonPosition.y);
+		System.out.println("Rotation : " + rotation);
+		animationRY(rotation);
 	}
 
 }

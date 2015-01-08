@@ -5,8 +5,9 @@ import java.util.LinkedList;
 
 import ta.shape3D.Animator;
 import ta.shape3D.Point.Point2D;
+import ta.shape3D.Triangle3D;
 import ta.shape3D.mesh.MeshTA;
-import awakening.toolshop.monster.Monster;
+import awakening.toolshop.monster.MonsterEarth;
 import awakening.toolshop.tower.OffensivTower;
 import awakening.toolshop.tower.Tower;
 
@@ -30,6 +31,7 @@ public class PartieSolo implements Screen{
 	SpriteBatch batch;
 	ShapeRenderer shape;
 	boolean keyPressed=false;
+	Point2D monsterPosition = new Point2D(30,30);
 	ImmediateModeRenderer20 renderer;
 	PerspectiveCamera cam;
     MeshTA terrain;
@@ -42,6 +44,7 @@ public class PartieSolo implements Screen{
     LinkedList<Tower> toursModeles = new LinkedList<Tower>();
     LinkedList<Tower> tours = new LinkedList<Tower>();
     LinkedList<MeshTA> balles = new LinkedList<MeshTA>();
+    MonsterEarth monstre;
     int compteur;
     float x=20,y=50, z=20;
     Animator animation = new Animator(30);
@@ -56,28 +59,32 @@ public class PartieSolo implements Screen{
 					for(Tower t : tours)
 					{
 						if(!t.haveATarget())
-							if(t.testPortee(30	,30))
+						{
+							if(t.testPortee(monstre.getX(), monstre.getZ()))
 							{
-								System.out.println("tir!");
-								t.targetMonster(new Monster(new Point2D(30,30)) {
-									
-									@Override
-									public void normalMove() {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void crazyMove() {
-										// TODO Auto-generated method stub
-										
-									}
-								});
+								System.out.println("shoot!");
+								t.targetMonster(monstre);
 								t.action();
 								animation.addTemporarily(t);
 							}
+						}
+						else
+						{
+							if(t.testPortee(t.getTarget().getX(), t.getTarget().getZ()))
+							{
+								//System.out.println(compteur);
+								t.action();
+								animation.addTemporarily(t);
+							}
+							else
+							{
+								System.out.println("lose target!");
+								t.loseTarget();
+							}
+						}
+						compteur++;
 					}
-					sleep(500);
+					sleep(40);
 				}
 			}catch(InterruptedException e){
 				e.printStackTrace();
@@ -112,6 +119,20 @@ public class PartieSolo implements Screen{
 		cam.update();
 		toursModeles.add(new OffensivTower("tower2.mta"));
 		toursModeles.add(new OffensivTower("tower.mta"));
+		MeshTA mesh = new MeshTA();
+		Triangle3D t = mesh.addTriangle();
+		t.getPoint1().y = 0;
+		t.getPoint1().x = -1;
+		t.getPoint1().z = 0;
+		t.getPoint2().y = 0;
+		t.getPoint2().x = 0;
+		t.getPoint2().z = -1;
+		t.getPoint3().y = 0;
+		t.getPoint3().x = 0;
+		t.getPoint3().z = 1;
+		monstre = new MonsterEarth(mesh, monsterPosition);
+		monstre.homethetie(3);
+		monstre.translate(0, 1, 0);
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			
 			@Override
@@ -316,6 +337,7 @@ public class PartieSolo implements Screen{
 	@Override
 	public void render(float delta) {
 		compteur++;
+		monstre.translate(0.1f, 0, 0);
 		if(addTours)
 		{
 			ajoutTours();
@@ -333,6 +355,7 @@ public class PartieSolo implements Screen{
 		{
 			b.render(renderer, cam.combined);
 		}
+		monstre.render(renderer, cam.combined);
 		shape.setProjectionMatrix(cam.projection);
 		shape.setTransformMatrix(cam.view);
 		shape.begin(ShapeType.Line);

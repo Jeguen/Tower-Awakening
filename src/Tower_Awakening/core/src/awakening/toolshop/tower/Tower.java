@@ -17,8 +17,8 @@ public abstract class Tower extends MeshTA
 	protected Tower levelUp;
 	protected Monster target;
 	protected Point2D canonPosition= new Point2D(1,0);
-	public final static float cos01 = (float) Math.cos(0.2f);
-	public final static float sin01 = (float) Math.sin(0.2f);
+	public final static float cos01 = (float) Math.cos(0.02f);
+	public final static float sin01 = (float) Math.sin(0.02f);
 	protected LinkedList<Missile> m;
 	// *****************************************
 	// ************** CONSTRUCTORS ************
@@ -111,18 +111,29 @@ public abstract class Tower extends MeshTA
 	@Override
 	public boolean mustBeInterrupted() {
 		if(!haveATarget()) return true;
+
 		float coefCanon, coefTarget;
 		float posX = (target.getX() - getX());
 		float posY =(target.getZ()- getZ());
+		if(Math.abs(canonPosition.y)<0.1f)
+		{
+			if(Math.abs(posY)<2f && canonPosition.x*posX>0)
+			{
+				System.out.println("ok");
+				return true;
+			}
+			else
+				return false;
+		}
 		coefTarget = posX / posY;
 		coefCanon = -canonPosition.x / canonPosition.y;
-		System.out.println(coefTarget + " Coef " + coefCanon);
-		return (Math.abs(coefTarget - coefCanon) < 0.75f && Math.signum(posX) == Math.signum(canonPosition.x));
+		return (Math.abs(coefTarget - coefCanon) < 0.3f && Math.signum(posX) == Math.signum(canonPosition.x)
+			&& Math.signum(posY) == -Math.signum(canonPosition.y));
 	}
 
 	@Override
 	public void rotate(float x, float y, float z) {
-		getSousMesh(0).rotate(0, 0.2f*y, 0);
+		getSousMesh(0).rotate(0, 0.02f*y, 0);
 		float cosA = canonPosition.x;
 		canonPosition.x *= cos01;
 		canonPosition.x -= sin01*canonPosition.y * y;

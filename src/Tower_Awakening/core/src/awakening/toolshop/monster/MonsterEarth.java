@@ -1,5 +1,8 @@
 package awakening.toolshop.monster;
 
+import ta.shape3D.Point.Point2D;
+import ta.shape3D.mesh.MeshTA;
+
 public class MonsterEarth extends Monster
 {
 	public MonsterEarth(int id, int lifePoint, String name, float speedAttack, float vitesseDeplacement, boolean visible, String facSheet,
@@ -14,5 +17,10 @@ public class MonsterEarth extends Monster
 	@Override
 	public void crazyMove()
 	{
+	}
+	
+	public MonsterEarth(MeshTA m, Point2D position)
+	{
+		super(m, position);
 	}
 }
