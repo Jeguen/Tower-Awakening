@@ -1,4 +1,4 @@
- // Copyright © 2014 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
+ // Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
  
  // Licensed under the Apache License, Version 2.0 (the "License");
  // you may not use this file except in compliance with the License.
@@ -14,23 +14,29 @@
 
 package awakening.menu;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import awakening.game.PartieSolo;
 import awakening.game.TAGame;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -48,6 +54,10 @@ public class MainMenu implements Screen
 	private TAGame game;
 	private Music music;
 	private Sound effect;
+	private Locale[] locales = {Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN};
+	private ResourceBundle language;
+	private BitmapFont font;
+	private LabelStyle style;
 	
 	///Stage
 	private Stage stage;
@@ -78,6 +88,31 @@ public class MainMenu implements Screen
 		effect = Gdx.audio.newSound(Gdx.files.internal("sound/widget/Button Sound 53.wav"));
 		stage = new Stage();
 		
+		///Language
+		try
+		{
+			if(game.getLanguage().equals("ENGLISH"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_en_EN", locales[0]);
+			}
+			else if (game.getLanguage().equals("FRENCH"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_fr_FR", locales[1]);
+			}
+			else if (game.getLanguage().equals("ITALIAN"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_it_IT", locales[2]);
+			}
+			else
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res", locales[0]);
+			}
+		}
+		catch(java.util.MissingResourceException e)
+		{
+			System.out.println("yolo");
+		}
+		
 		///Viewport
 		camera=new OrthographicCamera();
 		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getWidth(), camera);
@@ -88,24 +123,28 @@ public class MainMenu implements Screen
 				
 		///Skin
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-				
+		
+		font = new BitmapFont(Gdx.files.internal("font/space.fnt"));
+		style = new LabelStyle(font, Color.WHITE);
+		
 		///Title
-		title = new Label("Tower Awakening", skin);
+		title = new Label(language.getString("label_main_title"), skin);
+		title.setStyle(style);
 				
 		///Widgets Background
 		widgetsBackground = new Image(new Texture(Gdx.files.internal("img/widget/bg widgets.png")));
 				
 		///Exit Button
-		btnExit = new TextButton("Exit", skin);
+		btnExit = new TextButton(language.getString("button_exit"), skin);
 				
 		///Options Button
-		btnOptions = new TextButton("Options", skin);
+		btnOptions = new TextButton(language.getString("button_options"), skin);
 				
 		///Multiplayer Button
-		btnMultiplayer = new TextButton("Multiplayer", skin);
+		btnMultiplayer = new TextButton(language.getString("button_multiplayer"), skin);
 				
 		///Solo Button
-		btnSolo = new TextButton("Solo", skin);
+		btnSolo = new TextButton(language.getString("button_solo"), skin);
 		
 	}
 	
@@ -123,6 +162,31 @@ public class MainMenu implements Screen
 		this.effect = effect;
 		stage = new Stage();
 		
+		///Language
+		try
+		{
+			if(game.getLanguage().equals("ENGLISH"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_en_EN", locales[0]);
+			}
+			else if (game.getLanguage().equals("FRENCH"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_fr_FR", locales[1]);
+			}
+			else if (game.getLanguage().equals("ITALIAN"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_it_IT", locales[2]);
+			}
+			else
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res", locales[0]);
+			}
+		}
+		catch(java.util.MissingResourceException e)
+		{
+			System.out.println("yolo");
+		}
+		
 		///Viewport
 		camera=new OrthographicCamera();
 		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getWidth(), camera);
@@ -130,27 +194,31 @@ public class MainMenu implements Screen
 		///Background
 		background = new Texture(Gdx.files.internal("img/menu/background-menu.png"));
 		batch = new SpriteBatch();
-		
+						
 		///Skin
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
+		font = new BitmapFont(Gdx.files.internal("font/space.fnt"));
+		style = new LabelStyle(font, Color.WHITE);
+		
 		///Title
-		title = new Label("Tower Awakening", skin);
+		title = new Label(language.getString("label_main_title"), skin);
+		title.setStyle(style);
 		
 		///Widgets Background
 		widgetsBackground = new Image(new Texture(Gdx.files.internal("img/widget/bg widgets.png")));
-		
+						
 		///Exit Button
-		btnExit = new TextButton("Exit", skin);
-		
+		btnExit = new TextButton(language.getString("button_exit"), skin);
+						
 		///Options Button
-		btnOptions = new TextButton("Options", skin);
-		
+		btnOptions = new TextButton(language.getString("button_options"), skin);
+						
 		///Multiplayer Button
-		btnMultiplayer = new TextButton("Multiplayer", skin);
-		
+		btnMultiplayer = new TextButton(language.getString("button_multiplayer"), skin);
+						
 		///Solo Button
-		btnSolo = new TextButton("Solo", skin);
+		btnSolo = new TextButton(language.getString("button_solo"), skin);
 	}
 	
 	@Override
@@ -159,7 +227,7 @@ public class MainMenu implements Screen
 		Gdx.input.setInputProcessor(stage);
 		
 		///Title
-		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth()/2, Gdx.app.getGraphics().getHeight() - 50);
+		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth(), Gdx.app.getGraphics().getHeight() - 50);
 		stage.addActor(title);
 		
 		///Widgets Background
@@ -231,7 +299,6 @@ public class MainMenu implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
-						music.dispose();
 						game.setScreen(new PartieSolo());
 						return false;	
 					}
@@ -245,23 +312,24 @@ public class MainMenu implements Screen
 		{
 			music.play();
 			music.setLooping(true);
-		}	
+		}
+		if(Gdx.input.isKeyPressed(Keys.A))
+		{
+			System.out.println("yolo");
+		}
 	}
 
 	@Override
 	public void render(float delta) 
 	{
+		
+		
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.graphics.setDisplayMode((int)game.getSize().x, (int)game.getSize().y, game.isFullscreen());
+		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
 		Gdx.graphics.setVSync(true);
-		
-		///Show DisplayMode (Test)
-		for(DisplayMode s : Gdx.app.getGraphics().getDisplayModes())
-		{
-			System.out.println(s);
-		}
 		
 		///Settings
 		music.setVolume(game.getMusicVolume());

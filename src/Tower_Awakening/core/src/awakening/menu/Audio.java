@@ -1,4 +1,4 @@
- // Copyright © 2014 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
+ // Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
  
  // Licensed under the Apache License, Version 2.0 (the "License");
  // you may not use this file except in compliance with the License.
@@ -13,6 +13,9 @@
  // limitations under the License.
 
 package awakening.menu;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import awakening.game.TAGame;
 
@@ -46,7 +49,9 @@ public class Audio implements Screen
 	///Game
 	private TAGame game;
 	private Music sound;
-	private Sound effect;
+	private Sound effect;	
+	private Locale[] locales = {Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN};
+	private ResourceBundle language;
 	
 	///Stage
 	private Stage stage;
@@ -79,6 +84,31 @@ public class Audio implements Screen
 		this.effect = effect;
 		stage = new Stage();
 		
+		try
+		{
+			if(game.getLanguage().equals("ENGLISH"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_en_EN", locales[0]);
+			}
+			else if (game.getLanguage().equals("FRENCH"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_fr_FR", locales[1]);
+			}
+			else if (game.getLanguage().equals("ITALIAN"))
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res_it_IT", locales[2]);
+			}
+			else
+			{
+				language = ResourceBundle.getBundle("awakening.menu.res", locales[0]);
+			}
+		}
+		catch(java.util.MissingResourceException e)
+		{
+			System.out.println("yolo");
+		}
+		
+		
 		///Viewport
 		camera=new OrthographicCamera();
 		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getWidth(), camera);
@@ -91,25 +121,25 @@ public class Audio implements Screen
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
 		///Title
-		title = new Label("Audio", skin);
+		title = new Label(language.getString("button_audio"), skin);
 		
 		///Widgets Background
 		widgetsBackground = new Image(new Texture(Gdx.files.internal("img/widget/bg widgets.png")));
 		
 		///Back Button
-		btnBack = new TextButton("Back", skin);
+		btnBack = new TextButton(language.getString("button_back"), skin);
 		
 		///Music Slider
 		sliderMusic = new Slider(0, 10, 1, false, skin);
 		
 		///Music Label
-		musicLabel = new Label("Music Volume", skin);
+		musicLabel = new Label(language.getString("label_music_volume"), skin);
 		
 		///Sound Slider
 		sliderEffects = new Slider(0, 10, 1, false, skin);
 		
 		///Sound Label
-		soundLabel = new Label("Effect Volume", skin);
+		soundLabel = new Label(language.getString("label_effect_volume"), skin);
 	}
 	
 	@Override
@@ -169,7 +199,7 @@ public class Audio implements Screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.graphics.setDisplayMode((int)game.getSize().x, (int)game.getSize().y, game.isFullscreen());
+		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
 		
 		///Settings
 		game.setMusicVolume((float) sliderMusic.getValue()/10); 

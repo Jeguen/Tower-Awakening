@@ -1,4 +1,4 @@
- // Copyright © 2014 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
+ // Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
  
  // Licensed under the Apache License, Version 2.0 (the "License");
  // you may not use this file except in compliance with the License.
@@ -17,8 +17,7 @@ package awakening.game;
 import awakening.menu.MainMenu;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.math.Vector2;
+
 
 /**
  * TAGame
@@ -105,15 +104,6 @@ public class TAGame extends Game {
 		setting.setFullscreen(fullscreen);
 	}
 
-	/**
-	 * Get the display mode
-	 * 
-	 * @return Display mode
-	 */
-	public DisplayMode getDisplay() 
-	{
-		return setting.getDisplay();
-	}
 
 	/**
 	 * Set the screen's size
@@ -123,7 +113,7 @@ public class TAGame extends Game {
 	 */
 	public void setSize(int w, int h) 
 	{
-		setting.setSize(w, h);
+		setting.setSize(new TAScreenSize(w,h));
 	}
 	
 	/**
@@ -131,19 +121,279 @@ public class TAGame extends Game {
 	 * 
 	 * @return Screen size
 	 */
-	public Vector2 getSize() 
+	public TAScreenSize getSize() 
 	{
 		return setting.getSize();
 	}
 
 	/**
-	 * Set the display mode
+	 * Get Zoom In key
 	 * 
-	 * @param display
+	 * @return Zoom In key
 	 */
-	public void setDisplay(DisplayMode display) 
+	public int getZoomIn() 
 	{
-		setting.setDisplay(display);
+		return setting.getZoomIn();
+	}
+
+	/**
+	 * Set Zoom In key
+	 * 
+	 * @param zoomIn
+	 */
+	public void setZoomIn(int zoomIn) 
+	{
+		setting.setZoomIn(zoomIn);
+	}
+
+	/**
+	 * Get Zoom Out key
+	 * 
+	 * @return Zoom Out key
+	 */
+	public int getZoomOut() 
+	{
+		return setting.getZoomOut();
+	}
+
+	/**
+	 * Set Zoom Out key
+	 * 
+	 * @param zoomOut
+	 */
+	public void setZoomOut(int zoomOut) 
+	{
+		setting.setZoomOut(zoomOut);
+	}
+
+	/**
+	 * Get Up key
+	 * 
+	 * @return Up key
+	 */
+	public int getUp() 
+	{
+		return setting.getUp();
+	}
+
+	/**
+	 * Set Up key
+	 * 
+	 * @param up
+	 */
+	public void setUp(int up) 
+	{
+		setting.setUp(up);
+	}
+
+	/**
+	 * Get Down key
+	 * 
+	 * @return Down key
+	 */
+	public int getDown() 
+	{
+		return setting.getDown();
+	}
+
+	/**
+	 * Set Down key
+	 * 
+	 * @param down
+	 */
+	public void setDown(int down) 
+	{
+		setting.setDown(down);
+	}
+
+	/**
+	 * Get Left key
+	 * 
+	 * @return Left key
+	 */
+	public int getLeft() 
+	{
+		return setting.getLeft();
+	}
+
+	/**
+	 * Set Left key
+	 * 
+	 * @param left
+	 */
+	public void setLeft(int left) 
+	{
+		setting.setLeft(left);
+	}
+	
+	/**
+	 * Get Right key
+	 * 
+	 * @return Right key
+	 */
+	public int getRight() 
+	{
+		return setting.getRight();
+	}
+
+	/**
+	 * Set Right key
+	 * 
+	 * @param right
+	 */
+	public void setRight(int right)
+	{
+		setting.setRight(right);
+	}
+
+	/**
+	 * Set Screen size
+	 * 
+	 * @param size
+	 */
+	public void setSize(TAScreenSize size) 
+	{
+		setting.setSize(size);
+	}
+
+	/**
+	 * Get Zoom In key's name
+	 * 
+	 * @return Screen size
+	 */
+	public String getZoomInKey() 
+	{
+		return setting.getZoomInKey();
+	}
+
+	/**
+	 * Set Zoom In key's name
+	 * 
+	 * @param zoomInKey
+	 */
+	public void setZoomInKey(String zoomInKey) 
+	{
+		setting.setZoomInKey(zoomInKey);
+	}
+
+	/**
+	 * Get Zoom Out key's name
+	 * 
+	 * @return Zoom Out key's name
+	 */
+	public String getZoomOutKey() 
+	{
+		return setting.getZoomOutKey();
+	}
+
+	/**
+	 * Set Zoom Out key's name
+	 * 
+	 * @param zoomOutKey
+	 */
+	public void setZoomOutKey(String zoomOutKey) 
+	{
+		setting.setZoomOutKey(zoomOutKey);
+	}
+
+	/**
+	 * Get Up key's name
+	 * 
+	 * @return Up key's name
+	 */
+	public String getUpKey() 
+	{
+		return setting.getUpKey();
+	}
+
+	/**
+	 * Set Up key's name
+	 * 
+	 * @param upKey
+	 */
+	public void setUpKey(String upKey) 
+	{
+		setting.setUpKey(upKey);
+	}
+
+	/**
+	 * Get Down key's name
+	 * 
+	 * @return Down key's name
+	 */
+	public String getDownKey() 
+	{
+		return setting.getDownKey();
+	}
+
+	/**
+	 * Set Down key's name
+	 * 
+	 * @param downKey
+	 */
+	public void setDownKey(String downKey) 
+	{
+		setting.setDownKey(downKey);
+	}
+
+	/**
+	 * Get Left key's name
+	 * 
+	 * @return Left key's name
+	 */
+	public String getLeftKey() 
+	{
+		return setting.getLeftKey();
+	}
+
+	/**
+	 * Set Left key's name
+	 * 
+	 * @param leftKey
+	 */
+	public void setLeftKey(String leftKey) 
+	{
+		setting.setLeftKey(leftKey);
+	}
+
+	/**
+	 * Get Right key's name
+	 * 
+	 * @return Right key's name
+	 */
+	public String getRightKey() 
+	{
+		return setting.getRightKey();
+	}
+
+	/**
+	 * Set Right key's name
+	 * 
+	 * @param rightKey
+	 */
+	public void setRightKey(String rightKey) 
+	{
+		setting.setRightKey(rightKey);
+	}
+
+	/**
+	 * Get Language
+	 * 
+	 * @return Language
+	 */
+	public String getLanguage() 
+	{
+		return setting.getLanguage();
+	}
+
+	/**
+	 * Set Language
+	 * 
+	 * @param language
+	 */
+	public void setLanguage(String language) 
+	{
+		setting.setLanguage(language);
 	}
 	
 }
