@@ -1,4 +1,4 @@
- // Copyright © 2014 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
+ // Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
  
  // Licensed under the Apache License, Version 2.0 (the "License");
  // you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
 
 package awakening.game;
 
-import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Input;
 
 /**
  * Settings
@@ -28,8 +27,23 @@ public class Settings
 	private float soundVolume;
 	private float musicVolume;
 	private boolean fullscreen;
-	private DisplayMode display;
-	private Vector2 size;
+	private TAScreenSize size;
+	
+	private String language;
+	
+	private int zoomIn;
+	private int zoomOut;
+	private int up;
+	private int down;
+	private int left;
+	private int right;
+	
+	private String zoomInKey;
+	private String zoomOutKey;
+	private String upKey;
+	private String downKey;
+	private String leftKey;
+	private String rightKey;
 	
 	/**
 	 * Constructor
@@ -37,10 +51,26 @@ public class Settings
 	public Settings()
 	{
 		soundVolume = 1.0f;
-		musicVolume = 1.0f;
+		musicVolume = 0.0f;
 		fullscreen = false;
-		//display = Gdx.graphics.getDisplayModes()[0];
-		size = new Vector2(640,480);
+		size = new TAScreenSize(640,480);
+		
+		language = "FRENCH";
+		
+		zoomIn = Input.Keys.P;
+		zoomOut = Input.Keys.M;
+		up = Input.Keys.UP;
+		down = Input.Keys.DOWN;
+		left = Input.Keys.LEFT;
+		right = Input.Keys.RIGHT;
+		
+		upKey = "UP";
+		downKey = "DOWN";
+		leftKey = "LEFT";
+		rightKey = "RIGHT";
+		zoomInKey = "P";
+		zoomOutKey = "M";
+		
 	}
 
 	/**
@@ -104,16 +134,6 @@ public class Settings
 	}
 
 	/**
-	 * Get the display mode
-	 * 
-	 * @return Display mode
-	 */
-	public DisplayMode getDisplay() 
-	{
-		return display;
-	}
-
-	/**
 	 * Set the screen's size
 	 * 
 	 * @param w
@@ -121,7 +141,7 @@ public class Settings
 	 */
 	public void setSize(int w, int h) 
 	{
-		this.size = new Vector2(w,h);
+		this.size = new TAScreenSize(w,h);
 	}
 	
 	/**
@@ -129,19 +149,279 @@ public class Settings
 	 * 
 	 * @return Screen size
 	 */
-	public Vector2 getSize() 
+	public TAScreenSize getSize() 
 	{
 		return size;
 	}
 
 	/**
-	 * Set the display mode
+	 * Get Zoom In key
 	 * 
-	 * @param display
+	 * @return Zoom In key
 	 */
-	public void setDisplay(DisplayMode display) 
+	public int getZoomIn() 
 	{
-		this.display = display;
+		return zoomIn;
+	}
+
+	/**
+	 * Set Zoom In key
+	 * 
+	 * @param zoomIn
+	 */
+	public void setZoomIn(int zoomIn) 
+	{
+		this.zoomIn = zoomIn;
+	}
+
+	/**
+	 * Get Zoom Out key
+	 * 
+	 * @return Zoom Out key
+	 */
+	public int getZoomOut() 
+	{
+		return zoomOut;
+	}
+
+	/**
+	 * Set Zoom Out key
+	 * 
+	 * @param zoomOut
+	 */
+	public void setZoomOut(int zoomOut) 
+	{
+		this.zoomOut = zoomOut;
+	}
+
+	/**
+	 * Get Up key
+	 * 
+	 * @return Up key
+	 */
+	public int getUp() 
+	{
+		return up;
+	}
+
+	/**
+	 * Set Up key
+	 * 
+	 * @param up
+	 */
+	public void setUp(int up) 
+	{
+		this.up = up;
+	}
+
+	/**
+	 * Get Down key
+	 * 
+	 * @return Down key
+	 */
+	public int getDown() 
+	{
+		return down;
+	}
+
+	/**
+	 * Set Down key
+	 * 
+	 * @param down
+	 */
+	public void setDown(int down) 
+	{
+		this.down = down;
+	}
+
+	/**
+	 * Get Left key
+	 * 
+	 * @return Left key
+	 */
+	public int getLeft() 
+	{
+		return left;
+	}
+
+	/**
+	 * Set Left key
+	 * 
+	 * @param left
+	 */
+	public void setLeft(int left) 
+	{
+		this.left = left;
+	}
+	
+	/**
+	 * Get Right key
+	 * 
+	 * @return Right key
+	 */
+	public int getRight() 
+	{
+		return right;
+	}
+
+	/**
+	 * Set Right key
+	 * 
+	 * @param right
+	 */
+	public void setRight(int right)
+	{
+		this.right = right;
+	}
+
+	/**
+	 * Set Screen size
+	 * 
+	 * @param size
+	 */
+	public void setSize(TAScreenSize size) 
+	{
+		this.size = size;
+	}
+
+	/**
+	 * Get Zoom In key's name
+	 * 
+	 * @return Screen size
+	 */
+	public String getZoomInKey() 
+	{
+		return zoomInKey;
+	}
+
+	/**
+	 * Set Zoom In key's name
+	 * 
+	 * @param zoomInKey
+	 */
+	public void setZoomInKey(String zoomInKey) 
+	{
+		this.zoomInKey = zoomInKey;
+	}
+
+	/**
+	 * Get Zoom Out key's name
+	 * 
+	 * @return Zoom Out key's name
+	 */
+	public String getZoomOutKey() 
+	{
+		return zoomOutKey;
+	}
+
+	/**
+	 * Set Zoom Out key's name
+	 * 
+	 * @param zoomOutKey
+	 */
+	public void setZoomOutKey(String zoomOutKey) 
+	{
+		this.zoomOutKey = zoomOutKey;
+	}
+
+	/**
+	 * Get Up key's name
+	 * 
+	 * @return Up key's name
+	 */
+	public String getUpKey() 
+	{
+		return upKey;
+	}
+
+	/**
+	 * Set Up key's name
+	 * 
+	 * @param upKey
+	 */
+	public void setUpKey(String upKey) 
+	{
+		this.upKey = upKey;
+	}
+
+	/**
+	 * Get Down key's name
+	 * 
+	 * @return Down key's name
+	 */
+	public String getDownKey() 
+	{
+		return downKey;
+	}
+
+	/**
+	 * Set Down key's name
+	 * 
+	 * @param downKey
+	 */
+	public void setDownKey(String downKey) 
+	{
+		this.downKey = downKey;
+	}
+
+	/**
+	 * Get Left key's name
+	 * 
+	 * @return Left key's name
+	 */
+	public String getLeftKey() 
+	{
+		return leftKey;
+	}
+
+	/**
+	 * Set Left key's name
+	 * 
+	 * @param leftKey
+	 */
+	public void setLeftKey(String leftKey) 
+	{
+		this.leftKey = leftKey;
+	}
+
+	/**
+	 * Get Right key's name
+	 * 
+	 * @return Right key's name
+	 */
+	public String getRightKey() 
+	{
+		return rightKey;
+	}
+
+	/**
+	 * Set Right key's name
+	 * 
+	 * @param rightKey
+	 */
+	public void setRightKey(String rightKey) 
+	{
+		this.rightKey = rightKey;
+	}
+
+	/**
+	 * Get Language
+	 * 
+	 * @return Language
+	 */
+	public String getLanguage() 
+	{
+		return language;
+	}
+
+	/**
+	 * Set Language
+	 * 
+	 * @param language
+	 */
+	public void setLanguage(String language) 
+	{
+		this.language = language;
 	}
 	
 }
