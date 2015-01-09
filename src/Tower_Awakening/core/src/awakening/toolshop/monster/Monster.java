@@ -1,5 +1,6 @@
 package awakening.toolshop.monster;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import ta.shape3D.Point.Point2D;
@@ -21,15 +22,25 @@ public abstract class Monster extends MeshTA
 	protected boolean crazyStatus;
 	protected int damage;
 	protected ArrayList<Box> path;
-	protected Box destination;
-	protected Box box;
+	protected int boxDestination;
+	protected Box boxActuel;
+	protected float dx;
+	protected float dy;
+	public boolean isArrived = false;
+	public int randomNumber = (int) (Math.random() * 100);
 	// *****************************************
 	// ************** CONSTRUCTORS ************
 	// *****************************************
+	
+	public Monster()
+    {
+		path=new ArrayList<Box>();
+    }
+	
 	public Monster(int id, int lifePoint, String name, float speedAttack, float vitesseDeplacement, boolean visible, String facSheet,
 	            int buildCost, int gainGold, int damage)
 	{
-		super();
+		this();
 		this.id = id;
 		this.lifePoint = lifePoint;
 		this.name = name;
@@ -43,7 +54,19 @@ public abstract class Monster extends MeshTA
 	}
 	public Monster(Point2D position)
 	{
+		this();
 		this.translate(position.x, 0, position.y);
+	}
+	public Monster(File meshfile)
+	{
+		this();
+		this.load(meshfile);
+	}
+	public Monster(MeshTA m)
+	{
+		this();
+		this.copy(m);
+		this.copyFeatures(m);
 	}
 	// ***********************************************
 	// ********** ABSTRACTS PROCEDURES **************
@@ -127,11 +150,11 @@ public abstract class Monster extends MeshTA
 		}
 		public Box getDestination()
 		{
-			return destination;
+			return path.get(boxDestination);
 		}
 		public Box getBox()
 		{
-			return box;
+			return boxActuel;
 		}
 		public void setId(int id)
 		{
@@ -173,16 +196,15 @@ public abstract class Monster extends MeshTA
 		{
 			this.damage = damage;
 		}
-		public void setPath(ArrayList<Box> path)
+		public void addBoxInPath(Box pathBox)
 		{
-			this.path = path;
+			this.path.add(pathBox);
+			boxDestination = 0;
+			this.setActualBox(path.get(0));
 		}
-		public void setDestination(Box destination)
+		public void setActualBox(Box box)
 		{
-			this.destination = destination;
-		}
-		public void setBox(Box box)
-		{
-			this.box = box;
+			setAbsolutePosition(box.getCoordX(), 0.1f, box.getCoordY());
+			this.boxActuel = box;
 		}
 }

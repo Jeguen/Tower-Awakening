@@ -2,11 +2,15 @@ package awakening.game;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import ta.shape3D.Animator;
 import ta.shape3D.Point.Point2D;
 import ta.shape3D.Triangle3D;
 import ta.shape3D.mesh.MeshTA;
+import awakening.field.Box;
+import awakening.field.Field;
+import awakening.toolshop.monster.Monster;
 import awakening.toolshop.monster.MonsterEarth;
 import awakening.toolshop.tower.OffensivTower;
 import awakening.toolshop.tower.Tower;
@@ -18,23 +22,32 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 public class PartieSolo implements Screen{
 
 	
-
+	private static float halfRadiusPolygon = 3;
+	private static int nbSidePolygon = 6;
+	private static int border = 10;
+	private static int nbSpawn = 5;
+	private static int nbBoxHeight =25;
+	private static int nbBoxWidth =25;
+	int indexBox;
 	SpriteBatch batch;
+	boolean afficheGrille=true;
+    BitmapFont font;
 	ShapeRenderer shape;
 	boolean keyPressed=false;
-	Point2D monsterPosition = new Point2D(30,30);
+	Matrix4 textTransform = new Matrix4();
 	ImmediateModeRenderer20 renderer;
 	PerspectiveCamera cam;
-    MeshTA terrain;
     byte numTour;
     MeshTA QG;
     boolean addTours;
@@ -44,10 +57,12 @@ public class PartieSolo implements Screen{
     LinkedList<Tower> toursModeles = new LinkedList<Tower>();
     LinkedList<Tower> tours = new LinkedList<Tower>();
     LinkedList<MeshTA> balles = new LinkedList<MeshTA>();
-    MonsterEarth monstre;
     int compteur;
     float x=20,y=50, z=20;
-    Animator animation = new Animator(30);
+    Animator animation = new Animator(35);
+    Field terrain;
+    
+    
     Thread moteur = new Thread(){
 
 		@Override
@@ -56,35 +71,54 @@ public class PartieSolo implements Screen{
 			try{
 				while(true)
 				{
+					ListIterator<Monster> iteratM = terrain.getMonsters().listIterator();
+					while(iteratM.hasNext())
+					{
+						Monster m = iteratM.next();
+						if(m.getPath().size()>0)
+						{
+							if(m.isArrived){
+								iteratM.remove();
+							}
+							else
+								m.normalMove();
+						}
+						else
+							terrain.findPathMonster();
+					}
 					for(Tower t : tours)
 					{
 						if(!t.haveATarget())
 						{
-							if(t.testPortee(monstre.getX(), monstre.getZ()))
-							{
-								System.out.println("shoot!");
-								t.targetMonster(monstre);
-								t.action();
-								animation.addTemporarily(t);
-							}
+							for(Monster monstre : terrain.getMonsters())
+								if(t.testPortee(monstre.getX(), monstre.getZ()))
+								{
+									System.out.println("shoot!");
+									t.targetMonster(monstre);
+									t.action();
+									animation.addTemporarily(t);
+								}
 						}
 						else
 						{
-							if(t.testPortee(t.getTarget().getX(), t.getTarget().getZ()))
-							{
-								//System.out.println(compteur);
-								t.action();
-								animation.addTemporarily(t);
-							}
+							if(!t.getTarget().isArrived)
+								if(t.testPortee(t.getTarget().getX(), t.getTarget().getZ()))
+								{
+									//System.out.println(compteur);
+									t.action();
+									animation.addTemporarily(t);
+								}
+								else
+								{
+									System.out.println("lose target!");
+									t.loseTarget();
+								}
 							else
-							{
-								System.out.println("lose target!");
 								t.loseTarget();
-							}
 						}
 						compteur++;
 					}
-					sleep(40);
+					sleep(20);
 				}
 			}catch(InterruptedException e){
 				e.printStackTrace();
@@ -98,6 +132,9 @@ public class PartieSolo implements Screen{
 		Gdx.graphics.setVSync(true);
 		Gdx.graphics.setContinuousRendering(false);
 		batch = new SpriteBatch();
+	    font = new BitmapFont();
+	    font.setScale(0.4f, 0.2f);
+	    font.setColor(Color.CYAN);
 		shape = new ShapeRenderer();
         Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
@@ -105,10 +142,22 @@ public class PartieSolo implements Screen{
         cam = new PerspectiveCamera(80, Gdx.graphics.getWidth(),(float) Gdx.graphics.getHeight());
 		cam.near = 1;
 		cam.far = 200;
-        terrain = MeshTA.load(new File("terrain 1.mta"));
-		terrain.rotate((float)Math.PI/2, 0,0);
-		terrain.translate(0, -1, 0);
-        QG = MeshTA.load(new File("QG.mta"));
+		terrain = new Field((int) halfRadiusPolygon, nbSidePolygon, border, nbSpawn, nbBoxHeight, nbBoxWidth, new File("terrain 1.mta"));
+		terrain.creerPlateau();
+		terrain.getSpawns().add(terrain.getBox().get(99));
+		terrain.getBox().get(99).setFieldType(Box.FIELD_SPAWNS);
+		terrain.getSpawns().add(terrain.getBox().get(3));
+		terrain.getBox().get(99).setFieldType(Box.FIELD_SPAWNS);
+		terrain.getSpawns().add(terrain.getBox().get(50));
+		terrain.getBox().get(99).setFieldType(Box.FIELD_SPAWNS);
+		terrain.getSpawns().add(terrain.getBox().get(120));
+		terrain.getBox().get(99).setFieldType(Box.FIELD_SPAWNS);
+		/*terrain.getSpawns().add(terrain.getBox().get(51));
+		terrain.getBox().get(51).setFieldType(Box.FIELD_SPAWNS);*/
+
+		terrain.setFinishBox(terrain.getBox().get(55));
+		terrain.numeroterDistance(terrain.getFinishBox());
+        QG = MeshTA.loadMeshTA(new File("QG.mta"));
         QG.translate(20, 1, 125);
         QG.rotate(0, -(float) (Math.PI/2), 0);
         QG.homethetieX(5);
@@ -119,7 +168,7 @@ public class PartieSolo implements Screen{
 		cam.update();
 		toursModeles.add(new OffensivTower("tower2.mta"));
 		toursModeles.add(new OffensivTower("tower.mta"));
-		MeshTA mesh = new MeshTA();
+		final MeshTA mesh = new MeshTA();
 		Triangle3D t = mesh.addTriangle();
 		t.getPoint1().y = 0;
 		t.getPoint1().x = -1;
@@ -130,18 +179,27 @@ public class PartieSolo implements Screen{
 		t.getPoint3().y = 0;
 		t.getPoint3().x = 0;
 		t.getPoint3().z = 1;
-		monstre = new MonsterEarth(mesh, monsterPosition);
-		monstre.homethetie(3);
-		monstre.translate(0, 1, 0);
+
+		textTransform.rotate(Vector3.X,-90);
+
+
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			
 			@Override
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				int y = Math.round((mousePosition.y/(3*halfRadiusPolygon)) - 0.5f);
+				int x = Math.round(((mousePosition.x - (y%2)*(2*halfRadiusPolygon))/(4*halfRadiusPolygon) - 0.5f));
+				indexBox = x + y * 27 - (y)/2;
+				System.out.println(mousePosition.x + " " + mousePosition.y);
+				System.out.println(indexBox + " " + x + " " + y );
 				if(button == Input.Buttons.LEFT)
 				{
-					p.x = mousePosition.x;
-					p.z = mousePosition.y;
-					addTours = true;
+					if(indexBox>=0  && indexBox<terrain.getBox().size()){
+						if(terrain.getBox().get(indexBox).getTower() == null)
+						{
+							addTours = true;
+						}
+					}
 					return true;
 				}
 				return false;
@@ -159,7 +217,9 @@ public class PartieSolo implements Screen{
 			
 			@Override
 			public boolean scrolled(int amount) {
-				y+=amount;
+				System.out.println(amount);
+				y+=amount*10;
+				cam.position.set(x, y, z);
 				return true;
 			}
 			
@@ -195,7 +255,7 @@ public class PartieSolo implements Screen{
 				keyPressed=true;
 				if(keycode == Input.Keys.LEFT)
 				{
-					x-=5;
+					x-=2;
 					cam.position.set(x,y,z);
 					cam.lookAt(x, 0, z);
 					new Thread(){
@@ -218,7 +278,7 @@ public class PartieSolo implements Screen{
 				}
 				else if(keycode ==Input.Keys.RIGHT)
 				{
-					x+=5;
+					x+=2;
 					cam.position.set(x,y,z);
 					cam.lookAt(x, 0, z);
 					new Thread(){
@@ -241,7 +301,7 @@ public class PartieSolo implements Screen{
 				}
 				else if(keycode ==Input.Keys.UP)
 				{
-					z-=5;
+					z-=2;
 					cam.position.set(x,y,z);
 					cam.lookAt(x, 0, z);
 					new Thread(){
@@ -264,7 +324,7 @@ public class PartieSolo implements Screen{
 				}
 				else if(keycode ==Input.Keys.DOWN)
 				{
-					z+=5;
+					z+=2;
 					cam.position.set(x,y,z);
 					cam.lookAt(x, 0, z);
 					new Thread(){
@@ -291,6 +351,22 @@ public class PartieSolo implements Screen{
 					numTour %=2;
 					System.out.println(numTour);
 				}
+				else if(keycode ==Input.Keys.Q)
+				{
+					afficheGrille ^=true;
+				}
+				else if(keycode ==Input.Keys.M)
+				{
+					MonsterEarth monstre = new MonsterEarth(mesh);
+					monstre.homethetie(3);					
+					terrain.addMonster(monstre);
+					x=monstre.getBox().getCoordX();
+					z=monstre.getBox().getCoordY();
+					cam.position.set(x, y, z);
+					cam.lookAt(x, 0, z);
+					terrain.findPathMonster();
+				}
+
 				return false;
 			}
 		});
@@ -302,11 +378,15 @@ public class PartieSolo implements Screen{
 	{
 
 					Tower t = new OffensivTower(toursModeles.get(numTour));
-
 					addTours=false;
 					tours.add(t);
-					t.homethetie(2);
-					t.translate(p.x,0,p.z);
+					terrain.getBox().get(indexBox).setTower(t);
+					terrain.getBox().get(indexBox).setFieldType(Box.FIELD_TOWER);
+					terrain.setTowerExist(true);
+					terrain.numeroterDistance(terrain.getFinishBox());
+					t.homethetie(3);
+					t.translate(terrain.getBox().get(indexBox).getCoordX(),0,terrain.getBox().get(indexBox).getCoordY());
+					terrain.findPathMonster();
 	}
 	public synchronized void ajoutBalles()
 	{
@@ -337,7 +417,6 @@ public class PartieSolo implements Screen{
 	@Override
 	public void render(float delta) {
 		compteur++;
-		monstre.translate(0.1f, 0, 0);
 		if(addTours)
 		{
 			ajoutTours();
@@ -355,7 +434,10 @@ public class PartieSolo implements Screen{
 		{
 			b.render(renderer, cam.combined);
 		}
-		monstre.render(renderer, cam.combined);
+		for(Monster m : terrain.getMonsters())
+		{
+			m.render(renderer, cam.combined);
+		}
 		shape.setProjectionMatrix(cam.projection);
 		shape.setTransformMatrix(cam.view);
 		shape.begin(ShapeType.Line);
@@ -369,14 +451,43 @@ public class PartieSolo implements Screen{
 		shape.line(new Vector3(0,0,-10), new Vector3(0,0,0));
 		shape.setColor(new Color(0.5f,0.5f,1f,1));
 		shape.line(new Vector3(0,0,10), new Vector3(0,0,0));
-		
-		for(int cpt = 0; cpt<25;cpt++)
-		{
-			shape.setColor(Color.PURPLE);
-			shape.line(new Vector3(cpt*10,1,250), new Vector3(cpt*10,1,0));
-			shape.line(new Vector3(250,1,cpt*10), new Vector3(0,1,cpt*10));
+		shape.setColor(Color.ORANGE);
+		shape.setColor(Color.WHITE);
+		if(afficheGrille){
+			for(Box b : terrain.getBox())
+			{
+				for(int i=0; i<b.getTabCoordX().length-1;i++)
+				{
+					shape.line(new Vector3(b.getTabCoordX()[i],0.1f,b.getTabCoordY()[i]), new Vector3(b.getTabCoordX()[i+1],0.1f,b.getTabCoordY()[i+1]));
+				}
+			}
+
+			batch.setProjectionMatrix(cam.combined.mul(textTransform));
+			batch.begin();
+	        //int compteur = 0;
+			for(Box b : terrain.getBox())
+			{
+		        font.draw(batch,String.valueOf(b.getRange()),b.getCoordX()-halfRadiusPolygon,- b.getCoordY()+2);
+				compteur++;
+			}
+			batch.end();
 		}
+		
 		shape.end();
+		
+		shape.begin(ShapeType.Filled);
+		shape.rotate(1, 0, 0, +90);
+		shape.setColor(Color.RED);
+		shape.circle(terrain.getFinishBox().getCoordX(), terrain.getFinishBox().getCoordY(), halfRadiusPolygon);
+		shape.setColor(Color.ORANGE);
+		for(Monster m : terrain.getMonsters())
+			for(Box b : m.getPath())
+				shape.circle(b.getCoordX(), b.getCoordY(), halfRadiusPolygon);
+
+		shape.rotate(1, 0, 0, -90);
+		shape.end();
+	
+		
 		try {
 			Thread.sleep(30);
 		} catch (InterruptedException e) {

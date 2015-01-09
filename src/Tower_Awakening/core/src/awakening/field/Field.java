@@ -1,10 +1,14 @@
 package awakening.field;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
+import ta.shape3D.mesh.MeshTA;
 import awakening.toolshop.monster.Monster;
+import awakening.toolshop.tower.Tower;
 
-public class Field
+public class Field extends MeshTA
 {
 	// **************************************
 	// ************** VARIABLES *************
@@ -17,15 +21,18 @@ public class Field
 	private int nbBoxWidth;
 	private ArrayList<Box> box;
 	private ArrayList<Box> spawns;
+	private ArrayList<Tower> towers;
 	private ArrayList<Monster> monsters;
 	private ArrayList<Barrier> barriers;
 	private Box finishBox;
 	private int[] tabCoordX;
 	private int[] tabCoordY;
+	private boolean towerExist;
 	// *****************************************
 	// ************** CONSTRUCTORS ************
 	// *****************************************
-	public Field(int halfRadiusPolygon, int nbSidePolygon, int border, int nbSpawn, int nbBoxHeight, int nbBoxWidth)
+	public Field(int halfRadiusPolygon, int nbSidePolygon, int border, int nbSpawn, int nbBoxHeight, int nbBoxWidth
+			, File meshFile)
 	{
 		this.halfRadiusPolygon = halfRadiusPolygon;
 		this.nbSidePolygon = nbSidePolygon;
@@ -39,6 +46,12 @@ public class Field
 		spawns = new ArrayList<Box>();
 		monsters = new ArrayList<Monster>();
 		barriers = new ArrayList<Barrier>();
+		if (meshFile!=null)
+		{
+			this.load(meshFile);
+			this.rotate((float)Math.PI/2, 0,0);
+			this.translate(0, -1, 0);
+		}
 	}
 	// *****************************************
 	// ************** PROCEDURES **************
@@ -78,11 +91,11 @@ public class Field
 		if (nbSidePolygon == 6)
 		{
 			boolean impair = true;
-			for (int y = 2 * halfRadiusPolygon + border; y < nbBoxHeight * 3 * halfRadiusPolygon + 2 * border; y += 3 * halfRadiusPolygon)
+			for (int y = 2 * halfRadiusPolygon; y < nbBoxHeight * 3 * halfRadiusPolygon + 2 * border; y += 3 * halfRadiusPolygon)
 			{
 				if (impair)
 				{
-					for (int x = 2 * halfRadiusPolygon + border; x < nbBoxWidth * 4 * halfRadiusPolygon + 2 * border; x += 4 * halfRadiusPolygon)
+					for (int x = 2 * halfRadiusPolygon; x < nbBoxWidth * 4 * halfRadiusPolygon + 2 * border; x += 4 * halfRadiusPolygon)
 					{
 						remplirTableauBox(x, y);
 						box.add(new Box(x, y, tabCoordX, tabCoordY));
@@ -90,7 +103,7 @@ public class Field
 				}
 				else
 				{
-					for (int x = 4 * halfRadiusPolygon + border; x < nbBoxWidth * 4 * halfRadiusPolygon + 2 * border; x += 4 * halfRadiusPolygon)
+					for (int x = 4 * halfRadiusPolygon; x < nbBoxWidth * 4 * halfRadiusPolygon + 2 * border; x += 4 * halfRadiusPolygon)
 					{
 						remplirTableauBox(x, y);
 						box.add(new Box(x, y, tabCoordX, tabCoordY));
@@ -116,12 +129,12 @@ public class Field
 		boolean bloque = true;
 		int totalBox = 0;
 		ArrayList<Box> tabBoxActuelles = new ArrayList<Box>();
-		// On met toutes les Boxs � -1
+		// On met toutes les Boxs � -1
 		for (Box b : box)
 		{
 			b.setRange(-1);
 		}
-		// On place la Box centrale � 0
+		// On place la Box centrale � 0
 		arrivee.setRange(0);
 		totalBox = 1;
 		// On place le premier rang de calcul
@@ -134,7 +147,7 @@ public class Field
 			            && (arrivee.getCoordX() - b.getCoordX()) * (arrivee.getCoordX() - b.getCoordX())
 			                        + (arrivee.getCoordY() - b.getCoordY()) * (arrivee.getCoordY() - b.getCoordY()) > 10)
 			{
-				if (b.getFieldType().equals(Box.FIELD_EARTH) || b.getFieldType().equals(Box.FIELD_SPAWNS))
+				if (b.getFieldType()>0)
 				{
 					b.setRange(1);
 					bloque = false;
@@ -154,7 +167,7 @@ public class Field
 		else
 		{
 			ArrayList<Box> tab = new ArrayList<Box>();
-			while (totalBox < nbBoxHeight * nbBoxWidth && !bloque)
+			while (totalBox < box.size() && !bloque)
 			{
 				bloque = true;
 				for (Box b : tabBoxActuelles)
@@ -164,7 +177,7 @@ public class Field
 						if ((b1.getCoordX() - b.getCoordX()) * (b1.getCoordX() - b.getCoordX()) + (b1.getCoordY() - b.getCoordY())
 						            * (b1.getCoordY() - b.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2))
 						{
-							if (b.getFieldType().equals(Box.FIELD_EARTH) || b.getFieldType().equals(Box.FIELD_SPAWNS))
+							if (b.getFieldType()>0)
 							{
 								if (b1.getRange() == -1)
 								{
@@ -176,7 +189,7 @@ public class Field
 							}
 							else
 							{
-								b.setRange(-2);
+								b.setRange(b.getFieldType());
 							}
 						}
 					}
@@ -197,7 +210,7 @@ public class Field
 			// Random number between 0 and the size of the list which
 			// contains spawns
 			int randomNumber = (int) (Math.random() * ((spawns.size() - 1) + 1));
-			m.setBox(spawns.get(randomNumber));
+			m.setActualBox(spawns.get(randomNumber));
 			monsters.add(m);
 		}
 	}
@@ -209,12 +222,12 @@ public class Field
 	// son tableau du chemin
 	// Maintenant chaque monstre pourra prendre un chemin "unique" car les
 	// chemins possibles pour chaque case
-	// Sont choisis aléatoirement
+	// Sont choisis alÃ©atoirement
 	// *************
 	public void findPathMonster()
 	{
 		// List which contains possible box for the path
-		ArrayList<Box> PossibleBox = new ArrayList<Box>();
+		ArrayList<Box> possibleBox = new ArrayList<Box>();
 		// Refers to the current box on which it is working
 		Box currentBox;
 		// For each monster
@@ -224,42 +237,269 @@ public class Field
 			m.getPath().clear();
 			// On ajoute la case sur lequel le monstre est (pour les
 			// calculs)
-			m.getPath().add(m.getBox());
+			m.addBoxInPath(m.getBox());
 			// On def la case actuelle à celle du monstre
 			currentBox = m.getBox();
 			do
 			{
-				// On parcourt toutes les cases et on filtre celle qui
+				// On parcourt toutes les BoxList1 et on filtre celle
+				// qui
 				// sont autour et celles qui sont -1 en distance
 				for (Box c : box)
 				{
-					if ((currentBox.getCoordX() - c.getCoordX()) * (currentBox.getCoordX() -c.getCoordX()) + (currentBox.getCoordY() - c.getCoordY())
-					            * (currentBox.getCoordY() - c.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2))
-					
+					if ((currentBox.getCoordX() - c.getCoordX()) * (currentBox.getCoordX() - c.getCoordX())
+					            + (currentBox.getCoordY() - c.getCoordY()) * (currentBox.getCoordY() - c.getCoordY()) < (4 * halfRadiusPolygon + 2)
+					            * (4 * halfRadiusPolygon + 2))
 					{
 						if (currentBox.getRange() == c.getRange() + 1)
 						{
-							// On ajoute ces POSSIBLES cases
-							// (entre 1 et 3 normalement)
-							PossibleBox.add(c);
+							// On ajoute ces POSSIBLES BoxList1
+							// (entre 1 et 3 normalement
+							if (possibleBox.size() == 0)
+							{
+								possibleBox.add(c);
+							}
+							else
+							{
+								if (c.getNbTargeted() < possibleBox.get(0).getNbTargeted())
+								{
+									possibleBox.clear();
+									possibleBox.add(c);
+								}
+								else if (c.getNbTargeted() == possibleBox.get(0).getNbTargeted())
+								{
+									possibleBox.add(c);
+								}
+							}
 						}
 					}
 				}
 				// On déf un nombre rang d'homme entre 0 et le nombre
 				// de case dans la liste -1 (en gros pour choisir une
-				// des cases dans la liste)
-				int randomNumber = (int) (Math.random() * 100) % (PossibleBox.size());
-				// On get
-				currentBox = PossibleBox.get(randomNumber);
-				// On ajoute la case au chemin
-				m.getPath().add(currentBox);
-				// On nettoye la liste "temp" pour les cases possibles
-				// pour la r�utiliser derriere
-				PossibleBox.clear();
+				// des BoxList1 dans la liste)
+				if(possibleBox.size()>0)
+				{
+					int randomNumber = m.randomNumber % (possibleBox.size());
+					// On get
+					currentBox = possibleBox.get(randomNumber);
+					// On ajoute la case au chemin
+					m.addBoxInPath(currentBox);
+					// On nettoye la liste "temp" pour les BoxList1
+					// possibles
+					// pour la r�utiliser derriere
+					possibleBox.clear();
+				}
 			}
 			// On fait ca tant que la case actuelle n'est pas la case
 			// finale (UNIQUE)
 			while (!(finishBox.equals(currentBox)));
+		}
+	}
+	public void findPathMonster(Monster m)
+	{
+		// List which contains possible box for the path
+		ArrayList<Box> possibleBox = new ArrayList<Box>();
+		// Refers to the current box on which it is working
+		Box currentBox;
+		
+		// Clean son chemin (on recalcule à chaque fois)
+		m.getPath().clear();
+		// On ajoute la case sur lequel le monstre est (pour les
+		// calculs)
+		m.getPath().add(m.getBox());
+		// On def la case actuelle à celle du monstre
+		currentBox = m.getBox();
+		do
+		{
+			// On parcourt toutes les BoxList1 et on filtre celle
+			// qui
+			// sont autour et celles qui sont -1 en distance
+			for (Box c : box)
+			{
+				if ((currentBox.getCoordX() - c.getCoordX()) * (currentBox.getCoordX() - c.getCoordX())
+				            + (currentBox.getCoordY() - c.getCoordY()) * (currentBox.getCoordY() - c.getCoordY()) < (4 * halfRadiusPolygon + 2)
+				            * (4 * halfRadiusPolygon + 2))
+				{
+					if (currentBox.getRange() == c.getRange() + 1)
+					{
+						// On ajoute ces POSSIBLES BoxList1
+						// (entre 1 et 3 normalement
+						if (possibleBox.size() == 0)
+						{
+							possibleBox.add(c);
+						}
+						else
+						{
+							if (c.getNbTargeted() < possibleBox.get(0).getNbTargeted())
+							{
+								possibleBox.clear();
+								possibleBox.add(c);
+							}
+							else if (c.getNbTargeted() == possibleBox.get(0).getNbTargeted())
+							{
+								possibleBox.add(c);
+							}
+						}
+					}
+				}
+			}
+			// On déf un nombre rang d'homme entre 0 et le nombre
+			// de case dans la liste -1 (en gros pour choisir une
+			// des BoxList1 dans la liste)
+			int randomNumber = (int) (Math.random() * 100) % (possibleBox.size());
+			// On get
+			currentBox = possibleBox.get(randomNumber);
+			// On ajoute la case au chemin
+			m.getPath().add(currentBox);
+			// On nettoye la liste "temp" pour les BoxList1
+			// possibles
+			// pour la r�utiliser derriere
+			possibleBox.clear();
+		}
+		// On fait ca tant que la case actuelle n'est pas la case
+		// finale (UNIQUE)
+		while (!(finishBox.equals(currentBox)));
+	}
+	public void initTargetedBox()
+	{
+		for (Box b : box)
+		{
+			b.setNbTargeted(0);
+		}
+	}
+	public void updateTargetedBoxAdd()
+	{
+		LinkedList<Box> BoxList1 = new LinkedList<Box>();
+		LinkedList<Box> BoxList12 = new LinkedList<Box>();
+		LinkedList<Box> BoxListDone = new LinkedList<Box>();
+		boolean par = false;
+		int cpt = 1;
+		System.out.println("OK" + towers.size());
+		Box b = towers.get(towers.size() - 1).getBox();
+		if (b.getTower() != null)
+		{
+			for (Box b1 : box)
+			{
+				if ((b.getCoordX() - b1.getCoordX()) * (b.getCoordX() - b1.getCoordX()) + (b.getCoordY() - b1.getCoordY())
+				            * (b.getCoordY() - b1.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2))
+				{
+					b1.setNbTargeted(b1.getNbTargeted() + 1);
+					BoxList1.add(b1);
+					BoxListDone.add(b1);
+				}
+			}
+			while (b.getTower().getRange() != cpt)
+			{
+				if (!par)
+				{
+					BoxList12.clear();
+					for (Box b2 : BoxList1)
+					{
+						for (Box b3 : box)
+						{
+							if ((b3.getCoordX() - b2.getCoordX()) * (b3.getCoordX() - b2.getCoordX())
+							            + (b3.getCoordY() - b2.getCoordY()) * (b3.getCoordY() - b2.getCoordY()) < (4 * halfRadiusPolygon + 2)
+							            * (4 * halfRadiusPolygon + 2)
+							            && !BoxListDone.contains(b3))
+							{
+								b3.setNbTargeted(b3.getNbTargeted() + 1);
+								BoxList12.add(b3);
+								BoxListDone.add(b3);
+							}
+						}
+					}
+					cpt++;
+					par = !par;
+				}
+				else
+				{
+					BoxList1.clear();
+					for (Box b2 : BoxList12)
+					{
+						for (Box b3 : box)
+						{
+							if ((b3.getCoordX() - b2.getCoordX()) * (b3.getCoordX() - b2.getCoordX())
+							            + (b3.getCoordY() - b2.getCoordY()) * (b3.getCoordY() - b2.getCoordY()) < (4 * halfRadiusPolygon + 2)
+							            * (4 * halfRadiusPolygon + 2)
+							            && !BoxListDone.contains(b3))
+							{
+								b3.setNbTargeted(b3.getNbTargeted() + 1);
+								BoxList1.add(b3);
+								BoxListDone.add(b3);
+							}
+						}
+					}
+					cpt++;
+					par = !par;
+				}
+			}
+		}
+	}
+	public void updateTargetedBoxRemove()
+	{
+		LinkedList<Box> BoxList1 = new LinkedList<Box>();
+		LinkedList<Box> BoxList12 = new LinkedList<Box>();
+		LinkedList<Box> BoxListDone = new LinkedList<Box>();
+		boolean par = false;
+		int cpt = 1;
+		Box b = towers.get(towers.size() - 1).getBox();
+		if (b.getTower() != null)
+		{
+			for (Box b1 : box)
+			{
+				if ((b.getCoordX() - b1.getCoordX()) * (b.getCoordX() - b1.getCoordX()) + (b.getCoordY() - b1.getCoordY())
+				            * (b.getCoordY() - b1.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2))
+				{
+					b1.setNbTargeted(b1.getNbTargeted() - 1);
+					BoxList1.add(b1);
+					BoxListDone.add(b1);
+				}
+			}
+			while (b.getTower().getRange() != cpt)
+			{
+				if (!par)
+				{
+					BoxList12.clear();
+					for (Box b2 : BoxList1)
+					{
+						for (Box b3 : box)
+						{
+							if ((b3.getCoordX() - b2.getCoordX()) * (b3.getCoordX() - b2.getCoordX())
+							            + (b3.getCoordY() - b2.getCoordY()) * (b3.getCoordY() - b2.getCoordY()) < (4 * halfRadiusPolygon + 2)
+							            * (4 * halfRadiusPolygon + 2)
+							            && !BoxListDone.contains(b3))
+							{
+								b3.setNbTargeted(b3.getNbTargeted() - 1);
+								BoxList12.add(b3);
+								BoxListDone.add(b3);
+							}
+						}
+					}
+					cpt++;
+					par = !par;
+				}
+				else
+				{
+					BoxList1.clear();
+					for (Box b2 : BoxList12)
+					{
+						for (Box b3 : box)
+						{
+							if ((b3.getCoordX() - b2.getCoordX()) * (b3.getCoordX() - b2.getCoordX())
+							            + (b3.getCoordY() - b2.getCoordY()) * (b3.getCoordY() - b2.getCoordY()) < (4 * halfRadiusPolygon + 2)
+							            * (4 * halfRadiusPolygon + 2)
+							            && !BoxListDone.contains(b3))
+							{
+								b3.setNbTargeted(b3.getNbTargeted() - 1);
+								BoxList1.add(b3);
+								BoxListDone.add(b3);
+							}
+						}
+					}
+					cpt++;
+					par = !par;
+				}
+			}
 		}
 	}
 	// *****************************************
@@ -317,6 +557,10 @@ public class Field
 	{
 		return tabCoordY;
 	}
+	public boolean getTowerExist()
+	{
+		return towerExist;
+	}
 	public void setHalfRadiusPolygon(int halfRadiusPolygon)
 	{
 		this.halfRadiusPolygon = halfRadiusPolygon;
@@ -368,5 +612,9 @@ public class Field
 	public void setTabCoordY(int[] tabCoordY)
 	{
 		this.tabCoordY = tabCoordY;
+	}
+	public void setTowerExist(boolean b)
+	{
+		this.towerExist = b;
 	}
 }

@@ -8,9 +8,10 @@ public class Box
 	// ************** VARIABLES *************
 	// **************************************
 	// Constant variable to define type of the box
-	public final static String FIELD_EARTH = "Earth#12348";
-	public final static String FIELD_BARRIER = "Barrier#23565";
-	public static final String FIELD_SPAWNS = "Spawns#6541";
+	public final static int FIELD_EARTH = 1;
+	public final static int FIELD_BARRIER = -2;
+	public static final int FIELD_SPAWNS = 2;
+	public static final int FIELD_TOWER = -3;
 	// Identification number of the box
 	private int id;
 	// Total number of created box
@@ -22,13 +23,15 @@ public class Box
 	private int[] tabCoordX = new int[6];
 	private int[] tabCoordY = new int[6];
 	// String which contains the type of the box
-	private String fieldType;
+	private int fieldType;
 	// Value of the range to go to the goal
 	private int range;
 	// Value of the handicap of the box
 	private float handicap;
 	// Reference to the tower on this box if it exists
 	private Tower tower;
+	// Total of tower which can target this box
+	private int nbTargeted;
 	// *****************************************
 	// ************** CONSTRUCTORS *************
 	// *****************************************
@@ -47,6 +50,8 @@ public class Box
 		this.fieldType = FIELD_EARTH;
 		// As default, a box has a standard handicap : 1
 		this.handicap = 1.2f;
+		// As default, a box is no targeted
+		this.nbTargeted=0;
 	}
 	// *****************************************
 	// ********** GETTERS & SETTERS ************
@@ -75,7 +80,7 @@ public class Box
 	{
 		return tabCoordY;
 	}
-	public String getFieldType()
+	public int getFieldType()
 	{
 		return fieldType;
 	}
@@ -90,6 +95,10 @@ public class Box
 	public Tower getTower()
 	{
 		return tower;
+	}
+	public int getNbTargeted()
+	{
+		return  nbTargeted;
 	}
 	public void setID(int id)
 	{
@@ -115,7 +124,7 @@ public class Box
 	{
 		this.tabCoordY = tabCoordY;
 	}
-	public void setFieldType(String fieldType)
+	public void setFieldType(int fieldType)
 	{
 		this.fieldType = fieldType;
 	}
@@ -130,5 +139,9 @@ public class Box
 	public void setTower(Tower tower)
 	{
 		this.tower = tower;
+	}
+	public void setNbTargeted(int nbTargeted)
+	{
+		this.nbTargeted=nbTargeted;
 	}
 }

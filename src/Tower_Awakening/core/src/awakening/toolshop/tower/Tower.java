@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import ta.shape3D.Point.Point2D;
 import ta.shape3D.mesh.MeshTA;
+import awakening.field.Box;
 import awakening.toolshop.monster.Monster;
 
 public abstract class Tower extends MeshTA
@@ -16,9 +17,10 @@ public abstract class Tower extends MeshTA
 	protected int level;
 	protected Tower levelUp;
 	protected Monster target;
+	protected Box box;
 	protected Point2D canonPosition= new Point2D(1,0);
-	public final static float cos01 = (float) Math.cos(0.02f);
-	public final static float sin01 = (float) Math.sin(0.02f);
+	public final static float cos01 = (float) Math.cos(0.04f);
+	public final static float sin01 = (float) Math.sin(0.04f);
 	protected LinkedList<Missile> m;
 	// *****************************************
 	// ************** CONSTRUCTORS ************
@@ -35,8 +37,7 @@ public abstract class Tower extends MeshTA
 	
 	public Tower(String path)
 	{
-		this(MeshTA.load(new File(path)));
-	
+		this.load(new File(path));
 	}
 	public Tower(MeshTA m)
 	{
@@ -66,6 +67,30 @@ public abstract class Tower extends MeshTA
 	{
 		return this.target!=null;
 	}
+	public Box getBox()
+	{
+		return box;
+	}
+	public int getId()
+	{
+		return id;
+	}
+	public float getBuildCost()
+	{
+		return buildCost;
+	}
+	public int getRange()
+	{
+		return range;
+	}
+	public float getSpeedAttaque()
+	{
+		return speedAttaque;
+	}
+	public int getLevel()
+	{
+		return level;
+	}
 	
 	// *****************************************
 	// ******** PROCEDURES TO OVERLOAD *********
@@ -76,12 +101,28 @@ public abstract class Tower extends MeshTA
 		return (distanceX * distanceX + distanceY * distanceY < range * range);	
 	}
 	
-
-	// ***********************************************
-	// ********** ABSTRACTS PROCEDURES **************
-	// ***********************************************
-	public abstract void action();
+	public void action(){
+		float deltaZ = -(target.getZ()- getZ());
+		float deltaX = (target.getX()- getX());
+		float rotation=0;
+		if(deltaZ>0){
+			rotation = 1;
+		}
+		else if(deltaZ<0)
+		{
+			rotation = -1;
+		}
+		else
+		{
+			if(deltaX * canonPosition.x<0 || Math.abs(deltaZ-canonPosition.y)>0.1f)
+			{
+				 rotation = 1;
+			}
+		}
+		animationRY(rotation);
+	};
 	
+
 	// *****************************************
 	// ****************** OTHER ****************
 	// *****************************************
@@ -115,11 +156,11 @@ public abstract class Tower extends MeshTA
 		float coefCanon, coefTarget;
 		float posX = (target.getX() - getX());
 		float posY =(target.getZ()- getZ());
-		if(Math.abs(canonPosition.y)<0.1f)
+		
+		if(Math.abs(canonPosition.y)<0.4f && Math.abs(posY)<10f)
 		{
-			if(Math.abs(posY)<2f && canonPosition.x*posX>0)
+			if(Math.abs(posY/posX)<0.6f && canonPosition.x*posX>0 && Math.abs(canonPosition.y-posY)<5f)
 			{
-				System.out.println("ok");
 				return true;
 			}
 			else
@@ -127,13 +168,13 @@ public abstract class Tower extends MeshTA
 		}
 		coefTarget = posX / posY;
 		coefCanon = -canonPosition.x / canonPosition.y;
-		return (Math.abs(coefTarget - coefCanon) < 0.3f && Math.signum(posX) == Math.signum(canonPosition.x)
+		return (Math.abs(coefTarget - coefCanon) < 0.2f && Math.signum(posX) == Math.signum(canonPosition.x)
 			&& Math.signum(posY) == -Math.signum(canonPosition.y));
 	}
 
 	@Override
 	public void rotate(float x, float y, float z) {
-		getSousMesh(0).rotate(0, 0.02f*y, 0);
+		getSousMesh(0).rotate(0, 0.04f*y, 0);
 		float cosA = canonPosition.x;
 		canonPosition.x *= cos01;
 		canonPosition.x -= sin01*canonPosition.y * y;
