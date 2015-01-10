@@ -23,7 +23,7 @@ public class Triangle3D {
 		this.points[0] = new Point3D(1,0,0);
 		this.points[1] = new Point3D(0,1,0);
 		this.points[2] = new Point3D(-1,0,0);
-		this.pointsTexture[0] = new Point2D(1,0);
+		this.pointsTexture[0] = new Point2D(0,0);
 		this.pointsTexture[1] = new Point2D(1,1);
 		this.pointsTexture[2] = new Point2D(0,1);
 		couleurs[0]=Color.WHITE;
@@ -92,7 +92,7 @@ public class Triangle3D {
 		rendu.vertex(points[2].x, points[2].y, points[2].z);
 	}
 	
-	public void save(DataOutputStream bos, String fileName)
+	public void save(DataOutputStream bos)
 	{
 		try {
 			bos.writeInt(id);

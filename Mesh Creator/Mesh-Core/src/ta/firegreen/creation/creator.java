@@ -117,7 +117,7 @@ public final class creator extends ApplicationAdapter {
 		}
 		if(fileMTA !=null)
 		{
-			nouveau = MeshTA.load(fileMTA);
+			nouveau = MeshTA.loadMeshTA(fileMTA);
 			fileMTA=null;
 		}
 		Gdx.gl.glClearColor(0, 0, 0, 1);

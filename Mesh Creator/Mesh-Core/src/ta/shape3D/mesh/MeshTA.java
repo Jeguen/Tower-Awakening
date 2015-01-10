@@ -141,7 +141,7 @@ public class MeshTA implements TemporarilyAnimable{
 		try {
 			DataOutputStream bos = new DataOutputStream(new FileOutputStream(f));
 			bos.writeUTF("MeshTowerAwakening");
-			this.save(bos, f.getName());
+			this.save(bos, f);
 			bos.flush();bos.close();
 			
 		} catch (FileNotFoundException e) {
@@ -152,7 +152,7 @@ public class MeshTA implements TemporarilyAnimable{
 			e.printStackTrace();
 		}
 	}
-	final public void save(DataOutputStream bos, String filename) throws IOException
+	final public void save(DataOutputStream bos, File f) throws IOException
 	{
 			bos.writeFloat(tX);
 			bos.writeFloat(tY);
@@ -167,22 +167,25 @@ public class MeshTA implements TemporarilyAnimable{
 			bos.writeInt(triangles.size());
 			for(Triangle3D t : triangles)
 			{
-				t.save(bos, filename);
+				t.save(bos);
 			}
 			if(image != null){
-				String s = filename.split(".mta")[0] + "Image" + name +".png";
-				FileHandle f = new FileHandle(s);
-				bos.writeUTF(s);
+				String s;
+				if(f.getParentFile()!=null)
+					s = f.getParent() +"\\"+ f.getName().split(".mta")[0] + "Image" + name +".png";
+				else
+					s = f.getName().split(".mta")[0] + "Image" + name +".png";
+				bos.writeUTF(f.getName().split(".mta")[0] + "Image" + name +".png");
 				TextureData td = image.getTextureData();
 				td.prepare();
-				PixmapIO.writePNG(f, image.getTextureData().consumePixmap());
+				PixmapIO.writePNG(new FileHandle(s), image.getTextureData().consumePixmap());
 			}
 			else
 				bos.writeUTF(new String());
 			bos.writeInt(sousMesh.size());
 			for(MeshTA m : sousMesh)
 			{
-				m.save(bos,filename);
+				m.save(bos,f);
 			}
 	}
 	final public LinkedList<Triangle3D> getTriangles()
@@ -194,7 +197,7 @@ public class MeshTA implements TemporarilyAnimable{
 		return sousMesh;
 	}
 	
-	final public static MeshTA load(File f)
+	final public MeshTA load(File f)
 	{
 		if(f.exists() && f.isFile())
 		{
@@ -204,7 +207,36 @@ public class MeshTA implements TemporarilyAnimable{
 					DataInputStream dis = new DataInputStream(new FileInputStream(f));
 					if(dis.readUTF().equals("MeshTowerAwakening"))
 					{
-						MeshTA retour = MeshTA.load(f,dis);
+						this.load(f,dis);
+						dis.close();
+						return this;
+					}
+					dis.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		JOptionPane.showMessageDialog(null, "Le fichier n'est pas valide", "Erreur",
+				JOptionPane.ERROR_MESSAGE);
+		return null;
+	}
+	final public static MeshTA loadMeshTA(File f)
+	{
+		if(f.exists() && f.isFile())
+		{
+			if(f.getName().endsWith(".mta"))
+			{
+				try {
+					DataInputStream dis = new DataInputStream(new FileInputStream(f));
+					if(dis.readUTF().equals("MeshTowerAwakening"))
+					{
+						MeshTA retour = new MeshTA();
+						retour.load(f,dis);
 						dis.close();
 						return retour;
 					}
@@ -222,38 +254,38 @@ public class MeshTA implements TemporarilyAnimable{
 				JOptionPane.ERROR_MESSAGE);
 		return null;
 	}
-	final private static MeshTA load(File f, DataInputStream dis) throws IOException
+	final private MeshTA load(File f, DataInputStream dis) throws IOException
 	{
-		MeshTA retour = new MeshTA();
-		retour.tX = dis.readFloat();
-		retour.tY = dis.readFloat();
-		retour.tZ = dis.readFloat();
-		retour.rX = dis.readFloat();
-		retour.rY = dis.readFloat();
-		retour.rZ = dis.readFloat();
-		retour.scaleX = dis.readFloat();
-		retour.scaleY = dis.readFloat();
-		retour.scaleZ = dis.readFloat();
-		retour.name = dis.readUTF();
+		this.tX = dis.readFloat();
+		this.tY = dis.readFloat();
+		this.tZ = dis.readFloat();
+		this.rX = dis.readFloat();
+		this.rY = dis.readFloat();
+		this.rZ = dis.readFloat();
+		this.scaleX = dis.readFloat();
+		this.scaleY = dis.readFloat();
+		this.scaleZ = dis.readFloat();
+		this.name = dis.readUTF();
 		int nbTriangles = dis.readInt();
 		for(int cpt=0;cpt<nbTriangles;cpt++)
 		{
-			retour.triangles.add(Triangle3D.load(dis));
+			this.triangles.add(Triangle3D.load(dis));
 		}
 		String imageFile = dis.readUTF();
 		if(!imageFile.equals("")){
 			if(f.getParent()!=null)
-				retour.setTexture(f.getParent() +"\\"+ imageFile);
+				this.setTexture(f.getParent() +"\\"+ imageFile);
 			else
-				retour.setTexture(imageFile);
+				this.setTexture(imageFile);
 
 		}
 		int nbMesh = dis.readInt();
 		for(int cpt=0;cpt<nbMesh;cpt++)
 		{
-			retour.sousMesh.add(MeshTA.load(f,dis));
+			MeshTA m = new MeshTA();
+			this.sousMesh.add(m.load(f,dis));
 		}
-		return retour;
+		return this;
 	}
 	
 	
@@ -418,6 +450,12 @@ public class MeshTA implements TemporarilyAnimable{
 		scaleX=sx;
 		scaleY=sy;
 		scaleZ=sz;
+		tX=x;
+		tY=y;
+		tZ=z;
+	}
+	final public void setAbsolutePosition(float x, float y, float z)
+	{
 		tX=x;
 		tY=y;
 		tZ=z;

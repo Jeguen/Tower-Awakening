@@ -1,7 +1,7 @@
 package ta.shape3D;
 
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Animator extends Thread {
 
@@ -36,13 +36,14 @@ public class Animator extends Thread {
 					a.anime();
 				}
 				onModification = true;
-				Iterator<TemporarilyAnimable> iterat = tempAnimeListe.iterator();
+				ListIterator<TemporarilyAnimable> iterat = tempAnimeListe.listIterator();
 				while(iterat.hasNext())
 				{
 					TemporarilyAnimable ta = iterat.next();
 					if(ta.mustBeInterrupted())
 					{
 						iterat.remove();
+						iterat = tempAnimeListe.listIterator(iterat.nextIndex());
 						ta.actionWhenInterruption();
 					}
 					else ta.anime();
@@ -73,17 +74,23 @@ public class Animator extends Thread {
 	
 	public void addAnimable(Animable a)
 	{
-		this.animeListe.push(a);
+		this.animeListe.addLast(a);
 	}
 	public void addTemporarily(final TemporarilyAnimable a)
 	{
-		if(!onModification) this.tempAnimeListe.push(a);
+		if(!onModification) this.tempAnimeListe.addLast(a);
 		else new Thread(){
 			
 			public void run()
 			{
-				while(onModification);
-				tempAnimeListe.push(a);
+				while(onModification)
+					try {
+						sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					};
+				tempAnimeListe.addLast(a);
 			}
 			
 		}.start();

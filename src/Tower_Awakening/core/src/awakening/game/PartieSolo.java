@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 import ta.shape3D.Animator;
-import ta.shape3D.Point.Point2D;
 import ta.shape3D.Triangle3D;
 import ta.shape3D.mesh.MeshTA;
 import awakening.field.Box;
@@ -22,13 +21,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 
 public class PartieSolo implements Screen{
 
@@ -39,6 +43,7 @@ public class PartieSolo implements Screen{
 	private static int nbSpawn = 5;
 	private static int nbBoxHeight =25;
 	private static int nbBoxWidth =25;
+	OnHoverableWidget onHoveredWidget;
 	int indexBox;
 	SpriteBatch batch;
 	boolean afficheGrille=true;
@@ -51,7 +56,7 @@ public class PartieSolo implements Screen{
     byte numTour;
     MeshTA QG;
     boolean addTours;
-    final Point2D mousePosition = new Point2D(0, 0);
+    final Vector2 mousePosition = new Vector2(0, 0);
     Vector3 p = new Vector3();
     boolean inAction = false;
     LinkedList<Tower> toursModeles = new LinkedList<Tower>();
@@ -61,7 +66,9 @@ public class PartieSolo implements Screen{
     float x=20,y=50, z=20;
     Animator animation = new Animator(35);
     Field terrain;
-    
+    private BoutonShop boutonShop;
+	private Stage stage;
+
     
     Thread moteur = new Thread(){
 
@@ -131,6 +138,7 @@ public class PartieSolo implements Screen{
 	public void show() {
 		Gdx.graphics.setVSync(true);
 		Gdx.graphics.setContinuousRendering(false);
+		stage = new Stage();
 		batch = new SpriteBatch();
 	    font = new BitmapFont();
 	    font.setScale(0.4f, 0.2f);
@@ -182,11 +190,12 @@ public class PartieSolo implements Screen{
 
 		textTransform.rotate(Vector3.X,-90);
 
+		
 
 		Gdx.input.setInputProcessor(new InputProcessor() {
 			
 			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {			
 				int y = Math.round((mousePosition.y/(3*halfRadiusPolygon)) - 0.5f);
 				int x = Math.round(((mousePosition.x - (y%2)*(2*halfRadiusPolygon))/(4*halfRadiusPolygon) - 0.5f));
 				indexBox = x + y * 27 - (y)/2;
@@ -226,15 +235,35 @@ public class PartieSolo implements Screen{
 			@Override
 			public boolean mouseMoved(int screenX, int screenY) {
 				mousePosition.x = screenX; mousePosition.y = screenY;
-				Vector3 p = cam.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
-				p.x -= x;
-				p.x *= y;
-				p.x += x;
-				p.y = y;
-				p.z -= z;
-				p.z *= y;
-				p.z += z;
-				mousePosition.x = p.x; mousePosition.y = p.z;
+				System.out.println(mousePosition.x + " " + mousePosition.y);
+				if(onHoveredWidget==null)
+				{
+					boolean isOverSomething=boutonShop.testMousePosition(mousePosition);					
+					if(isOverSomething)
+					{
+						boutonShop.onHoverAction();
+						onHoveredWidget = boutonShop;
+					}
+					else
+					{
+						Vector3 p = cam.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
+						p.x -= x;
+						p.x *= y;
+						p.x += x;
+						p.y = y;
+						p.z -= z;
+						p.z *= y;
+						p.z += z;
+						mousePosition.x = p.x; mousePosition.y = p.z;	
+					}
+				}
+				else{
+					if(!onHoveredWidget.testMousePosition(mousePosition))
+					{
+						onHoveredWidget.onExitAction();
+						onHoveredWidget = null;	
+					};
+				}
 				return true;
 			}
 			
@@ -370,6 +399,29 @@ public class PartieSolo implements Screen{
 				return false;
 			}
 		});
+		final Texture texture = new Texture("tower1.png");
+		boutonShop = new BoutonShop(texture, stage.getWidth()/5, stage.getHeight()/5);
+		stage.addActor(boutonShop);
+		boutonShop.setPosition(stage.getWidth()-boutonShop.getWidth(),stage.getHeight()-boutonShop.getHeight());
+		Window w = new Window("Radar" , new Skin(Gdx.files.internal("uiskin.json")));
+		stage.addActor(w);
+		w.setSize(stage.getWidth()/4, stage.getWidth()/4);
+		w.setPosition(stage.getWidth() - w.getWidth() - 10,5);
+		/*boutonShop.addListener
+		(
+				new ClickListener() 
+				{
+					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+					{
+						effect.play(game.getSoundVolume());
+						effect.dispose();
+						music.dispose();
+						Gdx.app.exit();
+						return false;	
+					}
+				}
+				
+		);*/
 		moteur.start();
 		animation.start();
 	}
@@ -486,6 +538,8 @@ public class PartieSolo implements Screen{
 
 		shape.rotate(1, 0, 0, -90);
 		shape.end();
+		
+        stage.draw(); 
 	
 		
 		try {
