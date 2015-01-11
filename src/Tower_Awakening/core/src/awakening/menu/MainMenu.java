@@ -282,6 +282,7 @@ public class MainMenu implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
+						game.setScreen(new Multiplayer(game, music, effect));
 						return false;	
 					}
 				}
