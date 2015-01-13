@@ -93,15 +93,15 @@ public class Graphics implements Screen
 		{
 			if(game.getLanguage().equals("ENGLISH"))
 			{
-				language = ResourceBundle.getBundle("awakening.menu.res_en_EN", locales[0]);
+				language = ResourceBundle.getBundle("awakening.view.menu.res_en_EN", locales[0]);
 			}
 			else if (game.getLanguage().equals("FRENCH"))
 			{
-				language = ResourceBundle.getBundle("awakening.menu.res_fr_FR", locales[1]);
+				language = ResourceBundle.getBundle("awakening.view.menu.res_fr_FR", locales[1]);
 			}
 			else if (game.getLanguage().equals("ITALIAN"))
 			{
-				language = ResourceBundle.getBundle("awakening.menu.res_it_IT", locales[2]);
+				language = ResourceBundle.getBundle("awakening.view.menu.res_it_IT", locales[2]);
 			}
 			else
 			{
