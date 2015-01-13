@@ -1,9 +1,13 @@
 package awakening.view.partie;
 
+import awakening.modele.toolshop.ToolShop;
+
 public class Joueur {
 
+	
+	ToolShop inventaire;
 	public Joueur() {
-		// TODO Auto-generated constructor stub
+		inventaire = new ToolShop();
 	}
 
 }

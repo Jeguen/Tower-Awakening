@@ -99,6 +99,10 @@ public abstract class Monster extends MeshTA
 		this.translate(position.x, 0, position.y);
 	}
 	
+		public Monster(String fileName) {
+			this.load(new File(fileName));
+		}
+
 		// *****************************************
 		// ********** GETTERS & SETTERS ************
 		// *****************************************

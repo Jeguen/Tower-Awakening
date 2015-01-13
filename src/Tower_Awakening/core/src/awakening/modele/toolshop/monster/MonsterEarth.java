@@ -2,6 +2,7 @@ package awakening.modele.toolshop.monster;
 
 import ta.shape3D.mesh.MeshTA;
 
+
 public class MonsterEarth extends Monster
 {
 	
@@ -53,6 +54,11 @@ public class MonsterEarth extends Monster
 	@Override
 	public void crazyMove()
 	{
+	}
+	
+	public MonsterEarth(String string)
+	{
+		super(string);
 	}
 	
 	public MonsterEarth(MeshTA m)

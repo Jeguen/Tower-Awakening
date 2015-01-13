@@ -61,6 +61,7 @@ public class PartieSolo extends Partie implements Screen{
     Vector3 p = new Vector3();
     boolean inAction = false;
     LinkedList<Tower> toursModeles = new LinkedList<Tower>();
+    LinkedList<Monster> monstreModeles = new LinkedList<Monster>();
     LinkedList<Tower> tours = new LinkedList<Tower>();
     LinkedList<MeshTA> balles = new LinkedList<MeshTA>();
     int compteur;
@@ -181,6 +182,13 @@ public class PartieSolo extends Partie implements Screen{
 			if(ft.isFile())
 				if(ft.getName().endsWith("mta"))
 					toursModeles.add(new OffensivTower(ft.getAbsolutePath()));
+		}
+		File monsterDirectory = new File("Monster");
+		for(File ft : monsterDirectory.listFiles())
+		{
+			if(ft.isFile())
+				if(ft.getName().endsWith("mta"))
+					monstreModeles.add(new MonsterEarth(ft.getAbsolutePath()));
 		}
 		final MeshTA mesh = new MeshTA();
 		Triangle3D t = mesh.addTriangle();
@@ -390,7 +398,7 @@ public class PartieSolo extends Partie implements Screen{
 				}
 				else if(keycode ==Input.Keys.M)
 				{
-					MonsterEarth monstre = new MonsterEarth(mesh);
+					MonsterEarth monstre = new MonsterEarth(monstreModeles.get(0));
 					monstre.homethetie(3);					
 					terrain.addMonster(monstre);
 					x=monstre.getBox().getCoordX();

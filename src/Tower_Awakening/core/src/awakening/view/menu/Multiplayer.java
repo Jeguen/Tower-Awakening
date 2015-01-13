@@ -12,12 +12,12 @@
  // See the License for the specific language governing permissions and
  // limitations under the License.
 
-package awakening.menu;
+package awakening.view.menu;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import awakening.game.TAGame;
+import awakening.control.moteur.TAGame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
