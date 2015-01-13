@@ -32,12 +32,6 @@ public class TAScreenSize implements Comparable<Object>
 	}
 
 	@Override
-	public String toString() 
-	{
-		return width + " x " + height;
-	}
-
-	@Override
 	public int compareTo(Object o) 
 	{
 		if(this.width < ((TAScreenSize) o).width)
@@ -67,6 +61,12 @@ public class TAScreenSize implements Comparable<Object>
 		{
 			return 0;
 		}
+	}
+
+	@Override
+	public String toString() 
+	{
+		return width + " x " + height;
 	}
 	
 }

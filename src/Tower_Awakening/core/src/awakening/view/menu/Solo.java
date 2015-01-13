@@ -1,53 +1,20 @@
 package awakening.view.menu;
 
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Gdx;
 
-public class Solo implements Screen{
+import awakening.control.moteur.PartieInputManagement;
+import awakening.control.moteur.TAGame;
+import awakening.view.partie.PartieSolo;
 
-	public Solo() {
-		// TODO Auto-generated constructor stub
+public class Solo extends PartieView{
+
+
+	public Solo(TAGame game) {
+		super(game, new PartieSolo(game));
+		inputManager = new PartieInputManagement(this, partie);
+		Gdx.input.setInputProcessor(inputManager);
+		partie.setInputManager(inputManager);
 	}
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void render(float delta) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

@@ -78,13 +78,13 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 	}
 	
 
-	public void onHoverAction()
-	{
-		isOnHover=true;
-	}
 	public void onExitAction()
 	{
 		isOnHover=false;
+	}
+	public void onHoverAction()
+	{
+		isOnHover=true;
 	}
 	@Override
 	public boolean testMousePosition(Vector2 mousePosition) {

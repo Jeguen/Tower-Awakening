@@ -11,6 +11,20 @@ public class MonsterEarth extends Monster
 	{
 		super(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold, damage);
 	}
+	public MonsterEarth(MeshTA m)
+	{
+		super(m);
+	}
+	public MonsterEarth(String string)
+	{
+		super(string);
+	}
+	
+	@Override
+	public void crazyMove()
+	{
+	}
+	
 	@Override
 	public void normalMove()
 	{
@@ -50,19 +64,5 @@ public class MonsterEarth extends Monster
 				isArrived=true;
 			}
 		}
-	}
-	@Override
-	public void crazyMove()
-	{
-	}
-	
-	public MonsterEarth(String string)
-	{
-		super(string);
-	}
-	
-	public MonsterEarth(MeshTA m)
-	{
-		super(m);
 	}
 }

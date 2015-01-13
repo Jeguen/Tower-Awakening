@@ -18,7 +18,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import awakening.control.moteur.TAGame;
-import awakening.view.partie.PartieSolo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -222,6 +221,76 @@ public class MainMenu implements Screen
 	}
 	
 	@Override
+	public void dispose() 
+	{
+		stage.dispose();
+		skin.dispose();
+		game.dispose();
+		music.dispose();
+		effect.dispose();
+	}
+
+	@Override
+	public void hide() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pause() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render(float delta) 
+	{
+		
+		
+		
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
+		Gdx.graphics.setVSync(true);
+		
+		///Settings
+		music.setVolume(game.getMusicVolume());
+		
+		///Cursor Skin
+		Pixmap pm = new Pixmap(Gdx.files.internal("img/cursor.png"));
+		Gdx.input.setCursorImage(pm, 0, 0);
+		pm.dispose();
+		
+		///Draw Background
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
+		batch.end();
+		
+		///Draw Stage
+		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();  
+	}
+
+	@Override
+	public void resize(int width, int height) 
+	{
+		view.update(width, height);
+		camera.setToOrtho(false,width,height);
+		stage.getViewport().update(width, height, true);
+	}
+
+	@Override
+	public void resume() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void show() 
 	{
 		Gdx.input.setInputProcessor(stage);
@@ -300,7 +369,7 @@ public class MainMenu implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
-						game.setScreen(new PartieSolo());
+						game.setScreen(new Solo(game));
 						return false;	
 					}
 				}
@@ -318,76 +387,6 @@ public class MainMenu implements Screen
 		{
 			System.out.println("yolo");
 		}
-	}
-
-	@Override
-	public void render(float delta) 
-	{
-		
-		
-		
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
-		Gdx.graphics.setVSync(true);
-		
-		///Settings
-		music.setVolume(game.getMusicVolume());
-		
-		///Cursor Skin
-		Pixmap pm = new Pixmap(Gdx.files.internal("img/cursor.png"));
-		Gdx.input.setCursorImage(pm, 0, 0);
-		pm.dispose();
-		
-		///Draw Background
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
-		batch.end();
-		
-		///Draw Stage
-		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();  
-	}
-
-	@Override
-	public void resize(int width, int height) 
-	{
-		view.update(width, height);
-		camera.setToOrtho(false,width,height);
-		stage.getViewport().update(width, height, true);
-	}
-
-	@Override
-	public void pause() 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resume() 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hide() 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dispose() 
-	{
-		stage.dispose();
-		skin.dispose();
-		game.dispose();
-		music.dispose();
-		effect.dispose();
 	}
 
 }

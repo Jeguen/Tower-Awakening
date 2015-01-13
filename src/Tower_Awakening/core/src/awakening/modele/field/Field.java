@@ -53,36 +53,15 @@ public class Field extends MeshTA
 			this.translate(0, -1, 0);
 		}
 	}
-	// *****************************************
-	// ************** PROCEDURES **************
-	// *****************************************
-	public void remplirTableauBox(int x, int y)
+	public void addMonster(Monster m)
 	{
-		if (nbSidePolygon == 6)
+		if (spawns.size() != 0)
 		{
-			tabCoordX[0] = x;
-			tabCoordX[1] = x + 2 * halfRadiusPolygon;
-			tabCoordX[2] = x + 2 * halfRadiusPolygon;
-			tabCoordX[3] = x;
-			tabCoordX[4] = x - 2 * halfRadiusPolygon;
-			tabCoordX[5] = x - 2 * halfRadiusPolygon;
-			tabCoordY[0] = y + 2 * halfRadiusPolygon;
-			tabCoordY[1] = y + halfRadiusPolygon;
-			tabCoordY[2] = y - halfRadiusPolygon;
-			tabCoordY[3] = y - 2 * halfRadiusPolygon;
-			tabCoordY[4] = y - halfRadiusPolygon;
-			tabCoordY[5] = y + halfRadiusPolygon;
-		}
-		else
-		{
-			tabCoordX[0] = x + 2 * halfRadiusPolygon;
-			tabCoordX[1] = x + 2 * halfRadiusPolygon;
-			tabCoordX[2] = x - 2 * halfRadiusPolygon;
-			tabCoordX[3] = x - 2 * halfRadiusPolygon;
-			tabCoordY[0] = y - 2 * halfRadiusPolygon;
-			tabCoordY[1] = y + 2 * halfRadiusPolygon;
-			tabCoordY[2] = y + 2 * halfRadiusPolygon;
-			tabCoordY[3] = y - 2 * halfRadiusPolygon;
+			// Random number between 0 and the size of the list which
+			// contains spawns
+			int randomNumber = (int) (Math.random() * 100)%spawns.size();
+			m.setActualBox(spawns.get(randomNumber));
+			monsters.add(m);
 		}
 	}
 	public void creerPlateau()
@@ -122,96 +101,6 @@ public class Field extends MeshTA
 					box.add(new Box(x, y, tabCoordX, tabCoordY));
 				}
 			}
-		}
-	}
-	public void numeroterDistance(Box arrivee)
-	{
-		boolean bloque = true;
-		int totalBox = 0;
-		ArrayList<Box> tabBoxActuelles = new ArrayList<Box>();
-		// On met toutes les Boxs � -1
-		for (Box b : box)
-		{
-			b.setRange(-1);
-		}
-		// On place la Box centrale � 0
-		arrivee.setRange(0);
-		totalBox = 1;
-		// On place le premier rang de calcul
-		// On prend la Box centrale et on recherche tous ces voisins en
-		// leur mettant 1 comme distance
-		for (Box b : box)
-		{
-			if ((arrivee.getCoordX() - b.getCoordX()) * (arrivee.getCoordX() - b.getCoordX()) + (arrivee.getCoordY() - b.getCoordY())
-			            * (arrivee.getCoordY() - b.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2)
-			            && (arrivee.getCoordX() - b.getCoordX()) * (arrivee.getCoordX() - b.getCoordX())
-			                        + (arrivee.getCoordY() - b.getCoordY()) * (arrivee.getCoordY() - b.getCoordY()) > 10)
-			{
-				if (b.getFieldType()>0)
-				{
-					b.setRange(1);
-					bloque = false;
-				}
-				else
-				{
-					b.setRange(-2);
-				}
-				totalBox += 1;
-				tabBoxActuelles.add(b);
-			}
-		}
-		if (bloque)
-		{
-			System.out.println("BLOQUE1");
-		}
-		else
-		{
-			ArrayList<Box> tab = new ArrayList<Box>();
-			while (totalBox < box.size() && !bloque)
-			{
-				bloque = true;
-				for (Box b : tabBoxActuelles)
-				{
-					for (Box b1 : box)
-					{
-						if ((b1.getCoordX() - b.getCoordX()) * (b1.getCoordX() - b.getCoordX()) + (b1.getCoordY() - b.getCoordY())
-						            * (b1.getCoordY() - b.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2))
-						{
-							if (b.getFieldType()>0)
-							{
-								if (b1.getRange() == -1)
-								{
-									b1.setRange(b.getRange() + 1);
-									totalBox += 1;
-									tab.add(b1);
-									bloque = false;
-								}
-							}
-							else
-							{
-								b.setRange(b.getFieldType());
-							}
-						}
-					}
-				}
-				tabBoxActuelles.clear();
-				for (Box b : tab)
-				{
-					tabBoxActuelles.add(b);
-				}
-				tab.clear();
-			}
-		}
-	}
-	public void addMonster(Monster m)
-	{
-		if (spawns.size() != 0)
-		{
-			// Random number between 0 and the size of the list which
-			// contains spawns
-			int randomNumber = (int) (Math.random() * 100)%spawns.size();
-			m.setActualBox(spawns.get(randomNumber));
-			monsters.add(m);
 		}
 	}
 	// *************
@@ -362,12 +251,244 @@ public class Field extends MeshTA
 		// finale (UNIQUE)
 		while (!(finishBox.equals(currentBox)));
 	}
+	public ArrayList<Barrier> getBarriers()
+	{
+		return barriers;
+	}
+	public int getBorder()
+	{
+		return border;
+	}
+	public ArrayList<Box> getBox()
+	{
+		return box;
+	}
+	public int getBoxIndexByPosition(float x, float y)
+	{
+		float yBox = Math.round((y/(3*halfRadiusPolygon)) - 0.5f);
+		float xBox = Math.round(((x - (y%2)*(2*halfRadiusPolygon))/(4*halfRadiusPolygon) - 0.5f));
+		return (int)(xBox + yBox * (float)(getNbBoxWidth()) + yBox/2f);
+	}
+	public Box getFinishBox()
+	{
+		return finishBox;
+	}
+	// *****************************************
+	// ********** GETTERS & SETTERS ************
+	// *****************************************
+	public int getHalfRadiusPolygon()
+	{
+		return halfRadiusPolygon;
+	}
+	public ArrayList<Monster> getMonsters()
+	{
+		return monsters;
+	}
+	public int getNbBoxHeight()
+	{
+		return nbBoxHeight;
+	}
+	public int getNbBoxWidth()
+	{
+		return nbBoxWidth;
+	}
+	public int getNbSidePolygon()
+	{
+		return nbSidePolygon;
+	}
+	public int getNbSpawn()
+	{
+		return nbSpawn;
+	}
+	public ArrayList<Box> getSpawns()
+	{
+		return spawns;
+	}
+	public int[] getTabCoordX()
+	{
+		return tabCoordX;
+	}
+	public int[] getTabCoordY()
+	{
+		return tabCoordY;
+	}
+	public boolean getTowerExist()
+	{
+		return towerExist;
+	}
 	public void initTargetedBox()
 	{
 		for (Box b : box)
 		{
 			b.setNbTargeted(0);
 		}
+	}
+	public void numeroterDistance(Box arrivee)
+	{
+		boolean bloque = true;
+		int totalBox = 0;
+		ArrayList<Box> tabBoxActuelles = new ArrayList<Box>();
+		// On met toutes les Boxs � -1
+		for (Box b : box)
+		{
+			b.setRange(-1);
+		}
+		// On place la Box centrale � 0
+		arrivee.setRange(0);
+		totalBox = 1;
+		// On place le premier rang de calcul
+		// On prend la Box centrale et on recherche tous ces voisins en
+		// leur mettant 1 comme distance
+		for (Box b : box)
+		{
+			if ((arrivee.getCoordX() - b.getCoordX()) * (arrivee.getCoordX() - b.getCoordX()) + (arrivee.getCoordY() - b.getCoordY())
+			            * (arrivee.getCoordY() - b.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2)
+			            && (arrivee.getCoordX() - b.getCoordX()) * (arrivee.getCoordX() - b.getCoordX())
+			                        + (arrivee.getCoordY() - b.getCoordY()) * (arrivee.getCoordY() - b.getCoordY()) > 10)
+			{
+				if (b.getFieldType()>0)
+				{
+					b.setRange(1);
+					bloque = false;
+				}
+				else
+				{
+					b.setRange(-2);
+				}
+				totalBox += 1;
+				tabBoxActuelles.add(b);
+			}
+		}
+		if (bloque)
+		{
+			System.out.println("BLOQUE1");
+		}
+		else
+		{
+			ArrayList<Box> tab = new ArrayList<Box>();
+			while (totalBox < box.size() && !bloque)
+			{
+				bloque = true;
+				for (Box b : tabBoxActuelles)
+				{
+					for (Box b1 : box)
+					{
+						if ((b1.getCoordX() - b.getCoordX()) * (b1.getCoordX() - b.getCoordX()) + (b1.getCoordY() - b.getCoordY())
+						            * (b1.getCoordY() - b.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2))
+						{
+							if (b.getFieldType()>0)
+							{
+								if (b1.getRange() == -1)
+								{
+									b1.setRange(b.getRange() + 1);
+									totalBox += 1;
+									tab.add(b1);
+									bloque = false;
+								}
+							}
+							else
+							{
+								b.setRange(b.getFieldType());
+							}
+						}
+					}
+				}
+				tabBoxActuelles.clear();
+				for (Box b : tab)
+				{
+					tabBoxActuelles.add(b);
+				}
+				tab.clear();
+			}
+		}
+	}
+	// *****************************************
+	// ************** PROCEDURES **************
+	// *****************************************
+	public void remplirTableauBox(int x, int y)
+	{
+		if (nbSidePolygon == 6)
+		{
+			tabCoordX[0] = x;
+			tabCoordX[1] = x + 2 * halfRadiusPolygon;
+			tabCoordX[2] = x + 2 * halfRadiusPolygon;
+			tabCoordX[3] = x;
+			tabCoordX[4] = x - 2 * halfRadiusPolygon;
+			tabCoordX[5] = x - 2 * halfRadiusPolygon;
+			tabCoordY[0] = y + 2 * halfRadiusPolygon;
+			tabCoordY[1] = y + halfRadiusPolygon;
+			tabCoordY[2] = y - halfRadiusPolygon;
+			tabCoordY[3] = y - 2 * halfRadiusPolygon;
+			tabCoordY[4] = y - halfRadiusPolygon;
+			tabCoordY[5] = y + halfRadiusPolygon;
+		}
+		else
+		{
+			tabCoordX[0] = x + 2 * halfRadiusPolygon;
+			tabCoordX[1] = x + 2 * halfRadiusPolygon;
+			tabCoordX[2] = x - 2 * halfRadiusPolygon;
+			tabCoordX[3] = x - 2 * halfRadiusPolygon;
+			tabCoordY[0] = y - 2 * halfRadiusPolygon;
+			tabCoordY[1] = y + 2 * halfRadiusPolygon;
+			tabCoordY[2] = y + 2 * halfRadiusPolygon;
+			tabCoordY[3] = y - 2 * halfRadiusPolygon;
+		}
+	}
+	public void setBarriers(ArrayList<Barrier> barriers)
+	{
+		this.barriers = barriers;
+	}
+	public void setBorder(int border)
+	{
+		this.border = border;
+	}
+	public void setBox(ArrayList<Box> box)
+	{
+		this.box = box;
+	}
+	public void setFinishBox(Box finishBox)
+	{
+		this.finishBox = finishBox;
+	}
+	public void setHalfRadiusPolygon(int halfRadiusPolygon)
+	{
+		this.halfRadiusPolygon = halfRadiusPolygon;
+	}
+	public void setMonsters(ArrayList<Monster> monsters)
+	{
+		this.monsters = monsters;
+	}
+	public void setNbBoxHeight(int nbBoxHeight)
+	{
+		this.nbBoxHeight = nbBoxHeight;
+	}
+	public void setNbBoxWidth(int nbBoxWidth)
+	{
+		this.nbBoxWidth = nbBoxWidth;
+	}
+	public void setNbSidePolygon(int nbSidePolygon)
+	{
+		this.nbSidePolygon = nbSidePolygon;
+	}
+	public void setNbSpawn(int nbSpawn)
+	{
+		this.nbSpawn = nbSpawn;
+	}
+	public void setSpawns(ArrayList<Box> spawns)
+	{
+		this.spawns = spawns;
+	}
+	public void setTabCoordX(int[] tabCoordX)
+	{
+		this.tabCoordX = tabCoordX;
+	}
+	public void setTabCoordY(int[] tabCoordY)
+	{
+		this.tabCoordY = tabCoordY;
+	}
+	public void setTowerExist(boolean b)
+	{
+		this.towerExist = b;
 	}
 	public void updateTargetedBoxAdd()
 	{
@@ -436,6 +557,7 @@ public class Field extends MeshTA
 			}
 		}
 	}
+	
 	public void updateTargetedBoxRemove()
 	{
 		LinkedList<Box> BoxList1 = new LinkedList<Box>();
@@ -502,127 +624,5 @@ public class Field extends MeshTA
 				}
 			}
 		}
-	}
-	// *****************************************
-	// ********** GETTERS & SETTERS ************
-	// *****************************************
-	public int getHalfRadiusPolygon()
-	{
-		return halfRadiusPolygon;
-	}
-	public int getNbSidePolygon()
-	{
-		return nbSidePolygon;
-	}
-	public int getBorder()
-	{
-		return border;
-	}
-	public int getNbSpawn()
-	{
-		return nbSpawn;
-	}
-	public int getNbBoxHeight()
-	{
-		return nbBoxHeight;
-	}
-	public int getNbBoxWidth()
-	{
-		return nbBoxWidth;
-	}
-	public ArrayList<Box> getBox()
-	{
-		return box;
-	}
-	public ArrayList<Box> getSpawns()
-	{
-		return spawns;
-	}
-	public ArrayList<Monster> getMonsters()
-	{
-		return monsters;
-	}
-	public ArrayList<Barrier> getBarriers()
-	{
-		return barriers;
-	}
-	public Box getFinishBox()
-	{
-		return finishBox;
-	}
-	public int[] getTabCoordX()
-	{
-		return tabCoordX;
-	}
-	public int[] getTabCoordY()
-	{
-		return tabCoordY;
-	}
-	public boolean getTowerExist()
-	{
-		return towerExist;
-	}
-	public void setHalfRadiusPolygon(int halfRadiusPolygon)
-	{
-		this.halfRadiusPolygon = halfRadiusPolygon;
-	}
-	public void setNbSidePolygon(int nbSidePolygon)
-	{
-		this.nbSidePolygon = nbSidePolygon;
-	}
-	public void setBorder(int border)
-	{
-		this.border = border;
-	}
-	public void setNbSpawn(int nbSpawn)
-	{
-		this.nbSpawn = nbSpawn;
-	}
-	public void setNbBoxHeight(int nbBoxHeight)
-	{
-		this.nbBoxHeight = nbBoxHeight;
-	}
-	public void setNbBoxWidth(int nbBoxWidth)
-	{
-		this.nbBoxWidth = nbBoxWidth;
-	}
-	public void setBox(ArrayList<Box> box)
-	{
-		this.box = box;
-	}
-	public void setSpawns(ArrayList<Box> spawns)
-	{
-		this.spawns = spawns;
-	}
-	public void setMonsters(ArrayList<Monster> monsters)
-	{
-		this.monsters = monsters;
-	}
-	public void setBarriers(ArrayList<Barrier> barriers)
-	{
-		this.barriers = barriers;
-	}
-	public void setFinishBox(Box finishBox)
-	{
-		this.finishBox = finishBox;
-	}
-	public void setTabCoordX(int[] tabCoordX)
-	{
-		this.tabCoordX = tabCoordX;
-	}
-	public void setTabCoordY(int[] tabCoordY)
-	{
-		this.tabCoordY = tabCoordY;
-	}
-	public void setTowerExist(boolean b)
-	{
-		this.towerExist = b;
-	}
-	
-	public int getBoxIndexByPosition(float x, float y)
-	{
-		float yBox = Math.round((y/(3*halfRadiusPolygon)) - 0.5f);
-		float xBox = Math.round(((x - (y%2)*(2*halfRadiusPolygon))/(4*halfRadiusPolygon) - 0.5f));
-		return (int)(xBox + yBox * (float)(getNbBoxWidth()) + yBox/2f);
 	}
 }

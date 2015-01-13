@@ -142,6 +142,71 @@ public class Multiplayer implements Screen
 	}
 	
 	@Override
+	public void dispose() 
+	{
+		stage.dispose();
+		skin.dispose();
+		game.dispose();
+		sound.dispose();
+		effect.dispose();
+	}
+
+	@Override
+	public void hide() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pause() 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void render(float delta) 
+	{
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
+		
+		///Settings
+		effect.setVolume(0, game.getSoundVolume());
+		sound.setVolume(game.getMusicVolume());
+		
+		///Cursor
+		Pixmap pm = new Pixmap(Gdx.files.internal("img/cursor.png"));
+		Gdx.input.setCursorImage(pm, 0, 0);
+		pm.dispose();
+		
+		///Draw Background
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
+		batch.end();
+		
+		///Draw Stage
+		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+		stage.draw();
+	}
+
+	@Override
+	public void resize(int width, int height) 
+	{
+		view.update(width, height);
+		camera.setToOrtho(false,width,height);
+		stage.getViewport().update(width, height, true);
+	}
+
+	@Override
+	public void resume() 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
 	public void show() 
 	{
 		Gdx.input.setInputProcessor(stage);
@@ -226,70 +291,5 @@ public class Multiplayer implements Screen
 		btnJoin.setPosition(btnCreate.getX() + btnCreate.getWidth(), Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 60 + 4*btnBack.getHeight());
 		btnJoin.setWidth(tfdIp.getWidth()/2);
 		stage.addActor(btnJoin);
-	}
-
-	@Override
-	public void render(float delta) 
-	{
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
-		
-		///Settings
-		effect.setVolume(0, game.getSoundVolume());
-		sound.setVolume(game.getMusicVolume());
-		
-		///Cursor
-		Pixmap pm = new Pixmap(Gdx.files.internal("img/cursor.png"));
-		Gdx.input.setCursorImage(pm, 0, 0);
-		pm.dispose();
-		
-		///Draw Background
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
-		batch.end();
-		
-		///Draw Stage
-		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) 
-	{
-		view.update(width, height);
-		camera.setToOrtho(false,width,height);
-		stage.getViewport().update(width, height, true);
-	}
-
-	@Override
-	public void pause() 
-	{
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void resume() 
-	{
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void hide() 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dispose() 
-	{
-		stage.dispose();
-		skin.dispose();
-		game.dispose();
-		sound.dispose();
-		effect.dispose();
 	}
 }

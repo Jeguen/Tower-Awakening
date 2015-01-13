@@ -4,6 +4,14 @@ import awakening.modele.toolshop.tower.Tower;
 
 public class Box
 {
+	public static int getNbCaseCreated()
+	{
+		return nbCaseCreated;
+	}
+	public static void setNbCaseCreated(int nbCaseCreated)
+	{
+		Box.nbCaseCreated = nbCaseCreated;
+	}
 	// **************************************
 	// ************** VARIABLES *************
 	// **************************************
@@ -55,17 +63,6 @@ public class Box
 		// As default, a box is no targeted
 		this.nbTargeted=0;
 	}
-	// *****************************************
-	// ********** GETTERS & SETTERS ************
-	// *****************************************
-	public int getID()
-	{
-		return id;
-	}
-	public static int getNbCaseCreated()
-	{
-		return nbCaseCreated;
-	}
 	public int getCoordX()
 	{
 		return coordX;
@@ -73,6 +70,29 @@ public class Box
 	public int getCoordY()
 	{
 		return coordY;
+	}
+	public int getFieldType()
+	{
+		return fieldType;
+	}
+	public float getHandicap()
+	{
+		return handicap;
+	}
+	// *****************************************
+	// ********** GETTERS & SETTERS ************
+	// *****************************************
+	public int getID()
+	{
+		return id;
+	}
+	public int getNbTargeted()
+	{
+		return  nbTargeted;
+	}
+	public int getRange()
+	{
+		return range;
 	}
 	public int[] getTabCoordX()
 	{
@@ -82,33 +102,12 @@ public class Box
 	{
 		return tabCoordY;
 	}
-	public int getFieldType()
-	{
-		return fieldType;
-	}
-	public int getRange()
-	{
-		return range;
-	}
-	public float getHandicap()
-	{
-		return handicap;
-	}
 	public Tower getTower()
 	{
 		return tower;
 	}
-	public int getNbTargeted()
-	{
-		return  nbTargeted;
-	}
-	public void setID(int id)
-	{
-		this.id = id;
-	}
-	public static void setNbCaseCreated(int nbCaseCreated)
-	{
-		Box.nbCaseCreated = nbCaseCreated;
+	public boolean isFree(){
+		return isFree;
 	}
 	public void setCoordX(int coordX)
 	{
@@ -118,6 +117,31 @@ public class Box
 	{
 		this.coordY = coordY;
 	}
+	public void setFieldType(int fieldType)
+	{
+		this.fieldType = fieldType;
+		if(fieldType==FIELD_SPAWNS) isFree=false;
+	}
+	public void setFree(boolean free)
+	{
+		this.isFree=free;
+	}
+	public void setHandicap(float handicap)
+	{
+		this.handicap = handicap;
+	}
+	public void setID(int id)
+	{
+		this.id = id;
+	}
+	public void setNbTargeted(int nbTargeted)
+	{
+		this.nbTargeted=nbTargeted;
+	}
+	public void setRange(int range)
+	{
+		this.range = range;
+	}
 	public void setTabCoordX(int[] tabCoordX)
 	{
 		this.tabCoordX = tabCoordX;
@@ -126,33 +150,9 @@ public class Box
 	{
 		this.tabCoordY = tabCoordY;
 	}
-	public void setFieldType(int fieldType)
-	{
-		this.fieldType = fieldType;
-		if(fieldType==FIELD_SPAWNS) isFree=false;
-	}
-	public void setRange(int range)
-	{
-		this.range = range;
-	}
-	public void setHandicap(float handicap)
-	{
-		this.handicap = handicap;
-	}
 	public void setTower(Tower tower)
 	{
 		this.tower = tower;
 		isFree=false;
-	}
-	public void setNbTargeted(int nbTargeted)
-	{
-		this.nbTargeted=nbTargeted;
-	}
-	public boolean isFree(){
-		return isFree;
-	}
-	public void setFree(boolean free)
-	{
-		this.isFree=free;
 	}
 }

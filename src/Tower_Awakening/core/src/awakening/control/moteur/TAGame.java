@@ -45,148 +45,6 @@ public class TAGame extends Game {
     }
 
     /**
-	 * Get the effect sounds volume
-	 * 
-	 * @return Volume
-	 */
-	public float getSoundVolume() 
-	{
-		return setting.getSoundVolume();
-	}
-
-	/**
-	 * Set the effect sounds volume
-	 * 
-	 * @param soundVolume volume
-	 */
-	public void setSoundVolume(float soundVolume) 
-	{
-		setting.setSoundVolume(soundVolume);;
-	}
-
-	/**
-	 * Get the music volume
-	 * 
-	 * @return Volume
-	 */
-	public float getMusicVolume() 
-	{
-		return setting.getMusicVolume();
-	}
-
-	/**
-	 * Set the music volume
-	 * 
-	 * @param Volume
-	 */
-	public void setMusicVolume(float musicVolume) 
-	{
-		setting.setMusicVolume(musicVolume);
-	}
-
-	/**
-	 * Test if the app is fullscreen
-	 * 
-	 * @return True if is fullscreen, false otherwhise
-	 */
-	public boolean isFullscreen() 
-	{
-		return setting.isFullscreen();
-	}
-
-	/**
-	 * Set the app fullscreen or not
-	 * 
-	 * @param fullscreen
-	 */
-	public void setFullscreen(boolean fullscreen) 
-	{
-		setting.setFullscreen(fullscreen);
-	}
-
-
-	/**
-	 * Set the screen's size
-	 * 
-	 * @param w
-	 * @param h
-	 */
-	public void setSize(int w, int h) 
-	{
-		setting.setSize(new TAScreenSize(w,h));
-	}
-	
-	/**
-	 * Get the screen's size
-	 * 
-	 * @return Screen size
-	 */
-	public TAScreenSize getSize() 
-	{
-		return setting.getSize();
-	}
-
-	/**
-	 * Get Zoom In key
-	 * 
-	 * @return Zoom In key
-	 */
-	public int getZoomIn() 
-	{
-		return setting.getZoomIn();
-	}
-
-	/**
-	 * Set Zoom In key
-	 * 
-	 * @param zoomIn
-	 */
-	public void setZoomIn(int zoomIn) 
-	{
-		setting.setZoomIn(zoomIn);
-	}
-
-	/**
-	 * Get Zoom Out key
-	 * 
-	 * @return Zoom Out key
-	 */
-	public int getZoomOut() 
-	{
-		return setting.getZoomOut();
-	}
-
-	/**
-	 * Set Zoom Out key
-	 * 
-	 * @param zoomOut
-	 */
-	public void setZoomOut(int zoomOut) 
-	{
-		setting.setZoomOut(zoomOut);
-	}
-
-	/**
-	 * Get Up key
-	 * 
-	 * @return Up key
-	 */
-	public int getUp() 
-	{
-		return setting.getUp();
-	}
-
-	/**
-	 * Set Up key
-	 * 
-	 * @param up
-	 */
-	public void setUp(int up) 
-	{
-		setting.setUp(up);
-	}
-
-	/**
 	 * Get Down key
 	 * 
 	 * @return Down key
@@ -194,126 +52,6 @@ public class TAGame extends Game {
 	public int getDown() 
 	{
 		return setting.getDown();
-	}
-
-	/**
-	 * Set Down key
-	 * 
-	 * @param down
-	 */
-	public void setDown(int down) 
-	{
-		setting.setDown(down);
-	}
-
-	/**
-	 * Get Left key
-	 * 
-	 * @return Left key
-	 */
-	public int getLeft() 
-	{
-		return setting.getLeft();
-	}
-
-	/**
-	 * Set Left key
-	 * 
-	 * @param left
-	 */
-	public void setLeft(int left) 
-	{
-		setting.setLeft(left);
-	}
-	
-	/**
-	 * Get Right key
-	 * 
-	 * @return Right key
-	 */
-	public int getRight() 
-	{
-		return setting.getRight();
-	}
-
-	/**
-	 * Set Right key
-	 * 
-	 * @param right
-	 */
-	public void setRight(int right)
-	{
-		setting.setRight(right);
-	}
-
-	/**
-	 * Set Screen size
-	 * 
-	 * @param size
-	 */
-	public void setSize(TAScreenSize size) 
-	{
-		setting.setSize(size);
-	}
-
-	/**
-	 * Get Zoom In key's name
-	 * 
-	 * @return Screen size
-	 */
-	public String getZoomInKey() 
-	{
-		return setting.getZoomInKey();
-	}
-
-	/**
-	 * Set Zoom In key's name
-	 * 
-	 * @param zoomInKey
-	 */
-	public void setZoomInKey(String zoomInKey) 
-	{
-		setting.setZoomInKey(zoomInKey);
-	}
-
-	/**
-	 * Get Zoom Out key's name
-	 * 
-	 * @return Zoom Out key's name
-	 */
-	public String getZoomOutKey() 
-	{
-		return setting.getZoomOutKey();
-	}
-
-	/**
-	 * Set Zoom Out key's name
-	 * 
-	 * @param zoomOutKey
-	 */
-	public void setZoomOutKey(String zoomOutKey) 
-	{
-		setting.setZoomOutKey(zoomOutKey);
-	}
-
-	/**
-	 * Get Up key's name
-	 * 
-	 * @return Up key's name
-	 */
-	public String getUpKey() 
-	{
-		return setting.getUpKey();
-	}
-
-	/**
-	 * Set Up key's name
-	 * 
-	 * @param upKey
-	 */
-	public void setUpKey(String upKey) 
-	{
-		setting.setUpKey(upKey);
 	}
 
 	/**
@@ -327,13 +65,23 @@ public class TAGame extends Game {
 	}
 
 	/**
-	 * Set Down key's name
+	 * Get Language
 	 * 
-	 * @param downKey
+	 * @return Language
 	 */
-	public void setDownKey(String downKey) 
+	public String getLanguage() 
 	{
-		setting.setDownKey(downKey);
+		return setting.getLanguage();
+	}
+
+	/**
+	 * Get Left key
+	 * 
+	 * @return Left key
+	 */
+	public int getLeft() 
+	{
+		return setting.getLeft();
 	}
 
 	/**
@@ -347,6 +95,177 @@ public class TAGame extends Game {
 	}
 
 	/**
+	 * Get the music volume
+	 * 
+	 * @return Volume
+	 */
+	public float getMusicVolume() 
+	{
+		return setting.getMusicVolume();
+	}
+
+
+	/**
+	 * Get Right key
+	 * 
+	 * @return Right key
+	 */
+	public int getRight() 
+	{
+		return setting.getRight();
+	}
+	
+	/**
+	 * Get Right key's name
+	 * 
+	 * @return Right key's name
+	 */
+	public String getRightKey() 
+	{
+		return setting.getRightKey();
+	}
+
+	/**
+	 * Get the screen's size
+	 * 
+	 * @return Screen size
+	 */
+	public TAScreenSize getSize() 
+	{
+		return setting.getSize();
+	}
+
+	/**
+	 * Get the effect sounds volume
+	 * 
+	 * @return Volume
+	 */
+	public float getSoundVolume() 
+	{
+		return setting.getSoundVolume();
+	}
+
+	/**
+	 * Get Up key
+	 * 
+	 * @return Up key
+	 */
+	public int getUp() 
+	{
+		return setting.getUp();
+	}
+
+	/**
+	 * Get Up key's name
+	 * 
+	 * @return Up key's name
+	 */
+	public String getUpKey() 
+	{
+		return setting.getUpKey();
+	}
+
+	/**
+	 * Get Zoom In key
+	 * 
+	 * @return Zoom In key
+	 */
+	public int getZoomIn() 
+	{
+		return setting.getZoomIn();
+	}
+
+	/**
+	 * Get Zoom In key's name
+	 * 
+	 * @return Screen size
+	 */
+	public String getZoomInKey() 
+	{
+		return setting.getZoomInKey();
+	}
+
+	/**
+	 * Get Zoom Out key
+	 * 
+	 * @return Zoom Out key
+	 */
+	public int getZoomOut() 
+	{
+		return setting.getZoomOut();
+	}
+
+	/**
+	 * Get Zoom Out key's name
+	 * 
+	 * @return Zoom Out key's name
+	 */
+	public String getZoomOutKey() 
+	{
+		return setting.getZoomOutKey();
+	}
+
+	/**
+	 * Test if the app is fullscreen
+	 * 
+	 * @return True if is fullscreen, false otherwhise
+	 */
+	public boolean isFullscreen() 
+	{
+		return setting.isFullscreen();
+	}
+
+	/**
+	 * Set Down key
+	 * 
+	 * @param down
+	 */
+	public void setDown(int down) 
+	{
+		setting.setDown(down);
+	}
+	
+	/**
+	 * Set Down key's name
+	 * 
+	 * @param downKey
+	 */
+	public void setDownKey(String downKey) 
+	{
+		setting.setDownKey(downKey);
+	}
+
+	/**
+	 * Set the app fullscreen or not
+	 * 
+	 * @param fullscreen
+	 */
+	public void setFullscreen(boolean fullscreen) 
+	{
+		setting.setFullscreen(fullscreen);
+	}
+
+	/**
+	 * Set Language
+	 * 
+	 * @param language
+	 */
+	public void setLanguage(String language) 
+	{
+		setting.setLanguage(language);
+	}
+
+	/**
+	 * Set Left key
+	 * 
+	 * @param left
+	 */
+	public void setLeft(int left) 
+	{
+		setting.setLeft(left);
+	}
+
+	/**
 	 * Set Left key's name
 	 * 
 	 * @param leftKey
@@ -357,13 +276,23 @@ public class TAGame extends Game {
 	}
 
 	/**
-	 * Get Right key's name
+	 * Set the music volume
 	 * 
-	 * @return Right key's name
+	 * @param Volume
 	 */
-	public String getRightKey() 
+	public void setMusicVolume(float musicVolume) 
 	{
-		return setting.getRightKey();
+		setting.setMusicVolume(musicVolume);
+	}
+
+	/**
+	 * Set Right key
+	 * 
+	 * @param right
+	 */
+	public void setRight(int right)
+	{
+		setting.setRight(right);
 	}
 
 	/**
@@ -377,23 +306,94 @@ public class TAGame extends Game {
 	}
 
 	/**
-	 * Get Language
+	 * Set the screen's size
 	 * 
-	 * @return Language
+	 * @param w
+	 * @param h
 	 */
-	public String getLanguage() 
+	public void setSize(int w, int h) 
 	{
-		return setting.getLanguage();
+		setting.setSize(new TAScreenSize(w,h));
 	}
 
 	/**
-	 * Set Language
+	 * Set Screen size
 	 * 
-	 * @param language
+	 * @param size
 	 */
-	public void setLanguage(String language) 
+	public void setSize(TAScreenSize size) 
 	{
-		setting.setLanguage(language);
+		setting.setSize(size);
+	}
+
+	/**
+	 * Set the effect sounds volume
+	 * 
+	 * @param soundVolume volume
+	 */
+	public void setSoundVolume(float soundVolume) 
+	{
+		setting.setSoundVolume(soundVolume);;
+	}
+
+	/**
+	 * Set Up key
+	 * 
+	 * @param up
+	 */
+	public void setUp(int up) 
+	{
+		setting.setUp(up);
+	}
+
+	/**
+	 * Set Up key's name
+	 * 
+	 * @param upKey
+	 */
+	public void setUpKey(String upKey) 
+	{
+		setting.setUpKey(upKey);
+	}
+
+	/**
+	 * Set Zoom In key
+	 * 
+	 * @param zoomIn
+	 */
+	public void setZoomIn(int zoomIn) 
+	{
+		setting.setZoomIn(zoomIn);
+	}
+
+	/**
+	 * Set Zoom In key's name
+	 * 
+	 * @param zoomInKey
+	 */
+	public void setZoomInKey(String zoomInKey) 
+	{
+		setting.setZoomInKey(zoomInKey);
+	}
+
+	/**
+	 * Set Zoom Out key
+	 * 
+	 * @param zoomOut
+	 */
+	public void setZoomOut(int zoomOut) 
+	{
+		setting.setZoomOut(zoomOut);
+	}
+
+	/**
+	 * Set Zoom Out key's name
+	 * 
+	 * @param zoomOutKey
+	 */
+	public void setZoomOutKey(String zoomOutKey) 
+	{
+		setting.setZoomOutKey(zoomOutKey);
 	}
 	
 }

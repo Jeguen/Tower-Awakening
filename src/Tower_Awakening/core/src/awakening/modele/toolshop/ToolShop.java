@@ -3,6 +3,8 @@ package awakening.modele.toolshop;
 import java.io.File;
 import java.util.LinkedList;
 
+import com.badlogic.gdx.Gdx;
+
 import awakening.modele.toolshop.monster.Monster;
 import awakening.modele.toolshop.monster.MonsterEarth;
 import awakening.modele.toolshop.tower.OffensivTower;
@@ -11,47 +13,59 @@ import awakening.modele.toolshop.tower.Tower;
 public class ToolShop {
 
 	
-	LinkedList<Tower> tours;
-	LinkedList<Monster> monstres;
-	public ToolShop() {}
+	public final LinkedList<Tower> tours;
+	public final LinkedList<Monster> monstres;
+	private int selectedTowerIndex;
+	private int selectedMonsterIndex;
+
+	public ToolShop() {
+		tours = new LinkedList<Tower>();
+		monstres = new LinkedList<Monster>();	
+	}
 	
-	public void loadModele()
+	public void addAMonster(Monster m)
 	{
-		File towerDirectory = new File("Tower");
-		for(File ft : towerDirectory.listFiles())
-		{
-			if(ft.isFile())
-				if(ft.getName().endsWith("mta"))
-					tours.add(new OffensivTower(ft.getAbsolutePath()));
-		}
-		File monsterDirectory = new File("Monster");
-		for(File ft : monsterDirectory.listFiles())
-		{
-			if(ft.isFile())
-				if(ft.getName().endsWith("mta"))
-					monstres.add(new MonsterEarth(ft.getAbsolutePath()));
-		}
+		
 	}
 	
 	//////////////////////////////////////////////
 	///////////////GETTER & SETTER///////////////
 	/////////////////////////////////////////////
 	
-	public void addAMonster(Monster m)
-	{
-		
-	}
-	public void getAMonster(int i)
-	{
-		
-	}
 	public void addATower(Tower t)
 	{
-		
+		tours.add(t);
 	}
-	public void getATower(Tower t)
+	public Monster getSelectedMonster()
 	{
-		
+		if(selectedMonsterIndex<monstres.size())
+			return monstres.get(selectedMonsterIndex);
+		else
+			return null;
+	}
+	public Tower getSelectedTower()
+	{
+		if(selectedTowerIndex<tours.size())
+			return tours.get(selectedTowerIndex);
+		else
+			return null;
+	}
+	public void loadModele()
+	{
+		File towerDirectory = Gdx.files.internal("Tower").file();
+		for(File ft : towerDirectory.listFiles())
+		{
+			if(ft.isFile())
+				if(ft.getName().endsWith("mta"))
+					tours.add(new OffensivTower(ft.getAbsolutePath()));
+		}
+		File monsterDirectory = Gdx.files.internal("Monster").file();
+		for(File ft : monsterDirectory.listFiles())
+		{
+			if(ft.isFile())
+				if(ft.getName().endsWith("mta"))
+					monstres.add(new MonsterEarth(ft.getAbsolutePath()));
+		}
 	}
 	
 

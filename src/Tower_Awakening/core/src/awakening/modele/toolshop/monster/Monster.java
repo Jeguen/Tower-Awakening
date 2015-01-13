@@ -39,6 +39,11 @@ public abstract class Monster extends MeshTA
 		path=new ArrayList<Box>();
     }
 	
+	public Monster(File meshfile)
+	{
+		this();
+		this.load(meshfile);
+	}
 	public Monster(int id, int lifePoint, String name, float speedAttack, float vitesseDeplacement, boolean visible, String facSheet,
 	            int buildCost, int gainGold, int damage)
 	{
@@ -54,27 +59,33 @@ public abstract class Monster extends MeshTA
 		this.gainGold = gainGold;
 		this.damage = damage;
 	}
-	public Monster(Vector2 position)
-	{
-		this();
-		this.translate(position.x, 0, position.y);
-	}
-	public Monster(File meshfile)
-	{
-		this();
-		this.load(meshfile);
-	}
 	public Monster(MeshTA m)
 	{
 		this();
 		this.copy(m);
 		this.copyFeatures(m);
 	}
-	// ***********************************************
-	// ********** ABSTRACTS PROCEDURES **************
-	// ***********************************************
-	public abstract void normalMove();
-	public abstract void crazyMove();
+	public Monster(MeshTA m, Vector2 position)
+	{
+		this.copy(m);
+		this.copyFeatures(m);
+		this.translate(position.x, 0, position.y);
+	}
+	public Monster(String fileName) {
+		this.load(new File(fileName));
+	}
+	public Monster(Vector2 position)
+	{
+		this();
+		this.translate(position.x, 0, position.y);
+	}
+	public void addBoxInPath(Box pathBox)
+	{
+		this.path.add(pathBox);
+		boxDestination = 0;
+		this.setActualBox(path.get(0));
+	}
+	
 	// *****************************************
 	// ************** PROCEDURES **************
 	// *****************************************
@@ -92,17 +103,32 @@ public abstract class Monster extends MeshTA
 		}
 	}
 	
-	public Monster(MeshTA m, Vector2 position)
-	{
-		this.copy(m);
-		this.copyFeatures(m);
-		this.translate(position.x, 0, position.y);
-	}
-	
-		public Monster(String fileName) {
-			this.load(new File(fileName));
-		}
+		public abstract void crazyMove();
 
+		public Box getBox()
+		{
+			return boxActuel;
+		}
+		public int getBuildCost()
+		{
+			return buildCost;
+		}
+		public int getDamage()
+		{
+			return damage;
+		}
+		public Box getDestination()
+		{
+			return path.get(boxDestination);
+		}
+		public String getFacSheet()
+		{
+			return facSheet;
+		}
+		public int getGainGold()
+		{
+			return gainGold;
+		}
 		// *****************************************
 		// ********** GETTERS & SETTERS ************
 		// *****************************************
@@ -118,6 +144,10 @@ public abstract class Monster extends MeshTA
 		{
 			return name;
 		}
+		public ArrayList<Box> getPath()
+		{
+			return path;
+		}
 		public float getSpeedAttack()
 		{
 			return speedAttack;
@@ -126,41 +156,46 @@ public abstract class Monster extends MeshTA
 		{
 			return vitesseDeplacement;
 		}
-		public boolean isVisible()
-		{
-			return visible;
-		}
-		public String getFacSheet()
-		{
-			return facSheet;
-		}
-		public int getBuildCost()
-		{
-			return buildCost;
-		}
-		public int getGainGold()
-		{
-			return gainGold;
-		}
 		public boolean isCrazyStatus()
 		{
 			return crazyStatus;
 		}
-		public int getDamage()
+		public boolean isVisible()
 		{
-			return damage;
+			return visible;
 		}
-		public ArrayList<Box> getPath()
+		// ***********************************************
+		// ********** ABSTRACTS PROCEDURES **************
+		// ***********************************************
+		public abstract void normalMove();
+		public void setActualBox(Box box)
 		{
-			return path;
+			if(this.boxActuel==null)
+				setAbsolutePosition(box.getCoordX(), 0.1f, box.getCoordY());
+			else
+				this.boxActuel.setFree(true);
+			this.boxActuel = box;
+			this.boxActuel.setFree(false);
 		}
-		public Box getDestination()
+		public void setBuildCost(int buildCost)
 		{
-			return path.get(boxDestination);
+			this.buildCost = buildCost;
 		}
-		public Box getBox()
+		public void setCrazyStatus(boolean crazyStatus)
 		{
-			return boxActuel;
+			this.crazyStatus = crazyStatus;
+		}
+		public void setDamage(int damage)
+		{
+			this.damage = damage;
+		}
+		public void setFacSheet(String facSheet)
+		{
+			this.facSheet = facSheet;
+		}
+		public void setGainGold(int gainGold)
+		{
+			this.gainGold = gainGold;
 		}
 		public void setId(int id)
 		{
@@ -174,47 +209,12 @@ public abstract class Monster extends MeshTA
 		{
 			this.speedAttack = speedAttack;
 		}
-		public void setVitesseDeplacement(float vitesseDeplacement)
-		{
-			this.vitesseDeplacement = vitesseDeplacement;
-		}
 		public void setVisible(boolean visible)
 		{
 			this.visible = visible;
 		}
-		public void setFacSheet(String facSheet)
+		public void setVitesseDeplacement(float vitesseDeplacement)
 		{
-			this.facSheet = facSheet;
-		}
-		public void setBuildCost(int buildCost)
-		{
-			this.buildCost = buildCost;
-		}
-		public void setGainGold(int gainGold)
-		{
-			this.gainGold = gainGold;
-		}
-		public void setCrazyStatus(boolean crazyStatus)
-		{
-			this.crazyStatus = crazyStatus;
-		}
-		public void setDamage(int damage)
-		{
-			this.damage = damage;
-		}
-		public void addBoxInPath(Box pathBox)
-		{
-			this.path.add(pathBox);
-			boxDestination = 0;
-			this.setActualBox(path.get(0));
-		}
-		public void setActualBox(Box box)
-		{
-			if(this.boxActuel==null)
-				setAbsolutePosition(box.getCoordX(), 0.1f, box.getCoordY());
-			else
-				this.boxActuel.setFree(true);
-			this.boxActuel = box;
-			this.boxActuel.setFree(false);
+			this.vitesseDeplacement = vitesseDeplacement;
 		}
 }

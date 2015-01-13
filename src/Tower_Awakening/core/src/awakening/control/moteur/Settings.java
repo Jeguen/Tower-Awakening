@@ -74,147 +74,6 @@ public class Settings
 	}
 
 	/**
-	 * Get the effect sounds volume
-	 * 
-	 * @return Volume
-	 */
-	public float getSoundVolume() 
-	{
-		return soundVolume;
-	}
-
-	/**
-	 * Set the effect sounds volume
-	 * 
-	 * @param soundVolume volume
-	 */
-	public void setSoundVolume(float soundVolume) 
-	{
-		this.soundVolume = soundVolume;
-	}
-
-	/**
-	 * Get the music volume
-	 * 
-	 * @return Volume
-	 */
-	public float getMusicVolume() 
-	{
-		return musicVolume;
-	}
-
-	/**
-	 * Set the music volume
-	 * 
-	 * @param Volume
-	 */
-	public void setMusicVolume(float musicVolume) 
-	{
-		this.musicVolume = musicVolume;
-	}
-
-	/**
-	 * Test if the app is fullscreen
-	 * 
-	 * @return True if is fullscreen, false otherwhise
-	 */
-	public boolean isFullscreen() 
-	{
-		return fullscreen;
-	}
-
-	/**
-	 * Set the app fullscreen or not
-	 * 
-	 * @param fullscreen
-	 */
-	public void setFullscreen(boolean fullscreen) 
-	{
-		this.fullscreen = fullscreen;
-	}
-
-	/**
-	 * Set the screen's size
-	 * 
-	 * @param w
-	 * @param h
-	 */
-	public void setSize(int w, int h) 
-	{
-		this.size = new TAScreenSize(w,h);
-	}
-	
-	/**
-	 * Get the screen's size
-	 * 
-	 * @return Screen size
-	 */
-	public TAScreenSize getSize() 
-	{
-		return size;
-	}
-
-	/**
-	 * Get Zoom In key
-	 * 
-	 * @return Zoom In key
-	 */
-	public int getZoomIn() 
-	{
-		return zoomIn;
-	}
-
-	/**
-	 * Set Zoom In key
-	 * 
-	 * @param zoomIn
-	 */
-	public void setZoomIn(int zoomIn) 
-	{
-		this.zoomIn = zoomIn;
-	}
-
-	/**
-	 * Get Zoom Out key
-	 * 
-	 * @return Zoom Out key
-	 */
-	public int getZoomOut() 
-	{
-		return zoomOut;
-	}
-
-	/**
-	 * Set Zoom Out key
-	 * 
-	 * @param zoomOut
-	 */
-	public void setZoomOut(int zoomOut) 
-	{
-		this.zoomOut = zoomOut;
-	}
-
-	/**
-	 * Get Up key
-	 * 
-	 * @return Up key
-	 */
-	public int getUp() 
-	{
-		return up;
-	}
-
-	/**
-	 * Set Up key
-	 * 
-	 * @param up
-	 */
-	public void setUp(int up) 
-	{
-		this.up = up;
-	}
-
-	/**
 	 * Get Down key
 	 * 
 	 * @return Down key
@@ -222,126 +81,6 @@ public class Settings
 	public int getDown() 
 	{
 		return down;
-	}
-
-	/**
-	 * Set Down key
-	 * 
-	 * @param down
-	 */
-	public void setDown(int down) 
-	{
-		this.down = down;
-	}
-
-	/**
-	 * Get Left key
-	 * 
-	 * @return Left key
-	 */
-	public int getLeft() 
-	{
-		return left;
-	}
-
-	/**
-	 * Set Left key
-	 * 
-	 * @param left
-	 */
-	public void setLeft(int left) 
-	{
-		this.left = left;
-	}
-	
-	/**
-	 * Get Right key
-	 * 
-	 * @return Right key
-	 */
-	public int getRight() 
-	{
-		return right;
-	}
-
-	/**
-	 * Set Right key
-	 * 
-	 * @param right
-	 */
-	public void setRight(int right)
-	{
-		this.right = right;
-	}
-
-	/**
-	 * Set Screen size
-	 * 
-	 * @param size
-	 */
-	public void setSize(TAScreenSize size) 
-	{
-		this.size = size;
-	}
-
-	/**
-	 * Get Zoom In key's name
-	 * 
-	 * @return Screen size
-	 */
-	public String getZoomInKey() 
-	{
-		return zoomInKey;
-	}
-
-	/**
-	 * Set Zoom In key's name
-	 * 
-	 * @param zoomInKey
-	 */
-	public void setZoomInKey(String zoomInKey) 
-	{
-		this.zoomInKey = zoomInKey;
-	}
-
-	/**
-	 * Get Zoom Out key's name
-	 * 
-	 * @return Zoom Out key's name
-	 */
-	public String getZoomOutKey() 
-	{
-		return zoomOutKey;
-	}
-
-	/**
-	 * Set Zoom Out key's name
-	 * 
-	 * @param zoomOutKey
-	 */
-	public void setZoomOutKey(String zoomOutKey) 
-	{
-		this.zoomOutKey = zoomOutKey;
-	}
-
-	/**
-	 * Get Up key's name
-	 * 
-	 * @return Up key's name
-	 */
-	public String getUpKey() 
-	{
-		return upKey;
-	}
-
-	/**
-	 * Set Up key's name
-	 * 
-	 * @param upKey
-	 */
-	public void setUpKey(String upKey) 
-	{
-		this.upKey = upKey;
 	}
 
 	/**
@@ -355,13 +94,23 @@ public class Settings
 	}
 
 	/**
-	 * Set Down key's name
+	 * Get Language
 	 * 
-	 * @param downKey
+	 * @return Language
 	 */
-	public void setDownKey(String downKey) 
+	public String getLanguage() 
 	{
-		this.downKey = downKey;
+		return language;
+	}
+
+	/**
+	 * Get Left key
+	 * 
+	 * @return Left key
+	 */
+	public int getLeft() 
+	{
+		return left;
 	}
 
 	/**
@@ -375,6 +124,176 @@ public class Settings
 	}
 
 	/**
+	 * Get the music volume
+	 * 
+	 * @return Volume
+	 */
+	public float getMusicVolume() 
+	{
+		return musicVolume;
+	}
+
+	/**
+	 * Get Right key
+	 * 
+	 * @return Right key
+	 */
+	public int getRight() 
+	{
+		return right;
+	}
+	
+	/**
+	 * Get Right key's name
+	 * 
+	 * @return Right key's name
+	 */
+	public String getRightKey() 
+	{
+		return rightKey;
+	}
+
+	/**
+	 * Get the screen's size
+	 * 
+	 * @return Screen size
+	 */
+	public TAScreenSize getSize() 
+	{
+		return size;
+	}
+
+	/**
+	 * Get the effect sounds volume
+	 * 
+	 * @return Volume
+	 */
+	public float getSoundVolume() 
+	{
+		return soundVolume;
+	}
+
+	/**
+	 * Get Up key
+	 * 
+	 * @return Up key
+	 */
+	public int getUp() 
+	{
+		return up;
+	}
+
+	/**
+	 * Get Up key's name
+	 * 
+	 * @return Up key's name
+	 */
+	public String getUpKey() 
+	{
+		return upKey;
+	}
+
+	/**
+	 * Get Zoom In key
+	 * 
+	 * @return Zoom In key
+	 */
+	public int getZoomIn() 
+	{
+		return zoomIn;
+	}
+
+	/**
+	 * Get Zoom In key's name
+	 * 
+	 * @return Screen size
+	 */
+	public String getZoomInKey() 
+	{
+		return zoomInKey;
+	}
+
+	/**
+	 * Get Zoom Out key
+	 * 
+	 * @return Zoom Out key
+	 */
+	public int getZoomOut() 
+	{
+		return zoomOut;
+	}
+
+	/**
+	 * Get Zoom Out key's name
+	 * 
+	 * @return Zoom Out key's name
+	 */
+	public String getZoomOutKey() 
+	{
+		return zoomOutKey;
+	}
+
+	/**
+	 * Test if the app is fullscreen
+	 * 
+	 * @return True if is fullscreen, false otherwhise
+	 */
+	public boolean isFullscreen() 
+	{
+		return fullscreen;
+	}
+
+	/**
+	 * Set Down key
+	 * 
+	 * @param down
+	 */
+	public void setDown(int down) 
+	{
+		this.down = down;
+	}
+	
+	/**
+	 * Set Down key's name
+	 * 
+	 * @param downKey
+	 */
+	public void setDownKey(String downKey) 
+	{
+		this.downKey = downKey;
+	}
+
+	/**
+	 * Set the app fullscreen or not
+	 * 
+	 * @param fullscreen
+	 */
+	public void setFullscreen(boolean fullscreen) 
+	{
+		this.fullscreen = fullscreen;
+	}
+
+	/**
+	 * Set Language
+	 * 
+	 * @param language
+	 */
+	public void setLanguage(String language) 
+	{
+		this.language = language;
+	}
+
+	/**
+	 * Set Left key
+	 * 
+	 * @param left
+	 */
+	public void setLeft(int left) 
+	{
+		this.left = left;
+	}
+
+	/**
 	 * Set Left key's name
 	 * 
 	 * @param leftKey
@@ -385,13 +304,23 @@ public class Settings
 	}
 
 	/**
-	 * Get Right key's name
+	 * Set the music volume
 	 * 
-	 * @return Right key's name
+	 * @param Volume
 	 */
-	public String getRightKey() 
+	public void setMusicVolume(float musicVolume) 
 	{
-		return rightKey;
+		this.musicVolume = musicVolume;
+	}
+
+	/**
+	 * Set Right key
+	 * 
+	 * @param right
+	 */
+	public void setRight(int right)
+	{
+		this.right = right;
 	}
 
 	/**
@@ -405,23 +334,94 @@ public class Settings
 	}
 
 	/**
-	 * Get Language
+	 * Set the screen's size
 	 * 
-	 * @return Language
+	 * @param w
+	 * @param h
 	 */
-	public String getLanguage() 
+	public void setSize(int w, int h) 
 	{
-		return language;
+		this.size = new TAScreenSize(w,h);
 	}
 
 	/**
-	 * Set Language
+	 * Set Screen size
 	 * 
-	 * @param language
+	 * @param size
 	 */
-	public void setLanguage(String language) 
+	public void setSize(TAScreenSize size) 
 	{
-		this.language = language;
+		this.size = size;
+	}
+
+	/**
+	 * Set the effect sounds volume
+	 * 
+	 * @param soundVolume volume
+	 */
+	public void setSoundVolume(float soundVolume) 
+	{
+		this.soundVolume = soundVolume;
+	}
+
+	/**
+	 * Set Up key
+	 * 
+	 * @param up
+	 */
+	public void setUp(int up) 
+	{
+		this.up = up;
+	}
+
+	/**
+	 * Set Up key's name
+	 * 
+	 * @param upKey
+	 */
+	public void setUpKey(String upKey) 
+	{
+		this.upKey = upKey;
+	}
+
+	/**
+	 * Set Zoom In key
+	 * 
+	 * @param zoomIn
+	 */
+	public void setZoomIn(int zoomIn) 
+	{
+		this.zoomIn = zoomIn;
+	}
+
+	/**
+	 * Set Zoom In key's name
+	 * 
+	 * @param zoomInKey
+	 */
+	public void setZoomInKey(String zoomInKey) 
+	{
+		this.zoomInKey = zoomInKey;
+	}
+
+	/**
+	 * Set Zoom Out key
+	 * 
+	 * @param zoomOut
+	 */
+	public void setZoomOut(int zoomOut) 
+	{
+		this.zoomOut = zoomOut;
+	}
+
+	/**
+	 * Set Zoom Out key's name
+	 * 
+	 * @param zoomOutKey
+	 */
+	public void setZoomOutKey(String zoomOutKey) 
+	{
+		this.zoomOutKey = zoomOutKey;
 	}
 	
 }

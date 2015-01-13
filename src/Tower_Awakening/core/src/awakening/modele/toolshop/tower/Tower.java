@@ -38,70 +38,15 @@ public abstract class Tower extends MeshTA
 		this.level = level;
 	}
 	
-	public Tower(String path)
-	{
-		this.load(new File(path));
-	}
 	public Tower(MeshTA m)
 	{
 		this.copy(m);
 		this.copyFeatures(m);	
 		this.range = 50;
 	}
-	
-	// *****************************************
-	// ************** GETTER SETTER ************
-	// *****************************************
-	final public void targetMonster(Monster target)
+	public Tower(String path)
 	{
-		this.target = target;
-	}
-	
-	final public void loseTarget()
-	{
-		this.target = null;
-	}
-	final public Monster getTarget()
-	{
-		return target;
-	}
-	
-	final public boolean haveATarget()
-	{
-		return this.target!=null;
-	}
-	public Box getBox()
-	{
-		return box;
-	}
-	public int getId()
-	{
-		return id;
-	}
-	public float getBuildCost()
-	{
-		return buildCost;
-	}
-	public int getRange()
-	{
-		return range;
-	}
-	public float getSpeedAttaque()
-	{
-		return speedAttaque;
-	}
-	public int getLevel()
-	{
-		return level;
-	}
-	
-	// *****************************************
-	// ******** PROCEDURES TO OVERLOAD *********
-	// *****************************************
-	public boolean testPortee(float x, float z){
-		float distanceX =getX() - x;
-		float distanceY =getZ() - z;
-		return (distanceX * distanceX + distanceY * distanceY < range * range);	
+		this.load(new File(path));
 	}
 	
 	public void action(){
@@ -123,34 +68,56 @@ public abstract class Tower extends MeshTA
 			}
 		}
 		animationRY(rotation);
-	};
+	}
 	
-
-	// *****************************************
-	// ****************** OTHER ****************
-	// *****************************************
-	final public void upgrade()
-	{
-		if(canBeUpgrade())
-		{
-			this.buildCost = levelUp.buildCost;
-			this.range = levelUp.range;
-			this.speedAttaque = levelUp.speedAttaque;
-			this.level++;
-			this.levelUp = levelUp.levelUp;
-		}
+	@Override
+	public void anime() {
+		this.rotate(0,getAnimationRY(),0);
 	}
 	final public boolean canBeUpgrade()
 	{
 		return levelUp!=null;
 	}
-
-
-	@Override
-	public void anime() {
-		this.rotate(0,getAnimationRY(),0);
+	
+	public Box getBox()
+	{
+		return box;
 	}
-
+	public float getBuildCost()
+	{
+		return buildCost;
+	}
+	public int getId()
+	{
+		return id;
+	}
+	public int getLevel()
+	{
+		return level;
+	}
+	public int getRange()
+	{
+		return range;
+	}
+	public float getSpeedAttaque()
+	{
+		return speedAttaque;
+	}
+	final public Monster getTarget()
+	{
+		return target;
+	}
+	
+	final public boolean haveATarget()
+	{
+		return this.target!=null;
+	}
+	
+	final public void loseTarget()
+	{
+		this.target = null;
+	};
+	
 
 	@Override
 	public boolean mustBeInterrupted() {
@@ -161,7 +128,7 @@ public abstract class Tower extends MeshTA
 		float posY =(target.getZ()- getZ());
 		if(canonPosition.x * posX>=0 && -canonPosition.y * posY>=0)
 		{
-			if(Math.abs(canonPosition.y)<0.4f && Math.abs(posY)<8f)
+			if(Math.abs(canonPosition.y)<0.5f && Math.abs(posY)<8f)
 			{
 					coefTarget = posY / posX;
 					int i =1;
@@ -192,7 +159,6 @@ public abstract class Tower extends MeshTA
 			return false;
 		}
 	}
-
 	@Override
 	public void rotate(float x, float y, float z) {
 		getSousMesh(0).rotate(0, 0.01f*y, 0);
@@ -201,6 +167,40 @@ public abstract class Tower extends MeshTA
 		canonPosition.x -= sin01*canonPosition.y * y;
 		canonPosition.y *= cos01;
 		canonPosition.y += cosA*sin01 * y;
+	}
+
+
+	// *****************************************
+	// ************** GETTER SETTER ************
+	// *****************************************
+	final public void targetMonster(Monster target)
+	{
+		this.target = target;
+	}
+
+
+	// *****************************************
+	// ******** PROCEDURES TO OVERLOAD *********
+	// *****************************************
+	public boolean testPortee(float x, float z){
+		float distanceX =getX() - x;
+		float distanceY =getZ() - z;
+		return (distanceX * distanceX + distanceY * distanceY < range * range);	
+	}
+
+	// *****************************************
+	// ****************** OTHER ****************
+	// *****************************************
+	final public void upgrade()
+	{
+		if(canBeUpgrade())
+		{
+			this.buildCost = levelUp.buildCost;
+			this.range = levelUp.range;
+			this.speedAttaque = levelUp.speedAttaque;
+			this.level++;
+			this.levelUp = levelUp.levelUp;
+		}
 	}
 	
 
