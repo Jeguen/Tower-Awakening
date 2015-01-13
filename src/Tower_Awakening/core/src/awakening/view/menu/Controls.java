@@ -146,7 +146,7 @@ public class Controls implements Screen
 		
 		///Langage Checkbox
 		lblLangage = new Label(language.getString("label_language"), skin);
-		String[] lang = {"English","Français","Italiano"};
+		String[] lang = {"English","Francais","Italiano"};
 		slbLangages = new SelectBox<String>(skin);
 		slbLangages.setItems(lang);
 		
@@ -341,7 +341,7 @@ public class Controls implements Screen
 		}
 		else if (game.getLanguage().equals("FRENCH"))
 		{
-			slbLangages.setSelected("Français");
+			slbLangages.setSelected("Francais");
 		}
 		else if (game.getLanguage().equals("ITALIAN"))
 		{
@@ -368,7 +368,7 @@ public class Controls implements Screen
 							System.out.println("yolo1");
 						}
 					}
-					else if (slbLangages.getSelected().equals("Français"))
+					else if (slbLangages.getSelected().equals("Francais"))
 					{
 						game.setLanguage("FRENCH");
 						try
