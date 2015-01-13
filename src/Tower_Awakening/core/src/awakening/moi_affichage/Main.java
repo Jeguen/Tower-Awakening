@@ -1,6 +1,6 @@
 package awakening.moi_affichage;
 
-import awakening.field.Field;
+import awakening.modele.field.Field;
 
 
 public class Main

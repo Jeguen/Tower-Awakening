@@ -10,10 +10,10 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import awakening.field.Barrier;
-import awakening.field.Box;
-import awakening.toolshop.monster.FlyingMonster;
-import awakening.toolshop.monster.Monster;
+import awakening.modele.field.Barrier;
+import awakening.modele.field.Box;
+import awakening.modele.toolshop.monster.FlyingMonster;
+import awakening.modele.toolshop.monster.Monster;
 
 public class Panel extends JPanel implements KeyListener, MouseListener
 {
