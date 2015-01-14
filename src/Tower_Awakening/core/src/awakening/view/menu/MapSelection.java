@@ -14,10 +14,12 @@
 
 package awakening.view.menu;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import awakening.control.moteur.TAGame;
+import awakening.view.GameWidget.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -28,14 +30,18 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
@@ -44,7 +50,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  * @author rodolphe-c
  *
  */
-public class Multiplayer implements Screen
+public class MapSelection implements Screen
 {
 	///Game
 	private TAGame game;
@@ -52,6 +58,11 @@ public class Multiplayer implements Screen
 	private Sound effect;	
 	private Locale[] locales = {Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN};
 	private ResourceBundle language;
+	private ArrayList<BoutonShop> maps;
+	private BoutonShop map1;
+	private BoutonShop map2;
+	private BoutonShop map3;
+	private int indexMap = 0;
 	
 	///Stage
 	private Stage stage;
@@ -64,11 +75,9 @@ public class Multiplayer implements Screen
 	private Image widgetsBackground;
 	private Label title;
 	private Skin skin;
-	private TextField tfdPort;
-	private TextField tfdIp;
 	private TextButton btnBack;
-	private TextButton btnJoin;
-	private TextButton btnCreate;
+	private ImageButton btnNext;
+	private ImageButton btnPrevious;
 
 	/**
 	 * Constructor
@@ -77,7 +86,7 @@ public class Multiplayer implements Screen
 	 * @param sound Main menu's music
 	 * @param effect Button's effect
 	 */
-	public Multiplayer(TAGame game, Music sound, Sound effect)
+	public MapSelection(TAGame game, Music sound, Sound effect)
 	{
 		this.game = game;
 		this.sound = sound;
@@ -108,7 +117,6 @@ public class Multiplayer implements Screen
 			System.out.println("yolo");
 		}
 		
-		
 		///Viewport
 		camera=new OrthographicCamera();
 		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getWidth(), camera);
@@ -121,24 +129,49 @@ public class Multiplayer implements Screen
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
 		///Title
-		title = new Label(language.getString("button_multiplayer"), skin);
+		title = new Label(language.getString("label_map_selection"), skin);
 		
 		///Widgets Background
-		widgetsBackground = new Image(new Texture(Gdx.files.internal("img/widget/window_large.png")));
+		widgetsBackground = new Image(new Texture(Gdx.files.internal("img/widget/window_selection.png")));
+		widgetsBackground.setSize(Gdx.app.getGraphics().getWidth() - Gdx.app.getGraphics().getWidth()/8, Gdx.app.getGraphics().getHeight() - Gdx.app.getGraphics().getHeight()/8);
 		
 		///Back Button
 		btnBack = new TextButton(language.getString("button_back"), skin);
 		
-		///Server List
-		btnJoin = new TextButton(language.getString("button_join"), skin);
-		btnCreate = new TextButton(language.getString("button_create"), skin);
+		///Next Button
+		Texture t1 = new Texture(Gdx.files.internal("img/widget/arrow_hover_right.png"));
+		Texture t2 = new Texture(Gdx.files.internal("img/widget/arrow_right.png"));
+		ImageButtonStyle style1 = new ImageButtonStyle
+				(
+						new TextureRegionDrawable(new TextureRegion(t1,0,0,t1.getWidth(), t1.getHeight())), 
+						new TextureRegionDrawable(new TextureRegion(t2,0,0,t2.getWidth(), t2.getHeight())),
+						new TextureRegionDrawable(new TextureRegion(t1,0,0,t1.getWidth(), t1.getHeight())), 
+						new TextureRegionDrawable(new TextureRegion(t2,0,0,t2.getWidth(), t2.getHeight())),
+						new TextureRegionDrawable(new TextureRegion(t1,0,0,t1.getWidth(), t1.getHeight())), 
+						new TextureRegionDrawable(new TextureRegion(t2,0,0,t2.getWidth(), t2.getHeight()))
+				);
+		btnNext = new ImageButton(style1); 
+			
+		///Previous Button
+		Texture t3 = new Texture(Gdx.files.internal("img/widget/arrow_hover_left.png"));
+		Texture t4 = new Texture(Gdx.files.internal("img/widget/arrow_left.png"));
+		ImageButtonStyle style2 = new ImageButtonStyle
+				(
+						new TextureRegionDrawable(new TextureRegion(t3,0,0,t3.getWidth(), t3.getHeight())), 
+						new TextureRegionDrawable(new TextureRegion(t4,0,0,t4.getWidth(), t4.getHeight())),
+						new TextureRegionDrawable(new TextureRegion(t3,0,0,t3.getWidth(), t3.getHeight())), 
+						new TextureRegionDrawable(new TextureRegion(t4,0,0,t4.getWidth(), t4.getHeight())),
+						new TextureRegionDrawable(new TextureRegion(t3,0,0,t3.getWidth(), t3.getHeight())), 
+						new TextureRegionDrawable(new TextureRegion(t4,0,0,t4.getWidth(), t4.getHeight()))
+				);
 		
-		///Port TextField
-		tfdPort = new TextField("",skin);
+		btnPrevious = new ImageButton(style2);
 		
-		///Port TextField
-		tfdIp = new TextField("",skin);
+		maps = new ArrayList<BoutonShop>();
 		
+		map1 = new BoutonShop(new Texture(Gdx.files.internal("img/menu/badlogic.jpg")), Gdx.app.getGraphics().getWidth()/4, Gdx.app.getGraphics().getWidth()/4);
+		map2 = new BoutonShop(new Texture(Gdx.files.internal("img/menu/badlogic.jpg")), Gdx.app.getGraphics().getWidth()/4, Gdx.app.getGraphics().getWidth()/4);
+		map3 = new BoutonShop(new Texture(Gdx.files.internal("img/menu/badlogic.jpg")), Gdx.app.getGraphics().getWidth()/4, Gdx.app.getGraphics().getWidth()/4);
 	}
 	
 	@Override
@@ -220,8 +253,8 @@ public class Multiplayer implements Screen
 		stage.addActor(widgetsBackground);
 		
 		///Back Button
-		btnBack.setWidth(widgetsBackground.getWidth()-20);
-		btnBack.setPosition(Gdx.app.getGraphics().getWidth()/2 - widgetsBackground.getWidth()/2 + 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 30);
+		btnBack.setWidth(100);
+		btnBack.setPosition(Gdx.app.getGraphics().getWidth()/2 - btnBack.getWidth()/2, Gdx.app.getGraphics().getHeight() - widgetsBackground.getHeight() + 10);
 		
 		btnBack.addListener
 		(
@@ -235,13 +268,14 @@ public class Multiplayer implements Screen
 						return false;	
 					}
 				}
-				
 		);
 		stage.addActor(btnBack);
 		
-		btnJoin.setPosition(Gdx.app.getGraphics().getWidth()/2 - btnJoin.getWidth()/2 - 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 60 + 3*btnBack.getHeight());
-		btnJoin.setWidth(widgetsBackground.getWidth()/2.5f-20);
-		btnJoin.addListener
+		///Next Button
+		btnNext.setWidth(75);
+		btnNext.setHeight(75);
+		btnNext.setPosition(Gdx.app.getGraphics().getWidth() - Gdx.app.getGraphics().getWidth()/8 - btnNext.getWidth(), Gdx.app.getGraphics().getHeight()/2);
+		btnNext.addListener
 		(
 				new ClickListener() 
 				{
@@ -249,16 +283,30 @@ public class Multiplayer implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
-						///TODO
+							if (indexMap < 2)
+							{
+								disableMap();
+								indexMap++;
+								changeMap();
+							}
+							else
+							{
+								disableMap();
+								indexMap = 0;
+								changeMap();
+							}
 						return false;	
 					}
 				}
 				
 		);
-		stage.addActor(btnJoin);
-		btnCreate.setPosition(Gdx.app.getGraphics().getWidth()/2 - btnJoin.getWidth()/2 - 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 60 + 4*btnBack.getHeight());
-		btnCreate.setWidth(widgetsBackground.getWidth()/2.5f-20);
-		btnCreate.addListener
+		stage.addActor(btnNext);
+		
+		///Previous Button
+		btnPrevious.setWidth(75);
+		btnPrevious.setHeight(75);
+		btnPrevious.setPosition(Gdx.app.getGraphics().getWidth()/8, Gdx.app.getGraphics().getHeight()/2);
+		btnPrevious.addListener
 		(
 				new ClickListener() 
 				{
@@ -266,33 +314,92 @@ public class Multiplayer implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
-						///TODO
+						if (indexMap > 0)
+						{
+							disableMap();
+							indexMap--;
+							changeMap();
+						}
+						else
+						{
+							disableMap();
+							indexMap = 2;
+							changeMap();
+						}
 						return false;	
 					}
 				}
 				
 		);
-		stage.addActor(btnCreate);
+		stage.addActor(btnPrevious);
 		
-		tfdPort.setPosition(Gdx.app.getGraphics().getWidth()/2 - tfdPort.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 70 + 5*btnBack.getHeight());
-		tfdPort.setWidth(widgetsBackground.getWidth()/2.5f-20);
-		stage.addActor(tfdPort);
-		Label lblPort = new Label("Port :", skin);
-		lblPort.setPosition(tfdPort.getX() - lblPort.getWidth() - 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 70 + 5*btnBack.getHeight());
-		stage.addActor(lblPort);
+		///Map1
+		map1.setPosition(Gdx.app.getGraphics().getWidth()/2 - map1.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - map1.getHeight()/2);
+		map1.addListener
+		(
+				new ClickListener() 
+				{
+					@Override
+					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+					{
+						effect.play(game.getSoundVolume());
+						System.out.println("map1");
+						return false;	
+					}
+				}
+		);
+		stage.addActor(map1);
+		maps = new ArrayList<BoutonShop>();
+		maps.add(map1);
 		
-		tfdIp.setPosition(Gdx.app.getGraphics().getWidth()/2 - tfdIp.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 80 + 6*btnBack.getHeight());
-		tfdIp.setWidth(widgetsBackground.getWidth()/2.5f-20);
-		stage.addActor(tfdIp);
-		Label lblIp = new Label("IP :", skin);
-		lblIp.setPosition(tfdIp.getX() - lblIp.getWidth() - 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 60 + 6*btnBack.getHeight() + tfdIp.getHeight()/2);
-		stage.addActor(lblIp);
+		///Map2
+		map2.setPosition(Gdx.app.getGraphics().getWidth()/2 - map1.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - map1.getHeight()/2);
+		map2.addListener
+		(
+				new ClickListener() 
+				{
+					@Override
+					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+					{
+						effect.play(game.getSoundVolume());
+						System.out.println("map2");
+						return false;	
+					}
+				}
+		);
+		stage.addActor(map2);
+		map2.setVisible(false);
+		maps.add(map2);
 		
-		btnCreate.setPosition(tfdPort.getX() , Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 60 + 4*btnBack.getHeight());
-		btnCreate.setWidth(tfdIp.getWidth()/2);
-		stage.addActor(btnCreate);
-		btnJoin.setPosition(btnCreate.getX() + btnCreate.getWidth(), Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 60 + 4*btnBack.getHeight());
-		btnJoin.setWidth(tfdIp.getWidth()/2);
-		stage.addActor(btnJoin);
+		///Map3
+		map3.setPosition(Gdx.app.getGraphics().getWidth()/2 - map1.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - map1.getHeight()/2);
+		map3.addListener
+		(
+				new ClickListener() 
+				{
+					@Override
+					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+					{
+						effect.play(game.getSoundVolume());
+						System.out.println("map3");
+						return false;	
+					}
+				}
+		);
+		stage.addActor(map3);
+		map3.setVisible(false);
+		maps.add(map3);
+	}
+	
+	public void disableMap()
+	{
+		maps.get(indexMap).setVisible(false);
+		maps.get(indexMap).setTouchable(Touchable.disabled);
+	}
+	
+	public void changeMap()
+	{
+		maps.get(indexMap).setVisible(true);
+		maps.get(indexMap).setTouchable(Touchable.enabled);;
 	}
 }

@@ -27,9 +27,11 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 	 * @param width
 	 * @param height
 	 */
-	public BoutonShop(Texture imageTour, float width, float height) {
-		super(new TextureRegionDrawable(new TextureRegion(imageTour,
-				0,0,imageTour.getWidth(), imageTour.getHeight())));
+	public BoutonShop(Texture imageTour, float width, float height) 
+	{
+		super(
+				new TextureRegionDrawable(new TextureRegion(imageTour,0,0,imageTour.getWidth(), imageTour.getHeight()))
+			 );
 		this.setWidth(width);
 		this.setHeight(height);
 		Pixmap pixmap = new Pixmap((int)width, (int)height, Format.RGBA4444 );

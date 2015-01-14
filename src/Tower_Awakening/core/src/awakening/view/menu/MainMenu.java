@@ -296,7 +296,7 @@ public class MainMenu implements Screen
 		Gdx.input.setInputProcessor(stage);
 		
 		///Title
-		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth(), Gdx.app.getGraphics().getHeight() - 50);
+		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth(), Gdx.app.getGraphics().getHeight() - 30);
 		stage.addActor(title);
 		
 		///Widgets Background
@@ -373,7 +373,7 @@ public class MainMenu implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
-						game.setScreen(new Solo(game));
+						game.setScreen(new MapSelection(game, music, effect));
 						return false;	
 					}
 				}
