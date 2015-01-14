@@ -92,16 +92,17 @@ public abstract class Monster extends MeshTA
 	// *****************************************
 	// ************** PROCEDURES **************
 	// *****************************************
+	@Override
 	public Object clone()
 	{
 		if (this.getClass().getName().equals("MonstreAerien"))
 		{
-			return (Object) new FlyingMonster(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold,
+			return new FlyingMonster(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold,
 			            damage);
 		}
 		else
 		{
-			return (Object) new MonsterEarth(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold,
+			return new MonsterEarth(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold,
 			            damage);
 		}
 	}

@@ -267,7 +267,7 @@ public class Field extends MeshTA
 	{
 		float yBox = Math.round((y/(3*halfRadiusPolygon)) - 0.7f);
 		float xBox = Math.round(((x - (y%2)*(2*halfRadiusPolygon))/(4*halfRadiusPolygon)));
-		return (int)(xBox + yBox * (float)(getNbBoxWidth()) + yBox/2f);
+		return (int)(xBox + yBox * (getNbBoxWidth()) + yBox/2f);
 	}
 	public Box getFinishBox()
 	{

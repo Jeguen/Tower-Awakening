@@ -222,6 +222,7 @@ public class Options implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -240,6 +241,7 @@ public class Options implements Screen
 				(
 						new ClickListener() 
 						{
+							@Override
 							public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 							{
 								effect.play(game.getSoundVolume());
@@ -258,6 +260,7 @@ public class Options implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -276,6 +279,7 @@ public class Options implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());

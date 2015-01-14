@@ -758,6 +758,7 @@ public class Controls implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -776,6 +777,7 @@ public class Controls implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -795,6 +797,7 @@ public class Controls implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -815,6 +818,7 @@ public class Controls implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -836,6 +840,7 @@ public class Controls implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -855,6 +860,7 @@ public class Controls implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -874,6 +880,7 @@ public class Controls implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -905,6 +912,7 @@ public class Controls implements Screen
 		(
 			new ChangeListener() 
 			{
+				@Override
 				public void changed (ChangeEvent event, Actor actor) 
 				{
 					System.out.println(slbLangages.getSelected());

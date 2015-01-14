@@ -52,6 +52,10 @@ public class ToolShop {
 	public void loadModele()
 	{
 		File towerDirectory = Gdx.files.internal("Tower").file();
+		for(File f : Gdx.files.internal("./").file().listFiles())
+		{
+			System.out.println(f.getName());
+		}
 		for(File ft : towerDirectory.listFiles())
 		{
 			System.out.println(ft.getName());

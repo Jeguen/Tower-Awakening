@@ -78,10 +78,12 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 	}
 	
 
+	@Override
 	public void onExitAction()
 	{
 		isOnHover=false;
 	}
+	@Override
 	public void onHoverAction()
 	{
 		isOnHover=true;

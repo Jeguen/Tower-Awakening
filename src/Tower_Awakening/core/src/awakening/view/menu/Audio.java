@@ -174,8 +174,8 @@ public class Audio implements Screen
 		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
 		
 		///Settings
-		game.setMusicVolume((float) sliderMusic.getValue()/10); 
-		game.setSoundVolume((float) sliderEffects.getValue()/10); 
+		game.setMusicVolume(sliderMusic.getValue()/10); 
+		game.setSoundVolume(sliderEffects.getValue()/10); 
 		
 		effect.setVolume(0, game.getSoundVolume());
 		sound.setVolume(game.getMusicVolume());
@@ -231,6 +231,7 @@ public class Audio implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());

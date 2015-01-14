@@ -176,7 +176,7 @@ public class Graphics implements Screen
 		
 		///Settings
 		sound.setVolume(game.getMusicVolume());
-		game.setSize((int)slbResolutions.getSelected().width, (int)slbResolutions.getSelected().height);
+		game.setSize(slbResolutions.getSelected().width, slbResolutions.getSelected().height);
 		
 		if(!cbxFullscreen.isChecked() && !Gdx.app.getGraphics().isFullscreen())
 		{
@@ -248,6 +248,7 @@ public class Graphics implements Screen
 		(
 				new ClickListener() 
 				{
+					@Override
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
@@ -295,6 +296,7 @@ public class Graphics implements Screen
 		(
 			new ChangeListener() 
 			{
+				@Override
 				public void changed (ChangeEvent event, Actor actor) 
 				{
 					System.out.println(slbResolutions.getSelected());

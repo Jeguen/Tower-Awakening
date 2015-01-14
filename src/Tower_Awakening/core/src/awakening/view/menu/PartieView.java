@@ -55,7 +55,7 @@ public class PartieView implements Screen{
         Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl20.glEnable(GL20.GL_TEXTURE_2D);
         renderer = new ImmediateModeRenderer20(false, true, 1);
-        camera = new PerspectiveCamera(80, Gdx.graphics.getWidth(),(float) Gdx.graphics.getHeight());
+        camera = new PerspectiveCamera(80, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 		camera.near = 1;
 		camera.far = 200;
 		camera.up.set(0,1,0);
@@ -200,7 +200,7 @@ public class PartieView implements Screen{
 		Vector3 position = camera.position;
 		Vector3 cible = camera.direction;
 		Vector3 up = camera.up;
-        camera = new PerspectiveCamera(80, Gdx.graphics.getWidth(),(float) Gdx.graphics.getHeight());
+        camera = new PerspectiveCamera(80, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         camera.near = 1;
 		camera.far = 200;
 		camera.position.set(position);

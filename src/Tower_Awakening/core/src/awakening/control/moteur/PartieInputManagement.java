@@ -40,6 +40,7 @@ public class PartieInputManagement implements InputProcessor{
 		{
 			vue.translateX(-2);
 			new Thread(){
+				@Override
 				public void run()
 				{
 					while(keyPressed) 
@@ -59,6 +60,7 @@ public class PartieInputManagement implements InputProcessor{
 		{
 			vue.translateX(2);
 			new Thread(){
+				@Override
 				public void run()
 				{
 					while(keyPressed) 
@@ -78,6 +80,7 @@ public class PartieInputManagement implements InputProcessor{
 		{
 			vue.translateZ(-2);
 			new Thread(){
+				@Override
 				public void run()
 				{
 					while(keyPressed) 
@@ -97,6 +100,7 @@ public class PartieInputManagement implements InputProcessor{
 		{
 			vue.translateZ(2);
 			new Thread(){
+				@Override
 				public void run()
 				{
 					while(keyPressed) 
@@ -173,7 +177,7 @@ public class PartieInputManagement implements InputProcessor{
 	
 	@Override
 	public boolean scrolled(int amount) {
-		vue.translateY((float)amount*10f);
+		vue.translateY(amount*10f);
 		return true;
 	}
 	

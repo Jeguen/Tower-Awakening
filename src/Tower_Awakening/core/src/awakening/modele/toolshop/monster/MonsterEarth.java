@@ -39,8 +39,8 @@ public class MonsterEarth extends Monster
 				boxDestination++;
 				System.out.println("boxActuel : " + boxActuel.getCoordX() + " " + boxActuel.getCoordY());
 
-				dx = (float)(path.get(boxDestination).getCoordX() - this.getX()) / 100f;
-				dy = (float)(path.get(boxDestination).getCoordY() - this.getZ()) / 100f;
+				dx = (path.get(boxDestination).getCoordX() - this.getX()) / 100f;
+				dy = (path.get(boxDestination).getCoordY() - this.getZ()) / 100f;
 			}
 			else 
 			{
@@ -56,8 +56,8 @@ public class MonsterEarth extends Monster
 			if(path.size()>1)
 			{
 				boxDestination++;
-				dx = (float)(path.get(boxDestination).getCoordX() - this.getX()) / 100f;
-				dy = (float)(path.get(boxDestination).getCoordY() - this.getZ()) / 100f;
+				dx = (path.get(boxDestination).getCoordX() - this.getX()) / 100f;
+				dy = (path.get(boxDestination).getCoordY() - this.getZ()) / 100f;
 			}
 			else 
 			{

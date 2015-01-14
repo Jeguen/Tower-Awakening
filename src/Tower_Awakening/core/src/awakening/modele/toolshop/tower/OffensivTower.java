@@ -45,12 +45,14 @@ public class OffensivTower extends Tower {
 		super.action();
 	}
 
+	@Override
 	public void save(DataOutputStream bos, File f) throws IOException
 	{
 		super.save(bos,f);
 		bos.writeFloat(damage);
 	}
 	
+	@Override
 	public void load(File f, DataInputStream dis) throws IOException
 	{
 		super.load(f, dis);

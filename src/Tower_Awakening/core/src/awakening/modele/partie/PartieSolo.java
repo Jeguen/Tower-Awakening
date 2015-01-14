@@ -12,7 +12,7 @@ public class PartieSolo extends Partie{
 	public PartieSolo(TAGame game)
 	{
 		super(game);
-		terrain = new Field((int) 3, 6, 10, 5, 250, 250, new File("terrain 1.mta"));
+		terrain = new Field(3, 6, 10, 5, 250, 250, new File("terrain 1.mta"));
 		terrain.creerPlateau();
 		terrain.getSpawns().add(terrain.getBox().get(99));
 		terrain.getBox().get(99).setFieldType(Box.FIELD_SPAWNS);
