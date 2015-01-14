@@ -27,9 +27,12 @@ public abstract class Monster extends MeshTA
 	protected Box boxActuel;
 	protected float dx;
 	protected float dy;
+	protected int coordX;
+	protected int coordY;
 	public boolean isArrived = false;
 	public boolean destinationChanged = false;
 	public int randomNumber = (int) (Math.random() * 100);
+	private boolean alive=true;
 	// *****************************************
 	// ************** CONSTRUCTORS ************
 	// *****************************************
@@ -102,6 +105,15 @@ public abstract class Monster extends MeshTA
 			            damage);
 		}
 	}
+	// turn boolean if monster dies after taking damages
+	public void takeDamage(int damage)
+	{
+		lifePoint=lifePoint-damage;
+		if(lifePoint<0)
+		{
+			alive=false;
+		}
+	}
 	
 		public abstract void crazyMove();
 
@@ -121,6 +133,15 @@ public abstract class Monster extends MeshTA
 		{
 			return path.get(boxDestination);
 		}
+		
+		public boolean isAlive() {
+			return alive;
+		}
+
+		public void setAlive(boolean alive) {
+			this.alive = alive;
+		}
+
 		public String getFacSheet()
 		{
 			return facSheet;
@@ -217,4 +238,21 @@ public abstract class Monster extends MeshTA
 		{
 			this.vitesseDeplacement = vitesseDeplacement;
 		}
+
+		public int getCoordX() {
+			return coordX;
+		}
+
+		public void setCoordX(int coordX) {
+			this.coordX = coordX;
+		}
+
+		public int getCoordY() {
+			return coordY;
+		}
+
+		public void setCoordY(int coordY) {
+			this.coordY = coordY;
+		}
+		
 }

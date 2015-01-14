@@ -265,8 +265,8 @@ public class Field extends MeshTA
 	}
 	public int getBoxIndexByPosition(float x, float y)
 	{
-		float yBox = Math.round((y/(3*halfRadiusPolygon)) - 0.5f);
-		float xBox = Math.round(((x - (y%2)*(2*halfRadiusPolygon))/(4*halfRadiusPolygon) - 0.5f));
+		float yBox = Math.round((y/(3*halfRadiusPolygon)) - 0.7f);
+		float xBox = Math.round(((x - (y%2)*(2*halfRadiusPolygon))/(4*halfRadiusPolygon)));
 		return (int)(xBox + yBox * (float)(getNbBoxWidth()) + yBox/2f);
 	}
 	public Box getFinishBox()
@@ -301,6 +301,7 @@ public class Field extends MeshTA
 		return nbSpawn;
 	}
 	public ArrayList<Box> getSpawns()
+	
 	{
 		return spawns;
 	}
@@ -625,4 +626,5 @@ public class Field extends MeshTA
 			}
 		}
 	}
+	
 }

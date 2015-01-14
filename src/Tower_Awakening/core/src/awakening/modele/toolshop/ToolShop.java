@@ -3,12 +3,11 @@ package awakening.modele.toolshop;
 import java.io.File;
 import java.util.LinkedList;
 
-import com.badlogic.gdx.Gdx;
-
 import awakening.modele.toolshop.monster.Monster;
 import awakening.modele.toolshop.monster.MonsterEarth;
-import awakening.modele.toolshop.tower.OffensivTower;
 import awakening.modele.toolshop.tower.Tower;
+
+import com.badlogic.gdx.Gdx;
 
 public class ToolShop {
 
@@ -55,9 +54,10 @@ public class ToolShop {
 		File towerDirectory = Gdx.files.internal("Tower").file();
 		for(File ft : towerDirectory.listFiles())
 		{
+			System.out.println(ft.getName());
 			if(ft.isFile())
 				if(ft.getName().endsWith("mta"))
-					tours.add(new OffensivTower(ft.getAbsolutePath()));
+					tours.add(Tower.loadTower(ft));
 		}
 		File monsterDirectory = Gdx.files.internal("Monster").file();
 		for(File ft : monsterDirectory.listFiles())

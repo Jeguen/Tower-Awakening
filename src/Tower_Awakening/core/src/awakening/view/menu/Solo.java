@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 
 import awakening.control.moteur.PartieInputManagement;
 import awakening.control.moteur.TAGame;
-import awakening.view.partie.PartieSolo;
+import awakening.modele.partie.PartieSolo;
 
 public class Solo extends PartieView{
 

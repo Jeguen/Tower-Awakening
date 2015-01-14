@@ -1,4 +1,4 @@
-package awakening.view.partie;
+package awakening.modele.partie;
 
 import awakening.control.moteur.TAGame;
 

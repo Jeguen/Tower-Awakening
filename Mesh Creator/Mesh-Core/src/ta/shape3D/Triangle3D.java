@@ -1,84 +1,178 @@
+ // Copyright © 2014, 2015 VINCENT Steeve, steeve.vincent@gmail.com
+ 
+ // Licensed under the Apache License, Version 2.0 (the "License");
+ // you may not use this file except in compliance with the License.
+ // You may obtain a copy of the License at
+ // 
+ // http://www.apache.org/licenses/LICENSE-2.0
+ // 
+ // Unless required by applicable law or agreed to in writing, software
+ // distributed under the License is distributed on an "AS IS" BASIS,
+ // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+
 package ta.shape3D;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import ta.shape3D.Point.Point2D;
-import ta.shape3D.Point.Point3D;
-
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
+/**
+ * Shape which used the ImmediateModeRenderer20 to draw, in OpenGL environment, a triangle
+ * @author S Firegreen
+ *
+ */
 public class Triangle3D {
-	private final Point3D[] points = new Point3D[3];
+	private final Vector3[] points = new Vector3[3];
 	private final Color[] couleurs = new Color[3];
-	private final Point2D[] pointsTexture = new Point2D[3];
-	Texture image;
+	private final Vector2[] pointsTexture = new Vector2[3];
 	public final int id;
 
-
+	/**
+	 * This constructor initializes each attributes
+	 * @param id Id which define the triangle 
+	 */
 	public Triangle3D(int id) {
-		this.points[0] = new Point3D(1,0,0);
-		this.points[1] = new Point3D(0,1,0);
-		this.points[2] = new Point3D(-1,0,0);
-		this.pointsTexture[0] = new Point2D(0,0);
-		this.pointsTexture[1] = new Point2D(1,1);
-		this.pointsTexture[2] = new Point2D(0,1);
+		this.points[0] = new Vector3(1,0,0);
+		this.points[1] = new Vector3(0,1,0);
+		this.points[2] = new Vector3(-1,0,0);
+		this.pointsTexture[0] = new Vector2(0,0);
+		this.pointsTexture[1] = new Vector2(1,1);
+		this.pointsTexture[2] = new Vector2(0,1);
 		couleurs[0]=Color.WHITE;
 		couleurs[1]=Color.WHITE;
 		couleurs[2]=Color.WHITE;
 		this.id=id;
 	}
 	
+	/**
+	 * This constructor initializes each attributes and give 0 for id
+	 */
+	public Triangle3D() {
+		this(0);
+	}
+	
+	
 	public String toString()
 	{
 		return "Triangle " + id + " P1"+points[0]+ "- P2"+points[1]+ " P3"+points[2];
 	}
-	public void setTexture(Texture t)
-	{
-		image = t;
-	}
 	
-	//getter and setter
-	public Point3D getPoint1(){
+	
+	/**
+	 * 
+	 * @return the first Point of the triangle
+	 */
+	public Vector3 getPoint1(){
 		return this.points[0];
 	}
-	public Point3D getPoint2(){
+	
+	/**
+	 * 
+	 * @return the second Point of the triangle
+	 */
+	public Vector3 getPoint2(){
 		return this.points[1];
 	}
-	public Point3D getPoint3(){
+	
+	/**
+	 * 
+	 * @return the third Point of the triangle
+	 */
+	public Vector3 getPoint3(){
 		return this.points[2];
 	}
+	
+	/**
+	 * 
+	 * @return the first Color of the triangle
+	 */
 	public Color getColor1(){
 		return this.couleurs[0];
 	}
+	
+	/**
+	 * 
+	 * @return the second Color of the triangle
+	 */
 	public Color getColor2(){
 		return this.couleurs[1];
 	}
+	
+	/**
+	 * 
+	 * @return the last Color of the triangle
+	 */
 	public Color getColor3(){
 		return this.couleurs[2];
 	}
+	
+	/**
+	 * set the Color to the first point 
+	 * @param p
+	 */
 	public void setColor1(Color p){
 		this.couleurs[0] = p;
 	}
+	/**
+	 * set the Color to the second point 
+	 * @param p
+	 */
 	public void setColor2(Color p){
 		this.couleurs[1] = p;
 	}
+	/**
+	 * set the Color to the last point 
+	 * @param p
+	 */
 	public void setColor3(Color p){
 		this.couleurs[2] = p;
 	}
-	public Point2D getPointTexture1(){
+	
+	/**
+	 * This Point Texture define the point of the image which corresponds to the
+	 * first point of the triangle. the position (0,0) corresponds to the
+	 * bottom left corner of the image.
+	 * @return the first Point of the triangle
+	 */
+	public Vector2 getPointTexture1(){
 		return this.pointsTexture[0];
 	}
-	public Point2D getPointTexture2(){
+	
+	/**
+	 * This Point Texture define the point of the image which corresponds to the
+	 * second point of the triangle. the position (0,0) corresponds to the
+	 * bottom left corner of the image.
+	 * @return the second Point of the triangle
+	 */
+	public Vector2 getPointTexture2(){
 		return this.pointsTexture[1];
 	}
-	public Point2D getPointTexture3(){
+	
+	/**
+	 * This Point Texture define the point of the image which corresponds to the
+	 * third point of the triangle. the position (0,0) corresponds to the
+	 * bottom left corner of the image.
+	 * @return the third Point of the triangle
+	 */
+	public Vector2 getPointTexture3(){
 		return this.pointsTexture[2];
 	}
 
+	/**
+	 * draw the triangle in the OpenGL environment. The Color of triangle depends of the tree colors defined. 
+	 * If the colors is different, the color of the triangle will be a blend of these colors. 
+	 * If the TEXTURE_2D is enable, the texture which is defined will be displayed according to
+	 *  the textures points defined.
+	 * @param rendu the renderer which is used for drawing triangle, you need to call the begin() method of this renderer
+	 * before using this method.
+	 */
 	public void render(ImmediateModeRenderer20 rendu){
 		//if(image!=null) image.bind(GL20.GL_TEXTURE_2D);
 		rendu.texCoord(pointsTexture[0].x, pointsTexture[0].y);
@@ -92,17 +186,22 @@ public class Triangle3D {
 		rendu.vertex(points[2].x, points[2].y, points[2].z);
 	}
 	
+	
+	/**
+	 * Save the object by using the stream defined
+	 * @param bos the stream which will be use for saving the information of the triangle to load
+	 */
 	public void save(DataOutputStream bos)
 	{
 		try {
 			bos.writeInt(id);
-			for(Point3D p : points)
+			for(Vector3 p : points)
 			{
 				bos.writeFloat(p.x);
 				bos.writeFloat(p.y);
 				bos.writeFloat(p.z);
 			}
-			for(Point2D p : pointsTexture)
+			for(Vector2 p : pointsTexture)
 			{
 				bos.writeFloat(p.x);
 				bos.writeFloat(p.y);
@@ -122,6 +221,11 @@ public class Triangle3D {
 
 	}
 
+	/**
+	 * Create and load a triangle by using the stream defined
+	 * @param dis the stream which contains the information of the triangle to load
+	 * @return the loaded triangle 
+	 */
 	public static Triangle3D load(DataInputStream dis)
 	{
 		Triangle3D retour = null;
@@ -129,11 +233,11 @@ public class Triangle3D {
 			retour = new Triangle3D(dis.readInt());
 			for(int cpt=0;cpt<3;cpt++)
 			{
-				retour.points[cpt] = new Point3D(dis.readFloat(),dis.readFloat(),dis.readFloat());
+				retour.points[cpt] = new Vector3(dis.readFloat(),dis.readFloat(),dis.readFloat());
 			}
 			for(int cpt=0;cpt<3;cpt++)
 			{
-				retour.pointsTexture[cpt] = new Point2D(dis.readFloat(),dis.readFloat());
+				retour.pointsTexture[cpt] = new Vector2(dis.readFloat(),dis.readFloat());
 			}
 			for(int cpt=0;cpt<3;cpt++)
 			{
@@ -152,30 +256,50 @@ public class Triangle3D {
 
 	}
 	
+	/**
+	 * Translate the triangle in the X axis
+	 * @param x D
+	 */
 	public void translateX(float x)
 	{
-		for(Point3D p : points)
+		for(Vector3 p : points)
 		{
 			p.x += x;
 		}
 	}
+	
+	/**
+	 * Translate the triangle in the Y axis
+	 * @param y
+	 */
 	public void translateY(float y)
 	{
-		for(Point3D p : points)
+		for(Vector3 p : points)
 		{
 			p.y += y;
 		}
 	}
+	/**
+	 * Translate the triangle in the Z axis
+	 * @param z
+	 */
 	public void translateZ(float z)
 	{
-		for(Point3D p : points)
+		for(Vector3 p : points)
 		{
 			p.z+= z;
 		}
 	}
+	
+	/**
+	 * Translate the triangle in the each axis
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void translate(float x, float y, float z)
 	{
-		for(Point3D p : points)
+		for(Vector3 p : points)
 		{
 			p.x += x;
 			p.y += y;
@@ -183,6 +307,10 @@ public class Triangle3D {
 		}
 	}
 	
+	/**
+	 * Copy each attributes of the Triangle t
+	 * @param t
+	 */
 	public void copy(Triangle3D t)
 	{
 		this.getPoint1().x = t.getPoint1().x;
@@ -205,6 +333,10 @@ public class Triangle3D {
 		this.couleurs[2] = t.couleurs[2];
 	}
 	
+	/**
+	 * Make a unique color for the triangle
+	 * @param c the color which will be bind on the triangle
+	 */
 	public void changeAllColor(Color c)
 	{
 		this.couleurs[0] = c;

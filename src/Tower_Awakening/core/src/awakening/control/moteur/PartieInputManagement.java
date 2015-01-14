@@ -3,9 +3,9 @@ package awakening.control.moteur;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import awakening.modele.partie.Partie;
 import awakening.view.GameWidget.OnHoverableWidget;
 import awakening.view.menu.PartieView;
-import awakening.view.partie.Partie;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;

@@ -1,3 +1,17 @@
+ // Copyright © 2014, 2015 VINCENT Steeve, steeve.vincent@gmail.com
+ 
+ // Licensed under the Apache License, Version 2.0 (the "License");
+ // you may not use this file except in compliance with the License.
+ // You may obtain a copy of the License at
+ // 
+ // http://www.apache.org/licenses/LICENSE-2.0
+ // 
+ // Unless required by applicable law or agreed to in writing, software
+ // distributed under the License is distributed on an "AS IS" BASIS,
+ // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+
 package ta.shape3D.mesh;
 
 import java.io.DataInputStream;
@@ -27,6 +41,12 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+
+/**
+ * Object which is composed of Triangle3D
+ * @author S Firegreen
+ *
+ */
 public class MeshTA implements TemporarilyAnimable{
 	final private LinkedList<Triangle3D> triangles = new LinkedList<Triangle3D>();
 	final private ArrayList<MeshTA> sousMesh = new ArrayList<MeshTA>();
@@ -69,10 +89,19 @@ public class MeshTA implements TemporarilyAnimable{
 		nbMesh++;
 	}
 
+	/**
+	 * Set the Mesh's name
+	 * @param name
+	 */
 	final public void setName(String name)
 	{
 		this.name = name;
 	}
+	
+	/**
+	 * Add a new triangle to the list
+	 * @return the reference of the triangle which is added
+	 */
 	final public Triangle3D addTriangle()
 	{
 		Triangle3D t;
@@ -80,10 +109,14 @@ public class MeshTA implements TemporarilyAnimable{
 			t =new Triangle3D(triangles.getLast().id+1);
 		else
 			t =new Triangle3D(0);
-		if(image!=null) t.setTexture(image);
 		triangles.add(t);
 		return t;
 	}
+	
+	/**
+	 * Add a sub Mesh
+	 * @return the reference of the sub mesh which is added
+	 */
 	final public MeshTA addSousMesh(){
 		MeshTA m = new MeshTA();
 		this.sousMesh.add(m);
@@ -103,10 +136,19 @@ public class MeshTA implements TemporarilyAnimable{
 	{
 		triangles.remove(t);
 	}
+	
 	final public Triangle3D getTriangle(int index)
 	{
 		return triangles.get(index);
 	}
+	
+	/**
+	 * draw all triangles of the Mesh in the OpenGL environment.
+	 * @param rendu the renderer which is used for drawing triangle, you don't need to call the begin() method of this renderer
+	 * before using this method.
+	 * @param rendu 
+	 * @param projectionMatrix The projection matrix in which the mesh will be represented 
+	 */
 	final public void render(ImmediateModeRenderer20 rendu, Matrix4 projectionMatrix)
 	{
 		projectionMatrix.translate(tX, tY, tZ);
@@ -136,7 +178,11 @@ public class MeshTA implements TemporarilyAnimable{
 		projectionMatrix.translate(-tX, -tY, -tZ);
 	}
 	
-	final public void save(File f)
+	/**
+	 * Save the mesh and the sub mesh in the File f
+	 * @param f 
+	 */
+	public void save(File f)
 	{
 		try {
 			DataOutputStream bos = new DataOutputStream(new FileOutputStream(f));
@@ -145,14 +191,12 @@ public class MeshTA implements TemporarilyAnimable{
 			bos.flush();bos.close();
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	final public void save(DataOutputStream bos, File f) throws IOException
+	public void save(DataOutputStream bos, File f) throws IOException
 	{
 			bos.writeFloat(tX);
 			bos.writeFloat(tY);
@@ -169,12 +213,14 @@ public class MeshTA implements TemporarilyAnimable{
 			{
 				t.save(bos);
 			}
+			System.out.println("yolo");
 			if(image != null){
 				String s;
 				if(f.getParentFile()!=null)
 					s = f.getParent() +"\\"+ f.getName().split(".mta")[0] + "Image" + name +".png";
 				else
 					s = f.getName().split(".mta")[0] + "Image" + name +".png";
+				System.out.println(s);
 				bos.writeUTF(f.getName().split(".mta")[0] + "Image" + name +".png");
 				TextureData td = image.getTextureData();
 				td.prepare();
@@ -197,7 +243,12 @@ public class MeshTA implements TemporarilyAnimable{
 		return sousMesh;
 	}
 	
-	final public MeshTA load(File f)
+	/**
+	 * Load the Mesh from the file give in the parameter
+	 * @param f
+	 * @return the mesh which is imported
+	 */
+	public MeshTA load(File f)
 	{
 		if(f.exists() && f.isFile())
 		{
@@ -225,7 +276,13 @@ public class MeshTA implements TemporarilyAnimable{
 				JOptionPane.ERROR_MESSAGE);
 		return null;
 	}
-	final public static MeshTA loadMeshTA(File f)
+	
+	/**
+	 * Load a Mesh from the file give in the parameter
+	 * @param f
+	 * @return the mesh which is imported
+	 */
+	public static MeshTA loadMeshTA(File f)
 	{
 		if(f.exists() && f.isFile())
 		{
@@ -254,7 +311,7 @@ public class MeshTA implements TemporarilyAnimable{
 				JOptionPane.ERROR_MESSAGE);
 		return null;
 	}
-	final private MeshTA load(File f, DataInputStream dis) throws IOException
+	public void load(File f, DataInputStream dis) throws IOException
 	{
 		this.tX = dis.readFloat();
 		this.tY = dis.readFloat();
@@ -283,13 +340,18 @@ public class MeshTA implements TemporarilyAnimable{
 		for(int cpt=0;cpt<nbMesh;cpt++)
 		{
 			MeshTA m = new MeshTA();
-			this.sousMesh.add(m.load(f,dis));
+			m.load(f,dis);
+			this.sousMesh.add(m);
 		}
-		return this;
 	}
 	
 	
-	
+	/**
+	 * Translates the mesh in the each axis
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void translate(float x, float y, float z)
 	{
 		tX+=x;
@@ -297,6 +359,13 @@ public class MeshTA implements TemporarilyAnimable{
 		tZ+=z;
 	}
 	
+	
+	/**
+	 * rotates the mesh in the each axis
+	 * @param x the rotation value in radiant around the x Axis
+	 * @param y the rotation value in radiant around the x Axis
+	 * @param z the rotation value in radiant around the x Axis
+	 */
 	public void rotate(float x, float y, float z)
 	{
 		rX+=x;
@@ -304,25 +373,45 @@ public class MeshTA implements TemporarilyAnimable{
 		rZ+=z;
 	}
 	
+	/**
+	 * Scales the mesh by the value given
+	 * @param taux 
+	 */
 	public void homethetie(float taux)
 	{
 		scaleX*=taux;
 		scaleY*=taux;
 		scaleZ*=taux;
 	}
+	/**
+	 * Scales the x coordinate of the mesh by the value given
+	 * @param taux 
+	 */
 	final public void homethetieX(float taux)
 	{
 		scaleX*=taux;
 	}
+	/**
+	 * Scales the y coordinate of the mesh by the value given
+	 * @param taux 
+	 */
 	final public void homethetieY(float taux)
 	{
 		scaleY*=taux;
 	}
+	/**
+	 * Scales the z coordinate of the mesh by the value given
+	 * @param taux 
+	 */
 	final public void homethetieZ(float taux)
 	{
 		scaleZ*=taux;
 	}
 	
+	/**
+	 * Clones each triangles and sub mesh of the mesh given
+	 * @param m
+	 */
 	public void copy(MeshTA m)
 	{
 		this.sousMesh.clear(); this.triangles.clear();
@@ -339,6 +428,11 @@ public class MeshTA implements TemporarilyAnimable{
 			mesh.copyFeatures(sousM);
 		}
 	}
+	
+	/**
+	 * Copies the translation, rotation and scale features of the mesh given
+	 * @param m
+	 */
 	final public void copyFeatures(MeshTA m)
 	{
 		rX=m.rX;
@@ -351,6 +445,10 @@ public class MeshTA implements TemporarilyAnimable{
 		tY=m.tY;
 		tZ=m.tZ;
 	}
+	
+	/**
+	 * Removes all triangles and subMesh
+	 */
 	final public void removeAll()
 	{
 		triangles.clear();
@@ -361,6 +459,11 @@ public class MeshTA implements TemporarilyAnimable{
 	{
 		return name; 
 	}
+	
+	/**
+	 * The implementation of the Anime interface, animate the mesh with the animation features defined with
+	 * animationTX(), animationTY(), animationTZ(), animationRX(), animationRY() and animationRZ()
+	 */
 	@Override
 	public void anime() {
 		translate(animeTX, animeTY, animeTZ);
@@ -396,11 +499,27 @@ public class MeshTA implements TemporarilyAnimable{
 		this.animeRZ=rz;
 	}
 	
+	/**
+	 * implementation the TemporarilyAnimable, this function returns always false. Derive the class to override 
+	 * this function
+	 */
 	@Override
 	public boolean mustBeInterrupted() {
 		return false;
 	}
 	
+	/**
+	 * implementation the TemporarilyAnimable, this function does nothing. Derive the class to override 
+	 * this function
+	 */
+	@Override
+	public void actionWhenInterruption() {
+	}
+	
+	/**
+	 * Change the color of all triangles of the mesh
+	 * @param c the color which must be binded
+	 */
 	final public void changeAllColor(Color c)
 	{
 		for(Triangle3D t : triangles)
@@ -413,6 +532,11 @@ public class MeshTA implements TemporarilyAnimable{
 		}
 	}
 	
+	
+	/**
+	 * Bind a texture to the Mesh. That's involved the binding of each triangle
+	 * @param imagePath
+	 */
 	final public void setTexture(String imagePath)
 	{
 		image = new Texture(imagePath);
@@ -435,10 +559,6 @@ public class MeshTA implements TemporarilyAnimable{
 	}
 	final public float getAnimationRZ() {
 		return animeRZ;
-	}
-
-	@Override
-	public void actionWhenInterruption() {
 	}
 	
 	final public void setAbsoluteFeature(float x, float y, float z, float rx, float rz, float ry,

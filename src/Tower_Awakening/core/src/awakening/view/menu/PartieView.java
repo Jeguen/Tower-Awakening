@@ -4,9 +4,9 @@ import ta.shape3D.mesh.MeshTA;
 import awakening.control.moteur.PartieInputManagement;
 import awakening.control.moteur.TAGame;
 import awakening.modele.field.Box;
+import awakening.modele.partie.Partie;
 import awakening.modele.toolshop.monster.Monster;
 import awakening.view.GameWidget.BoutonShop;
-import awakening.view.partie.Partie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

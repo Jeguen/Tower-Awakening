@@ -3,9 +3,9 @@ package awakening.control.moteur;
 import java.util.ListIterator;
 
 import ta.shape3D.Animator;
+import awakening.modele.partie.Partie;
 import awakening.modele.toolshop.monster.Monster;
 import awakening.modele.toolshop.tower.Tower;
-import awakening.view.partie.Partie;
 
 public class GameMotor extends Thread {
 
@@ -24,6 +24,15 @@ public class GameMotor extends Thread {
 		try{
 			while(true)
 			{
+				// it delete monster which has been died before
+				for(Monster m: partie.getTerrain().getMonsters())
+				{
+					// if the monster is die, it will be removed by the list
+					if(!m.isAlive())
+					{
+						partie.getTerrain().getMonsters().remove(m);
+					}
+				}
 				ListIterator<Monster> iteratM = partie.getTerrain().getMonsters().listIterator();
 				while(iteratM.hasNext())
 				{

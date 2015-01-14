@@ -1,4 +1,4 @@
-package awakening.view.partie;
+package awakening.modele.partie;
 
 import awakening.modele.toolshop.ToolShop;
 import awakening.modele.toolshop.tower.Tower;
@@ -7,6 +7,8 @@ public class Joueur {
 
 	
 	ToolShop inventaire;
+	
+	
 	public Joueur() {
 		inventaire = new ToolShop();
 	}

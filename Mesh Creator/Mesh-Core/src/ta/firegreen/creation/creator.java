@@ -1,8 +1,23 @@
+ // Copyright © 2014, 2015 VINCENT Steeve, steeve.vincent@gmail.com
+ 
+ // Licensed under the Apache License, Version 2.0 (the "License");
+ // you may not use this file except in compliance with the License.
+ // You may obtain a copy of the License at
+ // 
+ // http://www.apache.org/licenses/LICENSE-2.0
+ // 
+ // Unless required by applicable law or agreed to in writing, software
+ // distributed under the License is distributed on an "AS IS" BASIS,
+ // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+
 package ta.firegreen.creation;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Stack;
 
@@ -131,9 +146,24 @@ public final class creator extends ApplicationAdapter {
 		if(saveIMGFile!=null)
 		{
 			
-			final Pixmap p = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
-			Gdx.gl20.glReadPixels(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), GL20.GL_RGBA,
-					GL20.GL_UNSIGNED_BYTE, p.getPixels());
+			final Pixmap p = new Pixmap(Gdx.graphics.getWidth()-200, 
+					Gdx.graphics.getHeight()-200, Pixmap.Format.RGBA8888);
+			ByteBuffer bytes = ByteBuffer.allocateDirect(p.getPixels().capacity());
+			Gdx.gl20.glReadPixels(100, 100, Gdx.graphics.getWidth()-200, Gdx.graphics.getHeight()-200, GL20.GL_RGBA,
+					GL20.GL_UNSIGNED_BYTE, bytes);
+			int j = p.getPixels().capacity()-1;
+			for(int i=0;i<p.getPixels().capacity();i+=4)
+			{
+				p.getPixels().put(j,bytes.get(i+3));
+				j--;
+				p.getPixels().put(j,bytes.get(i+2));
+				j--;
+				p.getPixels().put(j,bytes.get(i+1));
+				j--;
+				p.getPixels().put(j,bytes.get(i));
+				j--;
+			}
+			
 			if(!saveIMGFile.getName().endsWith(".png"))
 				if(!saveIMGFile.renameTo(new File(saveIMGFile.getName()+".png")))
 				{
