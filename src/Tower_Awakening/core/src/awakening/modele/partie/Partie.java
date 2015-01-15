@@ -1,5 +1,7 @@
 package awakening.modele.partie;
 
+import com.badlogic.gdx.Gdx;
+
 import awakening.control.moteur.PartieInputManagement;
 import awakening.control.moteur.TAGame;
 import awakening.modele.field.Box;
@@ -25,7 +27,6 @@ public abstract class Partie {
 		joueurUtilisateur = new Joueur();
 		joueurAdverse = new Joueur();
 		this.game=game;
-		this.inputManager = new PartieInputManagement();
 	}
 	
 	public ToolShop getToolShop()

@@ -47,6 +47,10 @@ public class PartieView implements Screen{
 	public PartieView(TAGame game, Partie partie) {
 		this.game = game;
 		this.partie = partie;
+		inputManager = new PartieInputManagement();
+		inputManager.setView(this);
+		Gdx.input.setInputProcessor(inputManager);
+		partie.setInputManager(inputManager);
 		espace = MeshTA.loadMeshTA(Gdx.files.internal("Field/espace.mta").file());
 		espace.rotate((float) +Math.PI/2, 0, 0);
 		espace.translate(0, -50, 0);
@@ -71,9 +75,9 @@ public class PartieView implements Screen{
 				, Gdx.graphics.getWidth()-100);
 		boutonShop = fenetreToolShop.getTheOpenButton();
 		boutonShop.setPosition(0,0);
-		partie.getInputManager().addonHoverlistener(boutonShop);
-		stage.addActor(boutonShop);
+		inputManager.addonHoverlistener(boutonShop);
 
+		stage.addActor(boutonShop);
 		textTransform.rotate(Vector3.X,-90);
 		textTransform.translate(0, 0, 4);
 	}

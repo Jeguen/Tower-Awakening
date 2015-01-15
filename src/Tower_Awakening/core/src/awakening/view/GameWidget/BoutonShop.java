@@ -95,7 +95,7 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 	@Override
 	public boolean testMousePosition(Vector2 mousePosition) {
 		float deltaX = mousePosition.x - this.getX();
-		float deltaY = mousePosition.y - this.getY();
+		float deltaY = mousePosition.y - this.getOriginY();
 		return deltaX < this.getHeight() && deltaY < this.getWidth()
 				&& deltaX > 0 && deltaY > 0;		
 	}

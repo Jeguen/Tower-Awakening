@@ -367,9 +367,12 @@ public class MapSelection implements Screen
 						}
 					}
 			);
+			mapButton.setVisible(false);
+			mapButton.setTouchable(Touchable.disabled);;
 			stage.addActor(mapButton);
 			maps.add(mapButton);
 		}
+		changeMap();
 	}
 	
 	public void disableMap()

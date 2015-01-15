@@ -3,7 +3,6 @@ package awakening.control.moteur;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import awakening.modele.partie.Partie;
 import awakening.view.GameWidget.OnHoverableWidget;
 import awakening.view.menu.MainMenu;
 import awakening.view.menu.PartieView;
