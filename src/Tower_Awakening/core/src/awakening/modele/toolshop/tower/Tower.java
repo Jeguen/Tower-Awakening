@@ -297,10 +297,10 @@ public abstract class Tower extends MeshTA
 					{
 						OffensivTower retour = new OffensivTower();
 						retour.load(f,dis);
-						File fileImage = new File(f.getParent() + "\\" + retour.name+"ImageModele.png");
+						File fileImage = new File(f.getParent() + "/" + retour.name+"ImageModele.png");
 						if(fileImage.exists())
 						{
-							retour.imageModele = new Texture(f.getParent() + "\\" + retour.name+"ImageModele.png");
+							retour.imageModele = new Texture(f.getParent() + "/" + retour.name+"ImageModele.png");
 						}
 						dis.close();
 						return retour;
