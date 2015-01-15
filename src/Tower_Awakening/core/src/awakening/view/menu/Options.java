@@ -208,7 +208,7 @@ public class Options implements Screen
 		Gdx.input.setInputProcessor(stage);
 		
 		///Title
-		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth()/2, Gdx.app.getGraphics().getHeight() - 50);
+		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth()/2, Gdx.app.getGraphics().getHeight() - 30);
 		stage.addActor(title);
 		
 		///Widgets Background
