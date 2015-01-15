@@ -20,10 +20,13 @@ public class PartieInputManagement implements InputProcessor{
 	//private final Partie partie;
 	private final LinkedList<OnHoverableWidget> widgets;
 	private OnHoverableWidget onHoveredWidget;
+	private TAGame game;
 	boolean keyPressed=false;
 
 	
-	public PartieInputManagement() {
+	public PartieInputManagement(TAGame game) 
+	{
+		this.game = game;
 		widgets = new LinkedList<OnHoverableWidget>();
 	}
 	
@@ -40,7 +43,7 @@ public class PartieInputManagement implements InputProcessor{
 	@Override
 	public boolean keyDown(int keycode) {
 		keyPressed=true;
-		if(keycode == Input.Keys.LEFT)
+		if(keycode == game.getLeft())
 		{
 			vue.translateX(-2);
 			new Thread(){
@@ -60,7 +63,7 @@ public class PartieInputManagement implements InputProcessor{
 				}
 			}.start();
 		}
-		else if(keycode ==Input.Keys.RIGHT)
+		else if(keycode == game.getRight())
 		{
 			vue.translateX(2);
 			new Thread(){
@@ -80,7 +83,7 @@ public class PartieInputManagement implements InputProcessor{
 				}
 			}.start();
 		}
-		else if(keycode ==Input.Keys.UP)
+		else if(keycode == game.getUp())
 		{
 			vue.translateZ(-2);
 			new Thread(){
@@ -100,7 +103,7 @@ public class PartieInputManagement implements InputProcessor{
 				}
 			}.start();
 		}
-		else if(keycode ==Input.Keys.DOWN)
+		else if(keycode == game.getDown())
 		{
 			vue.translateZ(2);
 			new Thread(){
@@ -120,7 +123,7 @@ public class PartieInputManagement implements InputProcessor{
 				}
 			}.start();
 		}
-		else if(keycode ==Input.Keys.Q)
+		else if(keycode == Input.Keys.Q)
 		{
 			vue.switchAffichage();
 		}
