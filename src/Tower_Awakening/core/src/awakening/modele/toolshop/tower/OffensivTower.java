@@ -33,8 +33,9 @@ public class OffensivTower extends Tower {
 		super(modele, id, buildCost, range, speedAttaque, level);
 		this.damage = damage;
 	}
-	public OffensivTower(MeshTA m) {
-		super(m);
+	public OffensivTower(Tower m) {
+		super(m,m.id,m.buildCost,m.range,m.speedAttaque,m.level);
+		this.levelUp = m .levelUp;
 	}
 	public OffensivTower(String path) {
 		super(path);

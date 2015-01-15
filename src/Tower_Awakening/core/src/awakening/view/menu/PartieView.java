@@ -7,6 +7,7 @@ import awakening.modele.field.Box;
 import awakening.modele.partie.Partie;
 import awakening.modele.toolshop.monster.Monster;
 import awakening.view.GameWidget.BoutonShop;
+import awakening.view.GameWidget.ToolShopWindow;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -36,6 +37,7 @@ public class PartieView implements Screen{
 	Partie partie;
 	PartieInputManagement inputManager;
     BoutonShop boutonShop;
+    ToolShopWindow fenetreToolShop;
 	Stage stage;
 	boolean boxIsClicked = false;
     float x=20,y=50, z=20;
@@ -64,6 +66,13 @@ public class PartieView implements Screen{
 		camera.far = 200;
 		camera.up.set(0,1,0);
 		updateCamera();
+		
+		fenetreToolShop = new ToolShopWindow(partie.getToolShop(), Gdx.graphics.getHeight()-100
+				, Gdx.graphics.getWidth()-100);
+		boutonShop = fenetreToolShop.getTheOpenButton();
+		boutonShop.setPosition(0,0);
+		partie.getInputManager().addonHoverlistener(boutonShop);
+		stage.addActor(boutonShop);
 
 		textTransform.rotate(Vector3.X,-90);
 		textTransform.translate(0, 0, 4);

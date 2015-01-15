@@ -52,13 +52,8 @@ public class ToolShop {
 	public void loadModele()
 	{
 		File towerDirectory = Gdx.files.internal("Tower").file();
-		for(File f : Gdx.files.internal("./").file().listFiles())
-		{
-			System.out.println(f.getName());
-		}
 		for(File ft : towerDirectory.listFiles())
 		{
-			System.out.println(ft.getName());
 			if(ft.isFile())
 				if(ft.getName().endsWith("mta"))
 					tours.add(Tower.loadTower(ft));
@@ -70,6 +65,7 @@ public class ToolShop {
 				if(ft.getName().endsWith("mta"))
 					monstres.add(new MonsterEarth(ft.getAbsolutePath()));
 		}
+		for(Tower t : tours) System.out.println(t);
 	}
 	
 

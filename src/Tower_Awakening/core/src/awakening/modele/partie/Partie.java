@@ -25,12 +25,17 @@ public abstract class Partie {
 		joueurUtilisateur = new Joueur();
 		joueurAdverse = new Joueur();
 		this.game=game;
+		this.inputManager = new PartieInputManagement();
+	}
+	
+	public ToolShop getToolShop()
+	{
+		return toolshop;
 	}
 	
 	public void clickBox(float x, float y)
 	{
 		int i = terrain.getBoxIndexByPosition(x, y);
-		System.out.println(i);
 		if(i>=0  && i<terrain.getBox().size()){
 			if(terrain.getBox().get(i).isFree())
 			{
@@ -72,6 +77,11 @@ public abstract class Partie {
 	public void setInputManager(PartieInputManagement inputManager)
 	{
 		this.inputManager = inputManager;
+	}
+	
+	public PartieInputManagement getInputManager()
+	{
+		return inputManager;
 	}
 	
 	public void setTerrain(Field terrain)

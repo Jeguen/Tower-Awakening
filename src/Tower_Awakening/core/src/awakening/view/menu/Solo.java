@@ -11,8 +11,7 @@ public class Solo extends PartieView{
 
 
 	public Solo(TAGame game, Field terrain) {
-		super(game, new PartieSolo(game, terrain));
-		inputManager = new PartieInputManagement(this, partie);
+		super(game, new PartieSolo(game, terrain));	
 		Gdx.input.setInputProcessor(inputManager);
 		partie.setInputManager(inputManager);
 	}

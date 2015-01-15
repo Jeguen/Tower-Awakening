@@ -16,17 +16,20 @@ import com.badlogic.gdx.math.Vector3;
 public class PartieInputManagement implements InputProcessor{
 
 	private final Vector2 actualMousePoisition = new Vector2(0,0);
-	private final PartieView vue;
+	private PartieView vue;
 	//private final Partie partie;
 	private final LinkedList<OnHoverableWidget> widgets;
 	private OnHoverableWidget onHoveredWidget;
 	boolean keyPressed=false;
 
 	
-	public PartieInputManagement(PartieView vue, Partie partie) {
-		this.vue = vue;
-		//this.partie = partie;
+	public PartieInputManagement() {
 		widgets = new LinkedList<OnHoverableWidget>();
+	}
+	
+	public void setView(PartieView vue)
+	{
+		this.vue = vue;
 	}
 	
 	public Vector2 getMousePosition()
@@ -155,9 +158,9 @@ public class PartieInputManagement implements InputProcessor{
 			OnHoverableWidget w = null;
 			while(!isOverSomething  && iterat.hasNext())
 			{
+				System.out.println("Mouse position " + actualMousePoisition);
 				w = iterat.next();
 				isOverSomething = w.testMousePosition(actualMousePoisition);
-				
 			}
 			if(w!=null && isOverSomething)
 			{
@@ -202,5 +205,9 @@ public class PartieInputManagement implements InputProcessor{
 		return true;
 	}
 
+	public void addonHoverlistener(OnHoverableWidget widget)
+	{
+		this.widgets.add(widget);
+	}
 
 }

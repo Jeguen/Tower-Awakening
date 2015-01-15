@@ -52,7 +52,7 @@ public abstract class Tower extends MeshTA
 	public Tower(MeshTA modele, int id, float buildCost, int range, float speedAttaque, int level)
 	{
 		this.copy(modele);
-		this.copyFeatures(modele);	
+		this.copyFeatures(modele);
 		this.id = id;
 		this.buildCost = buildCost;
 		this.range = range;
@@ -237,6 +237,9 @@ public abstract class Tower extends MeshTA
 	{
 		if(canBeUpgrade())
 		{
+			System.out.println("upgrade!");
+			this.copy(levelUp);
+			//this.copyFeatures(levelUp);
 			this.buildCost = levelUp.buildCost;
 			this.range = levelUp.range;
 			this.speedAttaque = levelUp.speedAttaque;
@@ -292,13 +295,12 @@ public abstract class Tower extends MeshTA
 					DataInputStream dis = new DataInputStream(new FileInputStream(f));
 					if(dis.readUTF().equals(OffensivTower.class.getName()))
 					{
-						System.out.println("yolo 3");
 						OffensivTower retour = new OffensivTower();
 						retour.load(f,dis);
-						File fileImage = new File(f.getAbsolutePath() + "\\" + retour.name+"ImageModele.png");
+						File fileImage = new File(f.getParent() + "\\" + retour.name+"ImageModele.png");
 						if(fileImage.exists())
 						{
-							retour.imageModele = new Texture(fileImage.getName());
+							retour.imageModele = new Texture(f.getParent() + "\\" + retour.name+"ImageModele.png");
 						}
 						dis.close();
 						return retour;
@@ -360,6 +362,11 @@ public abstract class Tower extends MeshTA
 		this.level = towerModele.level;
 		this.levelUp = towerModele.levelUp;
 		this.range = towerModele.range;
+	}
+	
+	public Texture getModeleImage()
+	{
+		return imageModele;
 	}
 
 }
