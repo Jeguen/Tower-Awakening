@@ -1,12 +1,21 @@
 package awakening.modele.field;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import ta.shape3D.Triangle3D;
 import ta.shape3D.mesh.MeshTA;
 import awakening.modele.toolshop.monster.Monster;
 import awakening.modele.toolshop.tower.Tower;
+
+import com.badlogic.gdx.graphics.Texture;
 
 public class Field extends MeshTA
 {
@@ -19,6 +28,8 @@ public class Field extends MeshTA
 	private int nbSpawn;
 	private int nbBoxHeight;
 	private int nbBoxWidth;
+	private float height;
+	private float width;
 	private ArrayList<Box> box;
 	private ArrayList<Box> spawns;
 	private ArrayList<Tower> towers;
@@ -52,6 +63,57 @@ public class Field extends MeshTA
 			this.rotate((float)Math.PI/2, 0,0);
 			this.translate(0, -1, 0);
 		}
+	}
+	
+	public Field(Texture t, float w, float h, String name)
+	{
+		this();
+		this.setName(name);
+		this.width = w;
+		this.height = h;
+		float nbMeshHeight = h/(t.getHeight()/5f);
+		float nbMeshWidth = w/(t.getWidth()/5f);
+		int divisionHeight = 1, divisionWidth = 1; 
+		if(nbMeshHeight>1)
+		{
+			divisionHeight = Math.round(nbMeshHeight);
+		}
+		if(nbMeshWidth>1)
+		{
+			divisionWidth = Math.round(nbMeshWidth);
+		}
+		float meshWidth = w/divisionWidth;
+		float meshHeight = h/divisionHeight;
+		for(int i = 0; i<divisionWidth;i++)
+			for(int j = 0; j<divisionHeight;j++)
+			{
+				Triangle3D t1= addTriangle();
+				t1.getPoint1().x = i * meshWidth;
+				t1.getPoint1().y = j * meshHeight;
+				t1.getPoint2().x = (i+1) * meshWidth;
+				t1.getPoint2().y = j * meshHeight;
+				t1.getPoint3().x = i * meshWidth;
+				t1.getPoint3().y = (j+1) * meshHeight;
+				Triangle3D t2= addTriangle();
+				t2.getPoint1().x = (i+1) * meshWidth;
+				t2.getPoint1().y = (j+1) * meshHeight;
+				t2.getPoint2().x = (i+1) * meshWidth;
+				t2.getPoint2().y = j * meshHeight;
+				t2.getPoint3().x = i * meshWidth;
+				t2.getPoint3().y = (j+1) * meshHeight;
+				t1.getPointTexture1().x = 2;
+				t1.getPointTexture1().y = 2;
+				t2.getPointTexture1().x = 0;
+				t2.getPointTexture1().y = 0;
+				t1.getPointTexture2().x = 0;
+				t1.getPointTexture2().y = 2;
+				t2.getPointTexture2().x = 0;
+				t2.getPointTexture2().y = 2;
+				t1.getPointTexture3().x = 2;
+				t1.getPointTexture3().y = 0;
+				t2.getPointTexture3().x = 2;
+				t2.getPointTexture3().y = 0;
+			}
 	}
 	public void addMonster(Monster m)
 	{
@@ -627,4 +689,89 @@ public class Field extends MeshTA
 		}
 	}
 	
+	public void save(File f)
+	{
+		try {
+			DataOutputStream bos = new DataOutputStream(new FileOutputStream(f));
+			bos.writeUTF("FieldTowerAwakening");
+			this.save(bos, f);
+			bos.flush();bos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void save(DataOutputStream dos, File f) throws IOException
+	{
+		super.save(dos, f);
+		dos.writeFloat(height);
+		dos.writeFloat(width);
+	}
+	
+	@Override
+	public void load(File f, DataInputStream dis) throws IOException
+	{
+		super.load(f, dis);
+		height = dis.readFloat();
+		width = dis.readFloat();
+		this.halfRadiusPolygon = 4;
+		this.nbSidePolygon = 6;
+		this.border = 10;
+		this.nbSpawn = 5;
+		this.nbBoxHeight =  (int) (height/(halfRadiusPolygon*3));
+		this.nbBoxWidth = (int) (width/(halfRadiusPolygon*4));
+		tabCoordX = new int[nbSidePolygon];
+		tabCoordY = new int[nbSidePolygon];
+		// Initialisation of list
+		spawns = new ArrayList<Box>();
+		monsters = new ArrayList<Monster>();
+		barriers = new ArrayList<Barrier>();
+	}
+	
+	static public Field loadTower(File f)
+	{
+		if(f.exists() && f.isFile())
+		{
+			if(f.getName().endsWith(".mta"))
+			{
+				try {
+					DataInputStream dis = new DataInputStream(new FileInputStream(f));
+					if(dis.readUTF().equals("FieldTowerAwakening"))
+					{
+						Field retour = new Field();
+						retour.load(f,dis);
+						retour.rotate((float) +Math.PI/2, 0, 0);
+						retour.translate(0, -0.2f, 0);
+						dis.close();
+						return retour;
+					}
+					dis.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		System.err.println("Erreur de chargement Field");
+		return null;
+	}
+	
+	private Field(){
+		super();		
+	}
+	
+	public float getHeight()
+	{
+		return height;
+	}
+	
+	public float getWidth()
+	{
+		return width;
+	}
 }

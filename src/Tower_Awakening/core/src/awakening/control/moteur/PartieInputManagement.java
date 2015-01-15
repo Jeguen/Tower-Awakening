@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import awakening.modele.partie.Partie;
 import awakening.view.GameWidget.OnHoverableWidget;
+import awakening.view.menu.MainMenu;
 import awakening.view.menu.PartieView;
 
 import com.badlogic.gdx.Input;
@@ -16,7 +17,7 @@ public class PartieInputManagement implements InputProcessor{
 
 	private final Vector2 actualMousePoisition = new Vector2(0,0);
 	private final PartieView vue;
-	private final Partie partie;
+	//private final Partie partie;
 	private final LinkedList<OnHoverableWidget> widgets;
 	private OnHoverableWidget onHoveredWidget;
 	boolean keyPressed=false;
@@ -24,7 +25,7 @@ public class PartieInputManagement implements InputProcessor{
 	
 	public PartieInputManagement(PartieView vue, Partie partie) {
 		this.vue = vue;
-		this.partie = partie;
+		//this.partie = partie;
 		widgets = new LinkedList<OnHoverableWidget>();
 	}
 	
@@ -124,6 +125,10 @@ public class PartieInputManagement implements InputProcessor{
 		{
 
 		}
+		else if(keycode == Input.Keys.ESCAPE)
+		{
+			vue.getGame().setScreen(new MainMenu(vue.getGame()));
+		}
 
 		return false;
 	}
@@ -193,8 +198,8 @@ public class PartieInputManagement implements InputProcessor{
 	
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {			
-		partie.ajoutTour();
-		return false;
+		vue.clickBox();
+		return true;
 	}
 
 

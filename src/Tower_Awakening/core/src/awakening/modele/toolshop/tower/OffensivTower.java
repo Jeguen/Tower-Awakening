@@ -58,4 +58,20 @@ public class OffensivTower extends Tower {
 		super.load(f, dis);
 		damage = dis.readFloat();
 	}
+	
+	
+	public void copy(OffensivTower towerModele)
+	{
+		super.copy(towerModele);
+		this.damage = towerModele.damage;
+	}
+	
+	public void upgrade()
+	{
+		if(canBeUpgrade())
+		{
+			this.damage = ((OffensivTower)this.levelUp).damage;
+			super.upgrade();
+		}
+	}
 }

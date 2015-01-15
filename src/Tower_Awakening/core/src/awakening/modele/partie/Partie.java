@@ -27,9 +27,9 @@ public abstract class Partie {
 		this.game=game;
 	}
 	
-	public void ajoutTour()
+	public void clickBox(float x, float y)
 	{
-		int i = terrain.getBoxIndexByPosition(inputManager.getMousePosition().x, inputManager.getMousePosition().y);
+		int i = terrain.getBoxIndexByPosition(x, y);
 		System.out.println(i);
 		if(i>=0  && i<terrain.getBox().size()){
 			if(terrain.getBox().get(i).isFree())
@@ -43,6 +43,13 @@ public abstract class Partie {
 				t.homethetie(3);
 				t.translate(terrain.getBox().get(i).getCoordX(),0,terrain.getBox().get(i).getCoordY());
 				terrain.findPathMonster();
+			}
+			else
+			{
+				if(terrain.getBox().get(i).getTower()!=null)
+				{
+					terrain.getBox().get(i).getTower().upgrade();
+				}
 			}
 		}
 	}

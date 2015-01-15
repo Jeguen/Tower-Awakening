@@ -14,12 +14,14 @@
 
 package awakening.view.menu;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import awakening.control.moteur.TAGame;
-import awakening.view.GameWidget.*;
+import awakening.modele.field.Field;
+import awakening.view.GameWidget.BoutonShop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -52,6 +54,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  */
 public class MapSelection implements Screen
 {
+	
+	///Maps
+	ArrayList<Field> mapListes = new ArrayList<Field>();
+	
 	///Game
 	private TAGame game;
 	private Music sound;
@@ -59,9 +65,6 @@ public class MapSelection implements Screen
 	private Locale[] locales = {Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN};
 	private ResourceBundle language;
 	private ArrayList<BoutonShop> maps;
-	private BoutonShop map1;
-	private BoutonShop map2;
-	private BoutonShop map3;
 	private int indexMap = 0;
 	
 	///Stage
@@ -75,7 +78,9 @@ public class MapSelection implements Screen
 	private Image widgetsBackground;
 	private Label title;
 	private Skin skin;
+	private TextButton btnJeu;
 	private TextButton btnBack;
+
 	private ImageButton btnNext;
 	private ImageButton btnPrevious;
 
@@ -86,7 +91,7 @@ public class MapSelection implements Screen
 	 * @param sound Main menu's music
 	 * @param effect Button's effect
 	 */
-	public MapSelection(TAGame game, Music sound, Sound effect)
+	public MapSelection(final TAGame game, Music sound, final Sound effect)
 	{
 		this.game = game;
 		this.sound = sound;
@@ -95,6 +100,18 @@ public class MapSelection implements Screen
 		
 		try
 		{
+			File monsterDirectory = Gdx.files.internal("Field").file();
+			for(File ft : monsterDirectory.listFiles())
+			{
+				if(ft.isFile())
+					if(ft.getName().endsWith("mta"))
+					{
+						Field newMap = Field.loadTower(ft);
+						if(newMap != null) 
+							mapListes.add(newMap);
+					}
+			}
+			
 			if(game.getLanguage().equals("ENGLISH"))
 			{
 				language = ResourceBundle.getBundle("awakening.view.menu.res_en_EN", locales[0]);
@@ -137,6 +154,7 @@ public class MapSelection implements Screen
 		
 		///Back Button
 		btnBack = new TextButton(language.getString("button_back"), skin);
+		btnJeu = new TextButton(language.getString("button_game"), skin);
 		
 		///Next Button
 		Texture t1 = new Texture(Gdx.files.internal("img/widget/arrow_hover_right.png"));
@@ -169,9 +187,7 @@ public class MapSelection implements Screen
 		
 		maps = new ArrayList<BoutonShop>();
 		
-		map1 = new BoutonShop(new Texture(Gdx.files.internal("img/menu/badlogic.jpg")), Gdx.app.getGraphics().getWidth()/4, Gdx.app.getGraphics().getWidth()/4);
-		map2 = new BoutonShop(new Texture(Gdx.files.internal("img/menu/badlogic.jpg")), Gdx.app.getGraphics().getWidth()/4, Gdx.app.getGraphics().getWidth()/4);
-		map3 = new BoutonShop(new Texture(Gdx.files.internal("img/menu/badlogic.jpg")), Gdx.app.getGraphics().getWidth()/4, Gdx.app.getGraphics().getWidth()/4);
+
 	}
 	
 	@Override
@@ -270,6 +286,24 @@ public class MapSelection implements Screen
 				}
 		);
 		stage.addActor(btnBack);
+		btnJeu.setWidth(200);
+		btnJeu.setPosition(Gdx.app.getGraphics().getWidth()/2 - btnJeu.getWidth()/2,
+				Gdx.app.getGraphics().getHeight() - widgetsBackground.getHeight() + 40);
+		
+		btnJeu.addListener
+		(
+				new ClickListener() 
+				{
+					@Override
+					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+					{
+						effect.play(game.getSoundVolume());
+						game.setScreen(new Solo(game, mapListes.get(indexMap)));
+						return true;	
+					}
+				}
+		);
+		stage.addActor(btnJeu);
 		
 		///Next Button
 		btnNext.setWidth(75);
@@ -283,18 +317,10 @@ public class MapSelection implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
-							if (indexMap < 2)
-							{
-								disableMap();
-								indexMap++;
-								changeMap();
-							}
-							else
-							{
-								disableMap();
-								indexMap = 0;
-								changeMap();
-							}
+						disableMap();
+						indexMap++;
+						indexMap%=mapListes.size();
+						changeMap();
 						return false;	
 					}
 				}
@@ -314,81 +340,36 @@ public class MapSelection implements Screen
 					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
 					{
 						effect.play(game.getSoundVolume());
-						if (indexMap > 0)
-						{
-							disableMap();
-							indexMap--;
-							changeMap();
-						}
-						else
-						{
-							disableMap();
-							indexMap = 2;
-							changeMap();
-						}
+						disableMap();
+						indexMap--;
+						if(indexMap<0)
+							indexMap=mapListes.size()-1;
+						changeMap();
 						return false;	
 					}
 				}
 				
 		);
 		stage.addActor(btnPrevious);
-		
-		///Map1
-		map1.setPosition(Gdx.app.getGraphics().getWidth()/2 - map1.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - map1.getHeight()/2);
-		map1.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+		for(Field f : mapListes)
+		{
+			BoutonShop mapButton = new BoutonShop(f.getTexture(), Gdx.app.getGraphics().getWidth()/4, Gdx.app.getGraphics().getWidth()/4);
+			mapButton.setPosition(Gdx.app.getGraphics().getWidth()/2 - mapButton.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - mapButton.getHeight()/2);
+			mapButton.addListener
+			(
+					new ClickListener() 
 					{
-						effect.play(game.getSoundVolume());
-						System.out.println("map1");
-						return false;	
+						@Override
+						public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+						{
+							effect.play(game.getSoundVolume());
+							return false;	
+						}
 					}
-				}
-		);
-		stage.addActor(map1);
-		maps = new ArrayList<BoutonShop>();
-		maps.add(map1);
-		
-		///Map2
-		map2.setPosition(Gdx.app.getGraphics().getWidth()/2 - map1.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - map1.getHeight()/2);
-		map2.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						effect.play(game.getSoundVolume());
-						System.out.println("map2");
-						return false;	
-					}
-				}
-		);
-		stage.addActor(map2);
-		map2.setVisible(false);
-		maps.add(map2);
-		
-		///Map3
-		map3.setPosition(Gdx.app.getGraphics().getWidth()/2 - map1.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - map1.getHeight()/2);
-		map3.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						effect.play(game.getSoundVolume());
-						System.out.println("map3");
-						return false;	
-					}
-				}
-		);
-		stage.addActor(map3);
-		map3.setVisible(false);
-		maps.add(map3);
+			);
+			stage.addActor(mapButton);
+			maps.add(mapButton);
+		}
 	}
 	
 	public void disableMap()

@@ -37,13 +37,17 @@ public class PartieView implements Screen{
 	PartieInputManagement inputManager;
     BoutonShop boutonShop;
 	Stage stage;
-	boolean addTour = false;
+	boolean boxIsClicked = false;
     float x=20,y=50, z=20;
+    private MeshTA espace;
 
 	
 	public PartieView(TAGame game, Partie partie) {
 		this.game = game;
 		this.partie = partie;
+		espace = MeshTA.loadMeshTA(Gdx.files.internal("Field/espace.mta").file());
+		espace.rotate((float) +Math.PI/2, 0, 0);
+		espace.translate(0, -50, 0);
 		Gdx.graphics.setVSync(true);
 		Gdx.graphics.setContinuousRendering(false);
 		stage = new Stage();
@@ -111,14 +115,19 @@ public class PartieView implements Screen{
 
 	@Override
 	public void render(float delta) {
-		if(addTour)
-		{
-			partie.ajoutTour();
+		synchronized (partie) {
+			if(boxIsClicked)
+			{
+				partie.clickBox(inputManager.getMousePosition().x,inputManager.getMousePosition().y);
+				boxIsClicked = false;
+			}
 		}
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);	
 		camera.update();
 		
+		espace.render(renderer, camera.combined);
 		
 		partie.getTerrain().render(renderer, camera.combined);
 		for(MeshTA t : partie.getJoueur().getTowerIterator()) 
@@ -154,7 +163,6 @@ public class PartieView implements Screen{
 		}
 		
 		shape.end();
-		
 		shape.begin(ShapeType.Filled);
 		shape.rotate(1, 0, 0, 90);
 		shape.setColor(Color.RED);
@@ -260,6 +268,11 @@ public class PartieView implements Screen{
 	{
 		camera.position.set(x,y,z);
 		camera.lookAt(x, 0, z);
+	}
+	
+	public void clickBox()
+	{
+		boxIsClicked=true;
 	}
 
 }

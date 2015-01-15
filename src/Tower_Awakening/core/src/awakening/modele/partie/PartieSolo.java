@@ -1,7 +1,5 @@
 package awakening.modele.partie;
 
-import java.io.File;
-
 import awakening.control.moteur.TAGame;
 import awakening.modele.field.Box;
 import awakening.modele.field.Field;
@@ -9,10 +7,10 @@ import awakening.modele.field.Field;
 public class PartieSolo extends Partie{
 	
 	
-	public PartieSolo(TAGame game)
+	public PartieSolo(TAGame game, Field terrain)
 	{
 		super(game);
-		terrain = new Field(3, 6, 10, 5, 250, 250, new File("terrain 1.mta"));
+		this.terrain = terrain;
 		terrain.creerPlateau();
 		terrain.getSpawns().add(terrain.getBox().get(99));
 		terrain.getBox().get(99).setFieldType(Box.FIELD_SPAWNS);

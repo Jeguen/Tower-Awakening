@@ -68,7 +68,8 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-
+		if(isVisible())
+		{
 		if(isOnHover)
 			batch.draw(textureHover, this.getX(), this .getY(),
 				this.getWidth(),this.getHeight());
@@ -77,6 +78,7 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 				this.getWidth(),this.getHeight());
 		batch.draw(((TextureRegionDrawable)this.getStyle().up).getRegion()
 				, this.getX() + 10, this .getY() + 10, this.getWidth()-20,this.getHeight()-20);
+		}
 	}
 	
 
@@ -93,7 +95,7 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 	@Override
 	public boolean testMousePosition(Vector2 mousePosition) {
 		float deltaX = mousePosition.x - this.getX();
-		float deltaY = mousePosition.y - this.getOriginY();
+		float deltaY = mousePosition.y - this.getY();
 		return deltaX < this.getHeight() && deltaY < this.getWidth()
 				&& deltaX > 0 && deltaY > 0;		
 	}

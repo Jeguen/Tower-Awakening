@@ -254,7 +254,6 @@ public class MainMenu implements Screen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
-		Gdx.graphics.setVSync(true);
 		
 		///Settings
 		music.setVolume(game.getMusicVolume());

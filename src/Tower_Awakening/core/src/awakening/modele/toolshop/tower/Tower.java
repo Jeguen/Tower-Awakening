@@ -233,7 +233,7 @@ public abstract class Tower extends MeshTA
 	// *****************************************
 	// ****************** OTHER ****************
 	// *****************************************
-	final public void upgrade()
+	public void upgrade()
 	{
 		if(canBeUpgrade())
 		{
@@ -286,11 +286,8 @@ public abstract class Tower extends MeshTA
 	{
 		if(f.exists() && f.isFile())
 		{
-			System.out.println("yolo 1");
 			if(f.getName().endsWith(".mta"))
 			{
-				System.out.println("yolo 2");
-
 				try {
 					DataInputStream dis = new DataInputStream(new FileInputStream(f));
 					if(dis.readUTF().equals(OffensivTower.class.getName()))
@@ -354,6 +351,15 @@ public abstract class Tower extends MeshTA
 	public void setNextLevel(Tower nextLevel)
 	{
 		levelUp = nextLevel;
+	}
+	
+	public void copy(Tower towerModele)
+	{
+		super.copy(towerModele);
+		this.buildCost = towerModele.buildCost;
+		this.level = towerModele.level;
+		this.levelUp = towerModele.levelUp;
+		this.range = towerModele.range;
 	}
 
 }
