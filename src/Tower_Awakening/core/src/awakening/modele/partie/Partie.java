@@ -1,7 +1,5 @@
 package awakening.modele.partie;
 
-import com.badlogic.gdx.Gdx;
-
 import awakening.control.moteur.PartieInputManagement;
 import awakening.control.moteur.TAGame;
 import awakening.modele.field.Box;

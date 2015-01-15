@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class PartieView implements Screen{
@@ -42,7 +43,8 @@ public class PartieView implements Screen{
 	boolean boxIsClicked = false;
     float x=20,y=50, z=20;
     private MeshTA espace;
-
+    private Action a1;
+    private Action a2;
 	
 	public PartieView(TAGame game, Partie partie) {
 		this.game = game;
@@ -73,11 +75,36 @@ public class PartieView implements Screen{
 		
 		fenetreToolShop = new ToolShopWindow(partie.getToolShop(), Gdx.graphics.getHeight()-100
 				, Gdx.graphics.getWidth()-100);
+		fenetreToolShop.setPosition(50, 50);
 		boutonShop = fenetreToolShop.getTheOpenButton();
 		boutonShop.setPosition(0,0);
+		a1 = new Action() {
+			
+			@Override
+			public boolean act(float delta) {
+				fenetreToolShop.setVisible(false);
+				Gdx.input.setInputProcessor(inputManager);
+				boutonShop.getActions().clear();
+				boutonShop.addAction(a2);
+				return false;
+			}
+		};
+		a2 = new Action() {
+			
+			@Override
+			public boolean act(float delta) {
+				fenetreToolShop.setVisible(true);
+				Gdx.input.setInputProcessor(stage);
+				boutonShop.getActions().clear();
+				boutonShop.addAction(a1);
+				return false;
+			}
+		};
+		boutonShop.addAction(a2);
 		inputManager.addonHoverlistener(boutonShop);
-
 		stage.addActor(boutonShop);
+		stage.addActor(fenetreToolShop);
+		fenetreToolShop.setVisible(false);
 		textTransform.rotate(Vector3.X,-90);
 		textTransform.translate(0, 0, 4);
 	}

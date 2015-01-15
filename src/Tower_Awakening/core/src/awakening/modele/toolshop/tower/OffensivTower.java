@@ -67,6 +67,7 @@ public class OffensivTower extends Tower {
 		this.damage = towerModele.damage;
 	}
 	
+	@Override
 	public void upgrade()
 	{
 		if(canBeUpgrade())

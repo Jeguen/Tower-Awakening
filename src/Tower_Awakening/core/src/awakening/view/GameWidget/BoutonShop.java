@@ -1,12 +1,12 @@
 package awakening.view.GameWidget;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -51,15 +51,6 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 			pixmap.drawRectangle(i, i, pixmap.getWidth()-i*2, pixmap.getHeight()-i*2);
 		}
 		textureHover = new Texture( pixmap );
-		this.addAction(new Action(){
-
-			@Override
-			public boolean act(float delta) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-		});
 		pixmap.dispose();
 	}
 	
@@ -95,7 +86,7 @@ public class BoutonShop extends Button implements OnHoverableWidget{
 	@Override
 	public boolean testMousePosition(Vector2 mousePosition) {
 		float deltaX = mousePosition.x - this.getX();
-		float deltaY = mousePosition.y - this.getOriginY();
+		float deltaY = Gdx.graphics.getHeight() - mousePosition.y - this.getY() ;
 		return deltaX < this.getHeight() && deltaY < this.getWidth()
 				&& deltaX > 0 && deltaY > 0;		
 	}

@@ -3,6 +3,7 @@ package awakening.control.moteur;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import awakening.view.GameWidget.BoutonShop;
 import awakening.view.GameWidget.OnHoverableWidget;
 import awakening.view.menu.MainMenu;
 import awakening.view.menu.PartieView;
@@ -176,7 +177,26 @@ public class PartieInputManagement implements InputProcessor{
 			if(!onHoveredWidget.testMousePosition(actualMousePoisition))
 			{
 				onHoveredWidget.onExitAction();
-				onHoveredWidget = null;	
+				onHoveredWidget = null;
+				boolean isOverSomething=false;
+				Iterator<OnHoverableWidget> iterat = widgets.iterator();
+				OnHoverableWidget w = null;
+				while(!isOverSomething  && iterat.hasNext())
+				{
+					System.out.println("Mouse position " + actualMousePoisition);
+					w = iterat.next();
+					isOverSomething = w.testMousePosition(actualMousePoisition);
+				}
+				if(w!=null && isOverSomething)
+				{
+					w.onHoverAction();
+					onHoveredWidget = w;
+				}
+				else
+				{
+					Vector3 p = vue.getUnprojectedPoint(screenX, screenY);
+					actualMousePoisition.x = p.x; actualMousePoisition.y = p.z;	
+				}
 			};
 		}
 		return true;
@@ -200,7 +220,14 @@ public class PartieInputManagement implements InputProcessor{
 	
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {			
-		vue.clickBox();
+		if(this.onHoveredWidget ==null)
+			vue.clickBox();
+		else
+		{
+			System.out.println("yolo");
+			((BoutonShop)onHoveredWidget).act(0);
+		}
+		
 		return true;
 	}
 
