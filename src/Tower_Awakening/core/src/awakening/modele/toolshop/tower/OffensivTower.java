@@ -44,8 +44,8 @@ public class OffensivTower extends Tower
 	public void action()
 	{
 		super.action();
-		if (System.currentTimeMillis() % speedAttack * 100 == 0)
-		{
+		//if (System.currentTimeMillis() % speedAttack * 100 == 0)
+		//{
 			// if a projectile has been deleted, it will be removed by the
 			// list
 			for (Projectile p : projectiles)
@@ -55,6 +55,7 @@ public class OffensivTower extends Tower
 					projectiles.remove(p);
 				}
 			}
+			System.out.println("Fucking projectile CREATE");
 			Projectile p = new Projectile(box.getCoordX(), box.getCoordY(), target, damage);
 			projectiles.add(p);
 			for (Projectile p1 : projectiles)
@@ -62,7 +63,7 @@ public class OffensivTower extends Tower
 				// go voir la fonction pour comprendre
 				p1.doDamage();
 			}
-		}
+	//	}
 	}
 	@Override
 	public void save(DataOutputStream bos, File f) throws IOException
