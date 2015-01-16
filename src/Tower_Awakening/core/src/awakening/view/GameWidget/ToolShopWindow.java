@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -37,15 +38,19 @@ public class ToolShopWindow extends Window{
 		int x=0;
 		this.setSize(width, height);
 		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-		final Group liste = new Group();
-		final ScrollPane sp = new ScrollPane(null,skin);
-		sp.setSize(this.getWidth(), this.getHeight()-30);
-		sp.setPosition(0, 30);
+		Table toolTable = new Table();
+		final ScrollPane scroll = new ScrollPane(null,skin);
+		scroll.setForceScroll(false, true);
+		scroll.setFlickScroll(true);
+		scroll.setOverscroll(false, false);
+		scroll.setSize(this.getWidth(), this.getHeight()-30);
+		scroll.setPosition(0, 30);
 		for(Tower t : shop.tours)
 		{
 			System.out.println(t.canBeUpgrade());
 			if(t.getModeleImage()!=null)
 			{
+				Group liste = new Group();
 				BoutonShop btn = new BoutonShop(t.getModeleImage(), btnWidth, btnHeight);
 				liste.addActor(btn);
 				btnsTours.add(btn);
@@ -56,6 +61,8 @@ public class ToolShopWindow extends Window{
 				lblFeature.setPosition(lblTower.getX(), lblTower.getY() - lblTower.getHeight() - 10);
 				liste.addActor(lblFeature);
 				liste.addActor(lblTower);
+				toolTable.row();
+				toolTable.add(liste).height(btn.getHeight()).width(getWidth());
 			}
 			x++;
 		}
@@ -63,6 +70,7 @@ public class ToolShopWindow extends Window{
 		{
 			if(m.getModeleImage()!=null)
 			{
+				Group liste = new Group();
 				BoutonShop btn = new BoutonShop(m.getModeleImage(), btnWidth, btnHeight);
 				liste.addActor(btn);
 				btnsTours.add(btn);
@@ -80,6 +88,8 @@ public class ToolShopWindow extends Window{
 				Label lblTower = new Label(m.toString() + "  price : " + m.getBuildCost() + " $ ", skin);
 				lblTower.setPosition(btnWidth + 30,  btn.getY() + btn.getHeight()/2 - lblTower.getHeight()/2);
 				liste.addActor(lblTower);
+				toolTable.row();
+				toolTable.add(liste).height(btn.getHeight()).width(getWidth());
 			}
 			x++;
 		}
@@ -92,9 +102,11 @@ public class ToolShopWindow extends Window{
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					setVisible(false);
+					Gdx.input.setInputProcessor(partie.getInputManager());
 				}
 			});
-		this.addActor(liste);
+		scroll.setWidget(toolTable);
+		this.addActor(scroll);
 		this.addActor(annuler);
 	}
 
