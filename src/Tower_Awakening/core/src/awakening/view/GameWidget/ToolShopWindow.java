@@ -50,7 +50,7 @@ public class ToolShopWindow extends Window{
 				btnsTours.add(btn);
 				btn.setPosition(10,	this.getHeight() - (50 + x*(btnWidth+30)) - btn.getHeight());
 				Label lblTower = new Label(t.toString() + "  price : " + t.getBuildCost() + " $ ", skin);
-				Label lblFeature = new Label("speed : " + t.getSpeedAttaque() + "   range : " + t.getRange(), skin);
+				Label lblFeature = new Label("speed : " + t.getSpeedAttack() + "   range : " + t.getRange(), skin);
 				lblTower.setPosition(btnWidth + 30,  btn.getY() + btn.getHeight()/2 - lblTower.getHeight()/2);
 				lblFeature.setPosition(lblTower.getX(), lblTower.getY() - lblTower.getHeight() - 10);
 				this.addActor(lblFeature);

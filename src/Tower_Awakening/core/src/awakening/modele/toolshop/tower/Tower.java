@@ -133,7 +133,24 @@ public abstract class Tower extends MeshTA
 	final public void loseTarget()
 	{
 		this.target = null;
-	};
+	}
+	public ArrayList<Projectile> getProjectiles()
+	{
+		return projectiles;
+	}
+	public void setProjectiles(ArrayList<Projectile> projectiles)
+	{
+		this.projectiles = projectiles;
+	}
+	
+	public float getSpeedAttack()
+	{
+		return speedAttack;
+	}
+	public void setSpeedAttack(float speedAttack)
+	{
+		this.speedAttack = speedAttack;
+	}
 	@Override
 	public boolean mustBeInterrupted()
 	{
