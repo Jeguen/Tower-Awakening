@@ -7,17 +7,16 @@ public class Projectile
 	private int coordX;
 	private int coordY; 
 	private Monster target;
-	private float speed;
 	private boolean deleted;
-	private int damageValue;
+	private float damageValue;
 
-	public Projectile(int coordX, int coordY, Monster target, int speed) 
+	public Projectile(int coordX, int coordY, Monster target, float damageValue) 
 	{
 		this.coordX=coordX;
 		this.coordY=coordY;
 		this.target=target;
-		this.speed=speed;
 		deleted=false;
+		this.damageValue=damageValue;
 	}
 	public void doDamage()
 	{
@@ -45,25 +44,13 @@ public class Projectile
 	public void setTarget(Monster target) {
 		this.target = target;
 	}
-	public float getSpeed() {
-		return speed;
-	}
-	public void setSpeed(float speed) {
-		this.speed = speed;
-	}
 	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	public int getDamageValue() {
-		return damageValue;
-	}
 	public void setDamageValue(int damageValue) {
 		this.damageValue = damageValue;
 	}
-	
-	
-
 }
