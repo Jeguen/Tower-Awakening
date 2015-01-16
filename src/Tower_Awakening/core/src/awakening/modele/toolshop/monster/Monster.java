@@ -19,8 +19,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Monster extends MeshTA
 {
-	public final static String MONSTER_FLYING="air#1234";
-	public final static String MONSTER_EARTH="Walk#2654612";
+	public final static String MONSTER_FLYING = "air#1234";
+	public final static String MONSTER_EARTH = "Walk#2654612";
 	protected int id;
 	protected int lifePoint;
 	protected float speedAttack;
@@ -41,17 +41,15 @@ public abstract class Monster extends MeshTA
 	public boolean isArrived = false;
 	public boolean destinationChanged = false;
 	public int randomNumber = (int) (Math.random() * 100);
-	private boolean alive=true;
+	private boolean alive = true;
 	protected Texture imageModele;
 	// *****************************************
 	// ************** CONSTRUCTORS ************
 	// *****************************************
-	
 	public Monster()
-    {
-		path=new ArrayList<Box>();
-    }
-	
+	{
+		path = new ArrayList<Box>();
+	}
 	public Monster(File meshfile)
 	{
 		this();
@@ -72,7 +70,6 @@ public abstract class Monster extends MeshTA
 		this.gainGold = gainGold;
 		this.damage = damage;
 	}
-	
 	public Monster(MeshTA m)
 	{
 		this();
@@ -85,7 +82,8 @@ public abstract class Monster extends MeshTA
 		this.copyFeatures(m);
 		this.translate(position.x, 0, position.y);
 	}
-	public Monster(String fileName) {
+	public Monster(String fileName)
+	{
 		this.load(new File(fileName));
 	}
 	public Monster(Vector2 position)
@@ -99,7 +97,6 @@ public abstract class Monster extends MeshTA
 		boxDestination = 0;
 		this.setActualBox(path.get(0));
 	}
-	
 	// *****************************************
 	// ************** PROCEDURES **************
 	// *****************************************
@@ -108,239 +105,238 @@ public abstract class Monster extends MeshTA
 	{
 		if (this.getClass().getName().equals("MonstreAerien"))
 		{
-			return new FlyingMonster(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold,
-			            damage);
+			return new FlyingMonster(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold, damage);
 		}
 		else
 		{
-			return new MonsterEarth(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold,
-			            damage);
+			return new MonsterEarth(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold, damage);
 		}
 	}
 	// turn boolean if monster dies after taking damages
 	public void takeDamage(float damageValue)
 	{
-		lifePoint=(int) (lifePoint-damageValue);
-		if(lifePoint<0)
+		lifePoint = (int) (lifePoint - damageValue);
+		if (lifePoint < 0)
 		{
-			alive=false;
+			alive = false;
 		}
 	}
-	
-		public abstract void crazyMove();
-
-		public Box getBox()
+	public abstract void crazyMove();
+	public Box getBox()
+	{
+		return boxActuel;
+	}
+	public float getBuildCost()
+	{
+		return buildCost;
+	}
+	public int getDamage()
+	{
+		return damage;
+	}
+	public Box getDestination()
+	{
+		return path.get(boxDestination);
+	}
+	public boolean isAlive()
+	{
+		return alive;
+	}
+	public void setAlive(boolean alive)
+	{
+		this.alive = alive;
+	}
+	public String getFacSheet()
+	{
+		return facSheet;
+	}
+	public int getGainGold()
+	{
+		return gainGold;
+	}
+	// *****************************************
+	// ********** GETTERS & SETTERS ************
+	// *****************************************
+	public int getId()
+	{
+		return id;
+	}
+	public int getLifePoint()
+	{
+		return lifePoint;
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public ArrayList<Box> getPath()
+	{
+		return path;
+	}
+	public float getSpeedAttack()
+	{
+		return speedAttack;
+	}
+	public float getVitesseDeplacement()
+	{
+		return vitesseDeplacement;
+	}
+	public boolean isCrazyStatus()
+	{
+		return crazyStatus;
+	}
+	public boolean isVisible()
+	{
+		return visible;
+	}
+	// ***********************************************
+	// ********** ABSTRACTS PROCEDURES **************
+	// ***********************************************
+	public abstract void normalMove();
+	public void setActualBox(Box box)
+	{
+		if (this.boxActuel == null)
+			setAbsolutePosition(box.getCoordX(), 0.1f, box.getCoordY());
+		else
+			this.boxActuel.setFree(true);
+		this.boxActuel = box;
+		this.boxActuel.setFree(false);
+	}
+	public void setBuildCost(float buildCost)
+	{
+		this.buildCost = buildCost;
+	}
+	public void setCrazyStatus(boolean crazyStatus)
+	{
+		this.crazyStatus = crazyStatus;
+	}
+	public void setDamage(int damage)
+	{
+		this.damage = damage;
+	}
+	public void setFacSheet(String facSheet)
+	{
+		this.facSheet = facSheet;
+	}
+	public void setGainGold(int gainGold)
+	{
+		this.gainGold = gainGold;
+	}
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	public void setLifePoint(int lifePoint)
+	{
+		this.lifePoint = lifePoint;
+	}
+	public void setSpeedAttack(float speedAttack)
+	{
+		this.speedAttack = speedAttack;
+	}
+	public void setVisible(boolean visible)
+	{
+		this.visible = visible;
+	}
+	public void setVitesseDeplacement(float vitesseDeplacement)
+	{
+		this.vitesseDeplacement = vitesseDeplacement;
+	}
+	public int getCoordX()
+	{
+		return coordX;
+	}
+	public void setCoordX(int coordX)
+	{
+		this.coordX = coordX;
+	}
+	public int getCoordY()
+	{
+		return coordY;
+	}
+	public void setCoordY(int coordY)
+	{
+		this.coordY = coordY;
+	}
+	@Override
+	final public void save(File f)
+	{
+		try
 		{
-			return boxActuel;
+			DataOutputStream bos = new DataOutputStream(new FileOutputStream(f));
+			bos.writeUTF(getClass().getName());
+			this.save(bos, f);
+			bos.flush();
+			bos.close();
 		}
-		public float getBuildCost()
+		catch (FileNotFoundException e)
 		{
-			return buildCost;
+			e.printStackTrace();
 		}
-		public int getDamage()
+		catch (IOException e)
 		{
-			return damage;
+			e.printStackTrace();
 		}
-		public Box getDestination()
+	}
+	@Override
+	public void save(DataOutputStream bos, File f) throws IOException
+	{
+		super.save(bos, f);
+		bos.writeInt(id);
+		bos.writeFloat(buildCost);
+	}
+	static public Monster loadMonster(File f)
+	{
+		if (f.exists() && f.isFile())
 		{
-			return path.get(boxDestination);
-		}
-		
-		public boolean isAlive() {
-			return alive;
-		}
-
-		public void setAlive(boolean alive) {
-			this.alive = alive;
-		}
-
-		public String getFacSheet()
-		{
-			return facSheet;
-		}
-		public int getGainGold()
-		{
-			return gainGold;
-		}
-		// *****************************************
-		// ********** GETTERS & SETTERS ************
-		// *****************************************
-		public int getId()
-		{
-			return id;
-		}
-		public int getLifePoint()
-		{
-			return lifePoint;
-		}
-		public String getName()
-		{
-			return name;
-		}
-		public ArrayList<Box> getPath()
-		{
-			return path;
-		}
-		public float getSpeedAttack()
-		{
-			return speedAttack;
-		}
-		public float getVitesseDeplacement()
-		{
-			return vitesseDeplacement;
-		}
-		public boolean isCrazyStatus()
-		{
-			return crazyStatus;
-		}
-		public boolean isVisible()
-		{
-			return visible;
-		}
-		// ***********************************************
-		// ********** ABSTRACTS PROCEDURES **************
-		// ***********************************************
-		public abstract void normalMove();
-		public void setActualBox(Box box)
-		{
-			if(this.boxActuel==null)
-				setAbsolutePosition(box.getCoordX(), 0.1f, box.getCoordY());
-			else
-				this.boxActuel.setFree(true);
-			this.boxActuel = box;
-			this.boxActuel.setFree(false);
-		}
-		public void setBuildCost(float buildCost)
-		{
-			this.buildCost = buildCost;
-		}
-		public void setCrazyStatus(boolean crazyStatus)
-		{
-			this.crazyStatus = crazyStatus;
-		}
-		public void setDamage(int damage)
-		{
-			this.damage = damage;
-		}
-		public void setFacSheet(String facSheet)
-		{
-			this.facSheet = facSheet;
-		}
-		public void setGainGold(int gainGold)
-		{
-			this.gainGold = gainGold;
-		}
-		public void setId(int id)
-		{
-			this.id = id;
-		}
-		public void setLifePoint(int lifePoint)
-		{
-			this.lifePoint = lifePoint;
-		}
-		public void setSpeedAttack(float speedAttack)
-		{
-			this.speedAttack = speedAttack;
-		}
-		public void setVisible(boolean visible)
-		{
-			this.visible = visible;
-		}
-		public void setVitesseDeplacement(float vitesseDeplacement)
-		{
-			this.vitesseDeplacement = vitesseDeplacement;
-		}
-
-		public int getCoordX() {
-			return coordX;
-		}
-
-		public void setCoordX(int coordX) {
-			this.coordX = coordX;
-		}
-
-		public int getCoordY() {
-			return coordY;
-		}
-
-		public void setCoordY(int coordY) {
-			this.coordY = coordY;
-		}
-		
-		@Override
-		final public void save(File f)
-		{
-			try {
-				DataOutputStream bos = new DataOutputStream(new FileOutputStream(f));
-				bos.writeUTF(getClass().getName());
-				this.save(bos, f);
-				bos.flush();bos.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		@Override
-		public void save(DataOutputStream bos, File f) throws IOException
-		{
-			super.save(bos,f);
-			bos.writeInt(id);
-			bos.writeFloat(buildCost);
-		}
-		
-		
-		static public Monster loadMonster(File f)
-		{
-			if(f.exists() && f.isFile())
+			if (f.getName().endsWith(".mta"))
 			{
-				if(f.getName().endsWith(".mta"))
+				try
 				{
-					try {
-						DataInputStream dis = new DataInputStream(new FileInputStream(f));
-						if(dis.readUTF().equals(MonsterEarth.class.getName()))
+					DataInputStream dis = new DataInputStream(new FileInputStream(f));
+					if (dis.readUTF().equals(MonsterEarth.class.getName()))
+					{
+						MonsterEarth retour = new MonsterEarth();
+						retour.load(f, dis);
+						File fileImage = new File(f.getParent() + "\\" + retour.name + "ImageModele.png");
+						if (fileImage.exists())
 						{
-							MonsterEarth retour = new MonsterEarth();
-							retour.load(f,dis);
-							File fileImage = new File(f.getParent() + "\\" + retour.name+"ImageModele.png");
-							if(fileImage.exists())
-							{
-								retour.imageModele = new Texture(f.getParent() + "\\" + retour.name+"ImageModele.png");
-							}
-							dis.close();
-							return retour;
+							retour.imageModele = new Texture(f.getParent() + "\\" + retour.name + "ImageModele.png");
 						}
 						dis.close();
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						return retour;
 					}
+					dis.close();
+				}
+				catch (FileNotFoundException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-			System.err.println("Erreur de chargement Tower");
-			return null;
 		}
-		
-		@Override
-		public void load(File f, DataInputStream dis) throws IOException
-		{
-			super.load(f, dis);
-			id = dis.readInt();
-			buildCost = dis.readFloat();
-		}
-
-		public void copy(Monster monsterModele)
-		{
-			super.copy(monsterModele);
-			this.buildCost = monsterModele.buildCost;
-		}
-		
-		public Texture getModeleImage()
-		{
-			return imageModele;
-		}
+		System.err.println("Erreur de chargement Tower");
+		return null;
+	}
+	@Override
+	public void load(File f, DataInputStream dis) throws IOException
+	{
+		super.load(f, dis);
+		id = dis.readInt();
+		buildCost = dis.readFloat();
+	}
+	public void copy(Monster monsterModele)
+	{
+		super.copy(monsterModele);
+		this.buildCost = monsterModele.buildCost;
+	}
+	public Texture getModeleImage()
+	{
+		return imageModele;
+	}
 }

@@ -1,9 +1,14 @@
 package awakening.modele.toolshop.tower;
 
+import ta.shape3D.mesh.MeshTA;
+
+import java.io.File;
+
 import awakening.modele.toolshop.monster.Monster;
 
-public class Projectile
+public class Projectile extends MeshTA
 {
+	private static MeshTA forme=MeshTA.loadMeshTA(new File("projectile.mta"));
 	private int coordX;
 	private int coordY; 
 	private Monster target;
@@ -17,6 +22,7 @@ public class Projectile
 		this.target=target;
 		deleted=false;
 		this.damageValue=damageValue;
+		this.copy(forme);
 	}
 	public void doDamage()
 	{

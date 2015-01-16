@@ -16,12 +16,6 @@ public class GameMotor extends Thread
 		this.partie = partie;
 		animation = new Animator(40);
 	}
-	
-	public Animator getAnimator()
-	{
-		return animation;
-	}
-	
 	@Override
 	public void run()
 	{
@@ -31,16 +25,14 @@ public class GameMotor extends Thread
 		{
 			while (true)
 			{
-
 				ListIterator<Monster> iteratM = partie.getTerrain().getMonsters().listIterator();
 				while (iteratM.hasNext())
 				{
-					System.out.println("xD");
 					Monster m = iteratM.next();
 					if (m.getPath().size() > 0)
 					{
-						if(m.isArrived || !m.isAlive()){
-
+						if (m.isArrived || !m.isAlive())
+						{
 							iteratM.remove();
 						}
 						else
