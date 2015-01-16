@@ -7,7 +7,7 @@ public class FlyingMonster extends Monster
 		super();
     }
 	public FlyingMonster(int id, int lifePoint, String name, float speedAttack, float vitesseDeplacement, boolean visible, String facSheet,
-	            int buildCost, int gainGold, int damage)
+	            float buildCost, int gainGold, int damage)
 	{
 		super(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold, damage);
 	}

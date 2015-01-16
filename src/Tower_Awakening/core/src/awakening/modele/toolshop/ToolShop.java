@@ -63,7 +63,7 @@ public class ToolShop {
 		{
 			if(ft.isFile())
 				if(ft.getName().endsWith("mta"))
-					monstres.add(new MonsterEarth(ft.getAbsolutePath()));
+					monstres.add(Monster.loadMonster(ft));
 		}
 		for(Tower t : tours) System.out.println(t);
 	}

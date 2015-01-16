@@ -24,22 +24,14 @@ public class GameMotor extends Thread {
 		try{
 			while(true)
 			{
-				// it delete monster which has been died before
-				for(Monster m: partie.getTerrain().getMonsters())
-				{
-					// if the monster is die, it will be removed by the list
-					if(!m.isAlive())
-					{
-						partie.getTerrain().getMonsters().remove(m);
-					}
-				}
+
 				ListIterator<Monster> iteratM = partie.getTerrain().getMonsters().listIterator();
 				while(iteratM.hasNext())
 				{
 					Monster m = iteratM.next();
 					if(m.getPath().size()>0)
 					{
-						if(m.isArrived){
+						if(m.isArrived || !m.isAlive()){
 							iteratM.remove();
 						}
 						else

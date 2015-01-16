@@ -158,7 +158,6 @@ public class PartieInputManagement implements InputProcessor{
 			OnHoverableWidget w = null;
 			while(!isOverSomething  && iterat.hasNext())
 			{
-				System.out.println("Mouse position " + actualMousePoisition);
 				w = iterat.next();
 				isOverSomething = w.testMousePosition(actualMousePoisition);
 			}

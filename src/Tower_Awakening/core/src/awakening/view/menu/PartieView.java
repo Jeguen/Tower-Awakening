@@ -73,7 +73,7 @@ public class PartieView implements Screen{
 		camera.up.set(0,1,0);
 		updateCamera();
 		
-		fenetreToolShop = new ToolShopWindow(partie.getToolShop(), Gdx.graphics.getHeight()-100
+		fenetreToolShop = new ToolShopWindow(partie.getToolShop(), partie, Gdx.graphics.getHeight()-100
 				, Gdx.graphics.getWidth()-100);
 		fenetreToolShop.setPosition(50, 50);
 		boutonShop = fenetreToolShop.getTheOpenButton();
