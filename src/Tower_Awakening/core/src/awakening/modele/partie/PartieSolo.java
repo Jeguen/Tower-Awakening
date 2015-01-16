@@ -22,5 +22,6 @@ public class PartieSolo extends Partie{
 		terrain.getBox().get(120).setFieldType(Box.FIELD_SPAWNS);
 		terrain.setFinishBox(terrain.getBox().get(100));
 		terrain.numeroterDistance(terrain.getFinishBox());
+		moteurJeu.start();
 	}
 }
