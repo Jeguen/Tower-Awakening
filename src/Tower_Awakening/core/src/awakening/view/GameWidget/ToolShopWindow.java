@@ -62,7 +62,7 @@ public class ToolShopWindow extends Window{
 				liste.addActor(lblFeature);
 				liste.addActor(lblTower);
 				toolTable.row();
-				toolTable.add(liste).height(btn.getHeight()).width(getWidth());
+				toolTable.add(liste).height(btn.getHeight()*0.7f).width(getWidth());
 			}
 			x++;
 		}
@@ -89,7 +89,7 @@ public class ToolShopWindow extends Window{
 				lblTower.setPosition(btnWidth + 30,  btn.getY() + btn.getHeight()/2 - lblTower.getHeight()/2);
 				liste.addActor(lblTower);
 				toolTable.row();
-				toolTable.add(liste).height(btn.getHeight()).width(getWidth());
+				toolTable.add(liste).height(btn.getHeight()*0.7f).width(getWidth());
 			}
 			x++;
 		}
