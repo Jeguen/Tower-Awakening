@@ -142,11 +142,6 @@ public abstract class Tower extends MeshTA
 	{
 		this.projectiles = projectiles;
 	}
-	
-	public float getSpeedAttack()
-	{
-		return speedAttack;
-	}
 	public void setSpeedAttack(float speedAttack)
 	{
 		this.speedAttack = speedAttack;

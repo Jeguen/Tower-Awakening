@@ -42,65 +42,63 @@ public class Field extends MeshTA
 	// *****************************************
 	// ************** CONSTRUCTORS ************
 	// *****************************************
-	public Field(int halfRadiusPolygon, int nbSidePolygon, int border, int nbSpawn, int fieldHeight, int fieldWidth
-			, File meshFile)
+	public Field(int halfRadiusPolygon, int nbSidePolygon, int border, int nbSpawn, int fieldHeight, int fieldWidth, File meshFile)
 	{
 		this.halfRadiusPolygon = halfRadiusPolygon;
 		this.nbSidePolygon = nbSidePolygon;
 		this.border = border;
 		this.nbSpawn = nbSpawn;
-		this.nbBoxHeight =  fieldHeight/(halfRadiusPolygon*3);
-		this.nbBoxWidth = fieldHeight/(halfRadiusPolygon*4);
+		this.nbBoxHeight = fieldHeight / (halfRadiusPolygon * 3);
+		this.nbBoxWidth = fieldHeight / (halfRadiusPolygon * 4);
 		tabCoordX = new int[nbSidePolygon];
 		tabCoordY = new int[nbSidePolygon];
 		// Initialisation of list
 		spawns = new ArrayList<Box>();
 		monsters = new ArrayList<Monster>();
 		barriers = new ArrayList<Barrier>();
-		if (meshFile!=null)
+		if (meshFile != null)
 		{
 			this.load(meshFile);
-			this.rotate((float)Math.PI/2, 0,0);
+			this.rotate((float) Math.PI / 2, 0, 0);
 			this.translate(0, -1, 0);
 		}
 	}
-	
 	public Field(Texture t, float w, float h, String name)
 	{
 		this();
 		this.setName(name);
 		this.width = w;
 		this.height = h;
-		float nbMeshHeight = h/(t.getHeight()/5f);
-		float nbMeshWidth = w/(t.getWidth()/5f);
-		int divisionHeight = 1, divisionWidth = 1; 
-		if(nbMeshHeight>1)
+		float nbMeshHeight = h / (t.getHeight() / 5f);
+		float nbMeshWidth = w / (t.getWidth() / 5f);
+		int divisionHeight = 1, divisionWidth = 1;
+		if (nbMeshHeight > 1)
 		{
 			divisionHeight = Math.round(nbMeshHeight);
 		}
-		if(nbMeshWidth>1)
+		if (nbMeshWidth > 1)
 		{
 			divisionWidth = Math.round(nbMeshWidth);
 		}
-		float meshWidth = w/divisionWidth;
-		float meshHeight = h/divisionHeight;
-		for(int i = 0; i<divisionWidth;i++)
-			for(int j = 0; j<divisionHeight;j++)
+		float meshWidth = w / divisionWidth;
+		float meshHeight = h / divisionHeight;
+		for (int i = 0; i < divisionWidth; i++)
+			for (int j = 0; j < divisionHeight; j++)
 			{
-				Triangle3D t1= addTriangle();
+				Triangle3D t1 = addTriangle();
 				t1.getPoint1().x = i * meshWidth;
 				t1.getPoint1().y = j * meshHeight;
-				t1.getPoint2().x = (i+1) * meshWidth;
+				t1.getPoint2().x = (i + 1) * meshWidth;
 				t1.getPoint2().y = j * meshHeight;
 				t1.getPoint3().x = i * meshWidth;
-				t1.getPoint3().y = (j+1) * meshHeight;
-				Triangle3D t2= addTriangle();
-				t2.getPoint1().x = (i+1) * meshWidth;
-				t2.getPoint1().y = (j+1) * meshHeight;
-				t2.getPoint2().x = (i+1) * meshWidth;
+				t1.getPoint3().y = (j + 1) * meshHeight;
+				Triangle3D t2 = addTriangle();
+				t2.getPoint1().x = (i + 1) * meshWidth;
+				t2.getPoint1().y = (j + 1) * meshHeight;
+				t2.getPoint2().x = (i + 1) * meshWidth;
 				t2.getPoint2().y = j * meshHeight;
 				t2.getPoint3().x = i * meshWidth;
-				t2.getPoint3().y = (j+1) * meshHeight;
+				t2.getPoint3().y = (j + 1) * meshHeight;
 				t1.getPointTexture1().x = 2;
 				t1.getPointTexture1().y = 2;
 				t2.getPointTexture1().x = 0;
@@ -121,7 +119,7 @@ public class Field extends MeshTA
 		{
 			// Random number between 0 and the size of the list which
 			// contains spawns
-			int randomNumber = (int) (Math.random() * 100)%spawns.size();
+			int randomNumber = (int) (Math.random() * 100) % spawns.size();
 			m.setActualBox(spawns.get(randomNumber));
 			monsters.add(m);
 		}
@@ -182,9 +180,10 @@ public class Field extends MeshTA
 		// Refers to the current box on which it is working
 		Box currentBox;
 		// For each monster
-		synchronized (monsters) {
+		synchronized (monsters)
+		{
 			for (Monster m : monsters)
-				{
+			{
 				// Clean son chemin (on recalcule à chaque fois)
 				m.getPath().clear();
 				// On ajoute la case sur lequel le monstre est (pour les
@@ -194,7 +193,8 @@ public class Field extends MeshTA
 				currentBox = m.getBox();
 				do
 				{
-					// On parcourt toutes les BoxList1 et on filtre celle
+					// On parcourt toutes les BoxList1 et on filtre
+					// celle
 					// qui
 					// sont autour et celles qui sont -1 en distance
 					for (Box c : box)
@@ -205,7 +205,8 @@ public class Field extends MeshTA
 						{
 							if (currentBox.getRange() == c.getRange() + 1)
 							{
-								// On ajoute ces POSSIBLES BoxList1
+								// On ajoute ces POSSIBLES
+								// BoxList1
 								// (entre 1 et 3 normalement
 								if (possibleBox.size() == 0)
 								{
@@ -226,23 +227,27 @@ public class Field extends MeshTA
 							}
 						}
 					}
-					// On déf un nombre rang d'homme entre 0 et le nombre
-					// de case dans la liste -1 (en gros pour choisir une
+					// On déf un nombre rang d'homme entre 0 et le
+					// nombre
+					// de case dans la liste -1 (en gros pour choisir
+					// une
 					// des BoxList1 dans la liste)
-					if(possibleBox.size()>0)
+					if (possibleBox.size() > 0)
 					{
 						int randomNumber = m.randomNumber % (possibleBox.size());
 						// On get
 						currentBox = possibleBox.get(randomNumber);
 						// On ajoute la case au chemin
 						m.addBoxInPath(currentBox);
-						// On nettoye la liste "temp" pour les BoxList1
+						// On nettoye la liste "temp" pour les
+						// BoxList1
 						// possibles
 						// pour la r�utiliser derriere
 						possibleBox.clear();
 					}
 				}
-				// On fait ca tant que la case actuelle n'est pas la case
+				// On fait ca tant que la case actuelle n'est pas la
+				// case
 				// finale (UNIQUE)
 				while (!(finishBox.equals(currentBox)));
 			}
@@ -254,7 +259,6 @@ public class Field extends MeshTA
 		ArrayList<Box> possibleBox = new ArrayList<Box>();
 		// Refers to the current box on which it is working
 		Box currentBox;
-		
 		// Clean son chemin (on recalcule à chaque fois)
 		m.getPath().clear();
 		// On ajoute la case sur lequel le monstre est (pour les
@@ -327,9 +331,9 @@ public class Field extends MeshTA
 	}
 	public int getBoxIndexByPosition(float x, float y)
 	{
-		float yBox = Math.round((y/(3*halfRadiusPolygon)) - 0.7f);
-		float xBox = Math.round(((x - (y%2)*(2*halfRadiusPolygon))/(4*halfRadiusPolygon)));
-		return (int)(xBox + yBox * (getNbBoxWidth()) + yBox/2f);
+		float yBox = Math.round((y / (3 * halfRadiusPolygon)) - 0.7f);
+		float xBox = Math.round(((x - (y % 2) * (2 * halfRadiusPolygon)) / (4 * halfRadiusPolygon)));
+		return (int) (xBox + yBox * (getNbBoxWidth()) + yBox / 2f);
 	}
 	public Box getFinishBox()
 	{
@@ -363,7 +367,6 @@ public class Field extends MeshTA
 		return nbSpawn;
 	}
 	public ArrayList<Box> getSpawns()
-	
 	{
 		return spawns;
 	}
@@ -409,7 +412,7 @@ public class Field extends MeshTA
 			            && (arrivee.getCoordX() - b.getCoordX()) * (arrivee.getCoordX() - b.getCoordX())
 			                        + (arrivee.getCoordY() - b.getCoordY()) * (arrivee.getCoordY() - b.getCoordY()) > 10)
 			{
-				if (b.getFieldType()>0)
+				if (b.getFieldType() > 0)
 				{
 					b.setRange(1);
 					bloque = false;
@@ -439,7 +442,7 @@ public class Field extends MeshTA
 						if ((b1.getCoordX() - b.getCoordX()) * (b1.getCoordX() - b.getCoordX()) + (b1.getCoordY() - b.getCoordY())
 						            * (b1.getCoordY() - b.getCoordY()) < (4 * halfRadiusPolygon + 2) * (4 * halfRadiusPolygon + 2))
 						{
-							if (b.getFieldType()>0)
+							if (b.getFieldType() > 0)
 							{
 								if (b1.getRange() == -1)
 								{
@@ -620,7 +623,6 @@ public class Field extends MeshTA
 			}
 		}
 	}
-	
 	public void updateTargetedBoxRemove()
 	{
 		LinkedList<Box> BoxList1 = new LinkedList<Box>();
@@ -688,22 +690,26 @@ public class Field extends MeshTA
 			}
 		}
 	}
-	
 	@Override
 	public void save(File f)
 	{
-		try {
+		try
+		{
 			DataOutputStream bos = new DataOutputStream(new FileOutputStream(f));
 			bos.writeUTF("FieldTowerAwakening");
 			this.save(bos, f);
-			bos.flush();bos.close();
-		} catch (FileNotFoundException e) {
+			bos.flush();
+			bos.close();
+		}
+		catch (FileNotFoundException e)
+		{
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			e.printStackTrace();
 		}
 	}
-	
 	@Override
 	public void save(DataOutputStream dos, File f) throws IOException
 	{
@@ -711,7 +717,6 @@ public class Field extends MeshTA
 		dos.writeFloat(height);
 		dos.writeFloat(width);
 	}
-	
 	@Override
 	public void load(File f, DataInputStream dis) throws IOException
 	{
@@ -722,8 +727,8 @@ public class Field extends MeshTA
 		this.nbSidePolygon = 6;
 		this.border = 10;
 		this.nbSpawn = 5;
-		this.nbBoxHeight =  (int) (height/(halfRadiusPolygon*3));
-		this.nbBoxWidth = (int) (width/(halfRadiusPolygon*4));
+		this.nbBoxHeight = (int) (height / (halfRadiusPolygon * 3));
+		this.nbBoxWidth = (int) (width / (halfRadiusPolygon * 4));
 		tabCoordX = new int[nbSidePolygon];
 		tabCoordY = new int[nbSidePolygon];
 		// Initialisation of list
@@ -731,29 +736,33 @@ public class Field extends MeshTA
 		monsters = new ArrayList<Monster>();
 		barriers = new ArrayList<Barrier>();
 	}
-	
 	static public Field loadTower(File f)
 	{
-		if(f.exists() && f.isFile())
+		if (f.exists() && f.isFile())
 		{
-			if(f.getName().endsWith(".mta"))
+			if (f.getName().endsWith(".mta"))
 			{
-				try {
+				try
+				{
 					DataInputStream dis = new DataInputStream(new FileInputStream(f));
-					if(dis.readUTF().equals("FieldTowerAwakening"))
+					if (dis.readUTF().equals("FieldTowerAwakening"))
 					{
 						Field retour = new Field();
-						retour.load(f,dis);
-						retour.rotate((float) +Math.PI/2, 0, 0);
+						retour.load(f, dis);
+						retour.rotate((float) +Math.PI / 2, 0, 0);
 						retour.translate(0, -0.2f, 0);
 						dis.close();
 						return retour;
 					}
 					dis.close();
-				} catch (FileNotFoundException e) {
+				}
+				catch (FileNotFoundException e)
+				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (IOException e) {
+				}
+				catch (IOException e)
+				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -762,16 +771,14 @@ public class Field extends MeshTA
 		System.err.println("Erreur de chargement Field");
 		return null;
 	}
-	
-	private Field(){
-		super();		
+	private Field()
+	{
+		super();
 	}
-	
 	public float getHeight()
 	{
 		return height;
 	}
-	
 	public float getWidth()
 	{
 		return width;
