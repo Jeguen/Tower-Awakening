@@ -49,7 +49,7 @@ public class PartieView implements Screen{
 	public PartieView(TAGame game, Partie partie) {
 		this.game = game;
 		this.partie = partie;
-		inputManager = new PartieInputManagement();
+		inputManager = new PartieInputManagement(game);
 		inputManager.setView(this);
 		Gdx.input.setInputProcessor(inputManager);
 		partie.setInputManager(inputManager);

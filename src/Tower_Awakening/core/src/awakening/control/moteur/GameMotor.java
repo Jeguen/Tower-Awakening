@@ -7,31 +7,40 @@ import awakening.modele.partie.Partie;
 import awakening.modele.toolshop.monster.Monster;
 import awakening.modele.toolshop.tower.Tower;
 
-public class GameMotor extends Thread {
-
+public class GameMotor extends Thread
+{
 	private Partie partie;
 	private Animator animation;
-	
-	public GameMotor(Partie partie) {
-		this.partie=partie;
+	public GameMotor(Partie partie)
+	{
+		this.partie = partie;
 		animation = new Animator(40);
 	}
-	
 	@Override
-	public void run() {
+	public void run()
+	{
 		super.run();
 		animation.start();
-		try{
-			while(true)
+		try
+		{
+			while (true)
 			{
+<<<<<<< HEAD
 
+=======
+>>>>>>> e7eb79b40b005583a9ce3851915e46c76d7ba96a
 				ListIterator<Monster> iteratM = partie.getTerrain().getMonsters().listIterator();
-				while(iteratM.hasNext())
+				while (iteratM.hasNext())
 				{
 					Monster m = iteratM.next();
-					if(m.getPath().size()>0)
+					if (m.getPath().size() > 0)
 					{
+<<<<<<< HEAD
 						if(m.isArrived || !m.isAlive()){
+=======
+						if (m.isArrived || !m.isAlive())
+						{
+>>>>>>> e7eb79b40b005583a9ce3851915e46c76d7ba96a
 							iteratM.remove();
 						}
 						else
@@ -40,12 +49,12 @@ public class GameMotor extends Thread {
 					else
 						partie.getTerrain().findPathMonster();
 				}
-				for(Tower t : partie.getJoueur().getTowerIterator())
+				for (Tower t : partie.getJoueur().getTowerIterator())
 				{
-					if(!t.haveATarget())
+					if (!t.haveATarget())
 					{
-						for(Monster monstre : partie.getTerrain().getMonsters())
-							if(t.testPortee(monstre.getX(), monstre.getZ()))
+						for (Monster monstre : partie.getTerrain().getMonsters())
+							if (t.testPortee(monstre.getX(), monstre.getZ()))
 							{
 								t.targetMonster(monstre);
 								t.action();
@@ -54,8 +63,8 @@ public class GameMotor extends Thread {
 					}
 					else
 					{
-						if(!t.getTarget().isArrived)
-							if(t.testPortee(t.getTarget().getX(), t.getTarget().getZ()))
+						if (!t.getTarget().isArrived)
+							if (t.testPortee(t.getTarget().getX(), t.getTarget().getZ()))
 							{
 								t.action();
 								animation.addTemporarily(t);
@@ -70,9 +79,10 @@ public class GameMotor extends Thread {
 				}
 				sleep(20);
 			}
-		}catch(InterruptedException e){
+		}
+		catch (InterruptedException e)
+		{
 			e.printStackTrace();
 		}
 	}
-
 }

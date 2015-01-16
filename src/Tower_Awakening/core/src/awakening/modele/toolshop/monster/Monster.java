@@ -118,9 +118,9 @@ public abstract class Monster extends MeshTA
 		}
 	}
 	// turn boolean if monster dies after taking damages
-	public void takeDamage(int damage)
+	public void takeDamage(float damageValue)
 	{
-		lifePoint=lifePoint-damage;
+		lifePoint=(int) (lifePoint-damageValue);
 		if(lifePoint<0)
 		{
 			alive=false;
