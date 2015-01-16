@@ -121,7 +121,6 @@ public class Field extends MeshTA
 		{
 			// Random number between 0 and the size of the list which
 			// contains spawns
-			System.out.println("lol");
 			int randomNumber = (int) (Math.random() * 100)%spawns.size();
 			m.setActualBox(spawns.get(randomNumber));
 			monsters.add(m);

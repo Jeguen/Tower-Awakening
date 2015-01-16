@@ -1,10 +1,12 @@
 package awakening.modele.partie;
 
+import awakening.control.moteur.GameMotor;
 import awakening.control.moteur.PartieInputManagement;
 import awakening.control.moteur.TAGame;
 import awakening.modele.field.Box;
 import awakening.modele.field.Field;
 import awakening.modele.toolshop.ToolShop;
+import awakening.modele.toolshop.monster.Monster;
 import awakening.modele.toolshop.tower.OffensivTower;
 import awakening.modele.toolshop.tower.Tower;
 import awakening.view.menu.MainMenu;
@@ -17,6 +19,7 @@ public abstract class Partie {
 	Field terrain;
 	PartieInputManagement inputManager;
 	TAGame game;
+	GameMotor moteurJeu;
 	
 	
 	public Partie(TAGame game) {
@@ -24,6 +27,7 @@ public abstract class Partie {
 		toolshop.loadModele();
 		joueurUtilisateur = new Joueur();
 		joueurAdverse = new Joueur();
+		moteurJeu = new GameMotor(this);
 		this.game=game;
 	}
 	
@@ -86,5 +90,15 @@ public abstract class Partie {
 	public void setTerrain(Field terrain)
 	{
 		this.terrain = terrain;
+	}
+	
+	public GameMotor getGameMotor()
+	{
+		return moteurJeu;
+	}
+	
+	public void addMonster(Monster m)
+	{
+		terrain.addMonster(m);
 	}
 }

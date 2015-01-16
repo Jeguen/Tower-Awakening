@@ -361,4 +361,9 @@ public abstract class Tower extends MeshTA
 	{
 		return imageModele;
 	}
+	
+	public float getSpeedAttack()
+	{
+		return speedAttack;
+	}
 }
