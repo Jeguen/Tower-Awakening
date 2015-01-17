@@ -1,16 +1,16 @@
- // Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
- 
- // Licensed under the Apache License, Version 2.0 (the "License");
- // you may not use this file except in compliance with the License.
- // You may obtain a copy of the License at
- // 
- // http://www.apache.org/licenses/LICENSE-2.0
- // 
- // Unless required by applicable law or agreed to in writing, software
- // distributed under the License is distributed on an "AS IS" BASIS,
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
+// Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package awakening.view.menu;
 
@@ -52,29 +52,28 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  * @author rodolphe-c
  *
  */
-public class MapSelection implements Screen
-{
-	
-	///Maps
+public class MapSelection implements Screen {
+
+	// /Maps
 	ArrayList<Field> mapListes = new ArrayList<Field>();
-	
-	///Game
+
+	// /Game
 	private TAGame game;
 	private Music sound;
-	private Sound effect;	
-	private Locale[] locales = {Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN};
+	private Sound effect;
+	private Locale[] locales = { Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN };
 	private ResourceBundle language;
 	private ArrayList<BoutonShop> maps;
 	private int indexMap = 0;
-	
-	///Stage
+
+	// /Stage
 	private Stage stage;
 	private SpriteBatch batch;
 	private Texture background;
 	private OrthographicCamera camera;
 	private StretchViewport view;
-	
-	///Widgets
+
+	// /Widgets
 	private Image widgetsBackground;
 	private Label title;
 	private Skin skin;
@@ -87,112 +86,121 @@ public class MapSelection implements Screen
 	/**
 	 * Constructor
 	 * 
-	 * @param game Tower Awakening's Game
-	 * @param sound Main menu's music
-	 * @param effect Button's effect
+	 * @param game
+	 *            Tower Awakening's Game
+	 * @param sound
+	 *            Main menu's music
+	 * @param effect
+	 *            Button's effect
 	 */
-	public MapSelection(final TAGame game, Music sound, final Sound effect)
-	{
+	public MapSelection(final TAGame game, Music sound, final Sound effect) {
 		this.game = game;
 		this.sound = sound;
 		this.effect = effect;
 		stage = new Stage();
-		
-		try
-		{
+
+		try {
 			File monsterDirectory = Gdx.files.internal("Field").file();
-			for(File ft : monsterDirectory.listFiles())
-			{
-				if(ft.isFile())
-					if(ft.getName().endsWith("mta"))
-					{
+			for (File ft : monsterDirectory.listFiles()) {
+				if (ft.isFile())
+					if (ft.getName().endsWith("mta")) {
 						Field newMap = Field.loadTower(ft);
-						if(newMap != null) 
+						if (newMap != null)
 							mapListes.add(newMap);
 					}
 			}
-			
-			if(game.getLanguage().equals("ENGLISH"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_en_EN", locales[0]);
+
+			if (game.getLanguage().equals("ENGLISH")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_en_EN", locales[0]);
+			} else if (game.getLanguage().equals("FRENCH")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_fr_FR", locales[1]);
+			} else if (game.getLanguage().equals("ITALIAN")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_it_IT", locales[2]);
+			} else {
+				language = ResourceBundle.getBundle("awakening.view.menu.res",
+						locales[0]);
 			}
-			else if (game.getLanguage().equals("FRENCH"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_fr_FR", locales[1]);
-			}
-			else if (game.getLanguage().equals("ITALIAN"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_it_IT", locales[2]);
-			}
-			else
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res", locales[0]);
-			}
-		}
-		catch(java.util.MissingResourceException e)
-		{
+		} catch (java.util.MissingResourceException e) {
 			System.out.println("yolo");
 		}
-		
-		///Viewport
-		camera=new OrthographicCamera();
-		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getWidth(), camera);
-		
-		///Background
-		background = new Texture(Gdx.files.internal("img/menu/Background-2.png"));
+
+		// /Viewport
+		camera = new OrthographicCamera();
+		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app
+				.getGraphics().getWidth(), camera);
+
+		// /Background
+		background = new Texture(
+				Gdx.files.internal("img/menu/Background-2.png"));
 		batch = new SpriteBatch();
-		
-		///Skin
+
+		// /Skin
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		
-		///Title
+
+		// /Title
 		title = new Label(language.getString("label_map_selection"), skin);
-		
-		///Widgets Background
-		widgetsBackground = new Image(new Texture(Gdx.files.internal("img/widget/window_selection.png")));
-		widgetsBackground.setSize(Gdx.app.getGraphics().getWidth() - Gdx.app.getGraphics().getWidth()/8, Gdx.app.getGraphics().getHeight() - Gdx.app.getGraphics().getHeight()/8);
-		
-		///Back Button
+
+		// /Widgets Background
+		widgetsBackground = new Image(new Texture(
+				Gdx.files.internal("img/widget/window_selection.png")));
+		widgetsBackground.setSize(Gdx.app.getGraphics().getWidth()
+				- Gdx.app.getGraphics().getWidth() / 8, Gdx.app.getGraphics()
+				.getHeight() - Gdx.app.getGraphics().getHeight() / 8);
+
+		// /Back Button
 		btnBack = new TextButton(language.getString("button_back"), skin);
 		btnJeu = new TextButton(language.getString("button_game"), skin);
-		
-		///Next Button
-		Texture t1 = new Texture(Gdx.files.internal("img/widget/arrow_hover_right.png"));
-		Texture t2 = new Texture(Gdx.files.internal("img/widget/arrow_right.png"));
-		ImageButtonStyle style1 = new ImageButtonStyle
-				(
-						new TextureRegionDrawable(new TextureRegion(t1,0,0,t1.getWidth(), t1.getHeight())), 
-						new TextureRegionDrawable(new TextureRegion(t2,0,0,t2.getWidth(), t2.getHeight())),
-						new TextureRegionDrawable(new TextureRegion(t1,0,0,t1.getWidth(), t1.getHeight())), 
-						new TextureRegionDrawable(new TextureRegion(t2,0,0,t2.getWidth(), t2.getHeight())),
-						new TextureRegionDrawable(new TextureRegion(t1,0,0,t1.getWidth(), t1.getHeight())), 
-						new TextureRegionDrawable(new TextureRegion(t2,0,0,t2.getWidth(), t2.getHeight()))
-				);
-		btnNext = new ImageButton(style1); 
-			
-		///Previous Button
-		Texture t3 = new Texture(Gdx.files.internal("img/widget/arrow_hover_left.png"));
-		Texture t4 = new Texture(Gdx.files.internal("img/widget/arrow_left.png"));
-		ImageButtonStyle style2 = new ImageButtonStyle
-				(
-						new TextureRegionDrawable(new TextureRegion(t3,0,0,t3.getWidth(), t3.getHeight())), 
-						new TextureRegionDrawable(new TextureRegion(t4,0,0,t4.getWidth(), t4.getHeight())),
-						new TextureRegionDrawable(new TextureRegion(t3,0,0,t3.getWidth(), t3.getHeight())), 
-						new TextureRegionDrawable(new TextureRegion(t4,0,0,t4.getWidth(), t4.getHeight())),
-						new TextureRegionDrawable(new TextureRegion(t3,0,0,t3.getWidth(), t3.getHeight())), 
-						new TextureRegionDrawable(new TextureRegion(t4,0,0,t4.getWidth(), t4.getHeight()))
-				);
-		
+
+		// /Next Button
+		Texture t1 = new Texture(
+				Gdx.files.internal("img/widget/arrow_hover_right.png"));
+		Texture t2 = new Texture(
+				Gdx.files.internal("img/widget/arrow_right.png"));
+		ImageButtonStyle style1 = new ImageButtonStyle(
+				new TextureRegionDrawable(new TextureRegion(t1, 0, 0,
+						t1.getWidth(), t1.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t2, 0, 0, t2
+						.getWidth(), t2.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t1, 0, 0, t1
+						.getWidth(), t1.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t2, 0, 0, t2
+						.getWidth(), t2.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t1, 0, 0, t1
+						.getWidth(), t1.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t2, 0, 0, t2
+						.getWidth(), t2.getHeight())));
+		btnNext = new ImageButton(style1);
+
+		// /Previous Button
+		Texture t3 = new Texture(
+				Gdx.files.internal("img/widget/arrow_hover_left.png"));
+		Texture t4 = new Texture(
+				Gdx.files.internal("img/widget/arrow_left.png"));
+		ImageButtonStyle style2 = new ImageButtonStyle(
+				new TextureRegionDrawable(new TextureRegion(t3, 0, 0,
+						t3.getWidth(), t3.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t4, 0, 0, t4
+						.getWidth(), t4.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t3, 0, 0, t3
+						.getWidth(), t3.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t4, 0, 0, t4
+						.getWidth(), t4.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t3, 0, 0, t3
+						.getWidth(), t3.getHeight())),
+				new TextureRegionDrawable(new TextureRegion(t4, 0, 0, t4
+						.getWidth(), t4.getHeight())));
+
 		btnPrevious = new ImageButton(style2);
-		
+
 		maps = new ArrayList<BoutonShop>();
-		
 
 	}
-	
+
 	@Override
-	public void dispose() 
-	{
+	public void dispose() {
 		stage.dispose();
 		skin.dispose();
 		game.dispose();
@@ -201,189 +209,183 @@ public class MapSelection implements Screen
 	}
 
 	@Override
-	public void hide() 
-	{
+	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void pause() 
-	{
+	public void pause() {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void render(float delta) 
-	{
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
-		
-		///Settings
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
+		Gdx.graphics.setDisplayMode(game.getSize().width,
+				game.getSize().height, game.isFullscreen());
+
+		// /Settings
 		effect.setVolume(0, game.getSoundVolume());
 		sound.setVolume(game.getMusicVolume());
-		
-		///Cursor
+
+		// /Cursor
 		Pixmap pm = new Pixmap(Gdx.files.internal("img/cursor.png"));
 		Gdx.input.setCursorImage(pm, 0, 0);
 		pm.dispose();
-		
-		///Draw Background
+
+		// /Draw Background
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
+		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app
+				.getGraphics().getHeight());
 		batch.end();
-		
-		///Draw Stage
+
+		// /Draw Stage
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
 	}
 
 	@Override
-	public void resize(int width, int height) 
-	{
+	public void resize(int width, int height) {
 		view.update(width, height);
-		camera.setToOrtho(false,width,height);
+		camera.setToOrtho(false, width, height);
 		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
-	public void resume() 
-	{
+	public void resume() {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void show() 
-	{
+	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		
-		///Title
-		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth()/2, Gdx.app.getGraphics().getHeight() - 30);
+
+		// /Title
+		title.setPosition(
+				Gdx.app.getGraphics().getWidth() / 2 - title.getWidth() / 2,
+				Gdx.app.getGraphics().getHeight() - 30);
 		stage.addActor(title);
-		
-		///Widgets Background
-		widgetsBackground.setPosition(Gdx.app.getGraphics().getWidth()/2 - widgetsBackground.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2);
+
+		// /Widgets Background
+		widgetsBackground.setPosition(Gdx.app.getGraphics().getWidth() / 2
+				- widgetsBackground.getWidth() / 2, Gdx.app.getGraphics()
+				.getHeight() / 2 - widgetsBackground.getHeight() / 2);
 		stage.addActor(widgetsBackground);
-		
-		///Back Button
+
+		// /Back Button
 		btnBack.setWidth(100);
-		btnBack.setPosition(Gdx.app.getGraphics().getWidth()/2 - btnBack.getWidth()/2, Gdx.app.getGraphics().getHeight() - widgetsBackground.getHeight() + 10);
-		
-		btnBack.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						effect.play(game.getSoundVolume());
-						game.setScreen(new MainMenu(game, sound, effect));
-						return false;	
-					}
-				}
-		);
+		btnBack.setPosition(
+				Gdx.app.getGraphics().getWidth() / 2 - btnBack.getWidth() / 2,
+				Gdx.app.getGraphics().getHeight()
+						- widgetsBackground.getHeight() + 10);
+
+		btnBack.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent e, float x, float y,
+					int pointer, int button) {
+				effect.play(game.getSoundVolume());
+				game.setScreen(new MainMenu(game, sound, effect));
+				return false;
+			}
+		});
 		stage.addActor(btnBack);
 		btnJeu.setWidth(200);
-		btnJeu.setPosition(Gdx.app.getGraphics().getWidth()/2 - btnJeu.getWidth()/2,
-				Gdx.app.getGraphics().getHeight() - widgetsBackground.getHeight() + 40);
-		
-		btnJeu.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						effect.play(game.getSoundVolume());
-						game.setScreen(new Solo(game, mapListes.get(indexMap)));
-						return true;	
-					}
-				}
-		);
+		btnJeu.setPosition(
+				Gdx.app.getGraphics().getWidth() / 2 - btnJeu.getWidth() / 2,
+				Gdx.app.getGraphics().getHeight()
+						- widgetsBackground.getHeight() + 40);
+
+		btnJeu.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent e, float x, float y,
+					int pointer, int button) {
+				effect.play(game.getSoundVolume());
+				game.setScreen(new Solo(game, mapListes.get(indexMap)));
+				return true;
+			}
+		});
 		stage.addActor(btnJeu);
-		
-		///Next Button
+
+		// /Next Button
 		btnNext.setWidth(75);
 		btnNext.setHeight(75);
-		btnNext.setPosition(Gdx.app.getGraphics().getWidth() - Gdx.app.getGraphics().getWidth()/8 - btnNext.getWidth(), Gdx.app.getGraphics().getHeight()/2);
-		btnNext.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						effect.play(game.getSoundVolume());
-						disableMap();
-						indexMap++;
-						indexMap%=mapListes.size();
-						changeMap();
-						return false;	
-					}
-				}
-				
+		btnNext.setPosition(Gdx.app.getGraphics().getWidth()
+				- Gdx.app.getGraphics().getWidth() / 8 - btnNext.getWidth(),
+				Gdx.app.getGraphics().getHeight() / 2);
+		btnNext.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent e, float x, float y,
+					int pointer, int button) {
+				effect.play(game.getSoundVolume());
+				disableMap();
+				indexMap++;
+				indexMap %= mapListes.size();
+				changeMap();
+				return false;
+			}
+		}
+
 		);
 		stage.addActor(btnNext);
-		
-		///Previous Button
+
+		// /Previous Button
 		btnPrevious.setWidth(75);
 		btnPrevious.setHeight(75);
-		btnPrevious.setPosition(Gdx.app.getGraphics().getWidth()/8, Gdx.app.getGraphics().getHeight()/2);
-		btnPrevious.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						effect.play(game.getSoundVolume());
-						disableMap();
-						indexMap--;
-						if(indexMap<0)
-							indexMap=mapListes.size()-1;
-						changeMap();
-						return false;	
-					}
-				}
-				
+		btnPrevious.setPosition(Gdx.app.getGraphics().getWidth() / 8, Gdx.app
+				.getGraphics().getHeight() / 2);
+		btnPrevious.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent e, float x, float y,
+					int pointer, int button) {
+				effect.play(game.getSoundVolume());
+				disableMap();
+				indexMap--;
+				if (indexMap < 0)
+					indexMap = mapListes.size() - 1;
+				changeMap();
+				return false;
+			}
+		}
+
 		);
 		stage.addActor(btnPrevious);
-		for(Field f : mapListes)
-		{
-			BoutonShop mapButton = new BoutonShop(f.getTexture(), Gdx.app.getGraphics().getWidth()/4, Gdx.app.getGraphics().getWidth()/4);
-			mapButton.setPosition(Gdx.app.getGraphics().getWidth()/2 - mapButton.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - mapButton.getHeight()/2);
-			mapButton.addListener
-			(
-					new ClickListener() 
-					{
-						@Override
-						public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-						{
-							effect.play(game.getSoundVolume());
-							return false;	
-						}
-					}
-			);
+		for (Field f : mapListes) {
+			BoutonShop mapButton = new BoutonShop(f.getTexture(), Gdx.app
+					.getGraphics().getWidth() / 4, Gdx.app.getGraphics()
+					.getWidth() / 4);
+			mapButton.setPosition(Gdx.app.getGraphics().getWidth() / 2
+					- mapButton.getWidth() / 2, Gdx.app.getGraphics()
+					.getHeight() / 2 - mapButton.getHeight() / 2);
+			mapButton.addListener(new ClickListener() {
+				@Override
+				public boolean touchDown(InputEvent e, float x, float y,
+						int pointer, int button) {
+					effect.play(game.getSoundVolume());
+					return false;
+				}
+			});
 			mapButton.setVisible(false);
-			mapButton.setTouchable(Touchable.disabled);;
+			mapButton.setTouchable(Touchable.disabled);
+			;
 			stage.addActor(mapButton);
 			maps.add(mapButton);
 		}
 		changeMap();
 	}
-	
-	public void disableMap()
-	{
+
+	public void disableMap() {
 		maps.get(indexMap).setVisible(false);
 		maps.get(indexMap).setTouchable(Touchable.disabled);
 	}
-	
-	public void changeMap()
-	{
+
+	public void changeMap() {
 		maps.get(indexMap).setVisible(true);
-		maps.get(indexMap).setTouchable(Touchable.enabled);;
+		maps.get(indexMap).setTouchable(Touchable.enabled);
+		;
 	}
 }

@@ -1,16 +1,16 @@
- // Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
- 
- // Licensed under the Apache License, Version 2.0 (the "License");
- // you may not use this file except in compliance with the License.
- // You may obtain a copy of the License at
- // 
- // http://www.apache.org/licenses/LICENSE-2.0
- // 
- // Unless required by applicable law or agreed to in writing, software
- // distributed under the License is distributed on an "AS IS" BASIS,
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
+// Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package awakening.view.menu;
 
@@ -50,23 +50,22 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  * @author rodolphe-c
  *
  */
-public class Graphics implements Screen
-{
-	///Game
+public class Graphics implements Screen {
+	// /Game
 	private TAGame game;
 	private Music sound;
 	private Sound effect;
-	private Locale[] locales = {Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN};
+	private Locale[] locales = { Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN };
 	private ResourceBundle language;
-	
-	///Stage
+
+	// /Stage
 	private Stage stage;
 	private SpriteBatch batch;
 	private Texture background;
 	private OrthographicCamera camera;
 	private StretchViewport view;
-	
-	///Widgets
+
+	// /Widgets
 	private Image widgetsBackground;
 	private Label title;
 	private Skin skin;
@@ -78,74 +77,73 @@ public class Graphics implements Screen
 	/**
 	 * Constructor
 	 * 
-	 * @param game Tower Awakening's Game
-	 * @param sound Main menu's music
-	 * @param effect Button's effect
+	 * @param game
+	 *            Tower Awakening's Game
+	 * @param sound
+	 *            Main menu's music
+	 * @param effect
+	 *            Button's effect
 	 */
-	public Graphics(TAGame game, Music sound, Sound effect)
-	{
+	public Graphics(TAGame game, Music sound, Sound effect) {
 		this.game = game;
 		this.sound = sound;
 		this.effect = effect;
 		stage = new Stage();
-		
-		try
-		{
-			if(game.getLanguage().equals("ENGLISH"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_en_EN", locales[0]);
+
+		try {
+			if (game.getLanguage().equals("ENGLISH")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_en_EN", locales[0]);
+			} else if (game.getLanguage().equals("FRENCH")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_fr_FR", locales[1]);
+			} else if (game.getLanguage().equals("ITALIAN")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_it_IT", locales[2]);
+			} else {
+				language = ResourceBundle.getBundle("awakening.menu.res",
+						locales[0]);
 			}
-			else if (game.getLanguage().equals("FRENCH"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_fr_FR", locales[1]);
-			}
-			else if (game.getLanguage().equals("ITALIAN"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_it_IT", locales[2]);
-			}
-			else
-			{
-				language = ResourceBundle.getBundle("awakening.menu.res", locales[0]);
-			}
-		}
-		catch(java.util.MissingResourceException e)
-		{
+		} catch (java.util.MissingResourceException e) {
 			System.out.println("yolo");
 		}
-		
-		///Viewport
-		camera=new OrthographicCamera();
-		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getWidth(), camera);
-		
-		///Background
-		background = new Texture(Gdx.files.internal("img/menu/Background-3.png"));
+
+		// /Viewport
+		camera = new OrthographicCamera();
+		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app
+				.getGraphics().getWidth(), camera);
+
+		// /Background
+		background = new Texture(
+				Gdx.files.internal("img/menu/Background-3.png"));
 		batch = new SpriteBatch();
-		
-		///Skin
+
+		// /Skin
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		
-		///Title
+
+		// /Title
 		title = new Label(language.getString("label_graphics_menu"), skin);
-		
-		///Widgets Background
-		widgetsBackground = new Image(new Texture(Gdx.files.internal("img/widget/bg widgets.png")));
-		
-		///Back Button
+
+		// /Widgets Background
+		widgetsBackground = new Image(new Texture(
+				Gdx.files.internal("img/widget/bg widgets.png")));
+
+		// /Back Button
 		btnBack = new TextButton(language.getString("button_back"), skin);
-		
-		///CheckBox Fullscreen
-		cbxFullscreen = new CheckBox(language.getString("label_fullscreen"), skin);
-		
-		///SelectBox Resolution
+
+		// /CheckBox Fullscreen
+		cbxFullscreen = new CheckBox(language.getString("label_fullscreen"),
+				skin);
+
+		// /SelectBox Resolution
 		slbResolutions = new SelectBox<TAScreenSize>(skin);
-		
-		///Label Resolution
+
+		// /Label Resolution
 		lblResolution = new Label(language.getString("label_resolution"), skin);
 	}
-	
+
 	@Override
-	public void dispose() 
-	{
+	public void dispose() {
 		stage.dispose();
 		skin.dispose();
 		game.dispose();
@@ -154,160 +152,175 @@ public class Graphics implements Screen
 	}
 
 	@Override
-	public void hide() 
-	{
+	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void pause() 
-	{
+	public void pause() {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void render(float delta) 
-	{
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
-		
-		///Settings
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
+		Gdx.graphics.setDisplayMode(game.getSize().width,
+				game.getSize().height, game.isFullscreen());
+
+		// /Settings
 		sound.setVolume(game.getMusicVolume());
-		game.setSize(slbResolutions.getSelected().width, slbResolutions.getSelected().height);
-		
-		if(!cbxFullscreen.isChecked() && !Gdx.app.getGraphics().isFullscreen())
-		{
+		game.setSize(slbResolutions.getSelected().width,
+				slbResolutions.getSelected().height);
+
+		if (!cbxFullscreen.isChecked() && !Gdx.app.getGraphics().isFullscreen()) {
 			game.setFullscreen(false);
-			Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, false);
-			resize(game.getSize().width, game.getSize().height); 
-		}
-		else if (!cbxFullscreen.isChecked() && Gdx.app.getGraphics().isFullscreen())
-		{
+			Gdx.graphics.setDisplayMode(game.getSize().width,
+					game.getSize().height, false);
+			resize(game.getSize().width, game.getSize().height);
+		} else if (!cbxFullscreen.isChecked()
+				&& Gdx.app.getGraphics().isFullscreen()) {
 			game.setFullscreen(false);
-			Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, false);
-			resize(game.getSize().width, game.getSize().height); 
-		}
-		else if (cbxFullscreen.isChecked())
-		{
+			Gdx.graphics.setDisplayMode(game.getSize().width,
+					game.getSize().height, false);
+			resize(game.getSize().width, game.getSize().height);
+		} else if (cbxFullscreen.isChecked()) {
 			game.setFullscreen(true);
-			Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, true);
-			resize(game.getSize().width, game.getSize().height); 
+			Gdx.graphics.setDisplayMode(game.getSize().width,
+					game.getSize().height, true);
+			resize(game.getSize().width, game.getSize().height);
 		}
-		
-		///Cursor
+
+		// /Cursor
 		Pixmap pm = new Pixmap(Gdx.files.internal("img/cursor.png"));
 		Gdx.input.setCursorImage(pm, 0, 0);
 		pm.dispose();
-		
-		///Draw Background
+
+		// /Draw Background
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
+		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app
+				.getGraphics().getHeight());
 		batch.end();
-		
-		///Draw Stage
+
+		// /Draw Stage
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
 	}
 
 	@Override
-	public void resize(int width, int height) 
-	{
+	public void resize(int width, int height) {
 		view.update(width, height);
-		camera.setToOrtho(false,width,height);
+		camera.setToOrtho(false, width, height);
 		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
-	public void resume() 
-	{
+	public void resume() {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void show() 
-	{
+	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		
-		///Title
-		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth()/2, Gdx.app.getGraphics().getHeight() - 30);
+
+		// /Title
+		title.setPosition(
+				Gdx.app.getGraphics().getWidth() / 2 - title.getWidth() / 2,
+				Gdx.app.getGraphics().getHeight() - 30);
 		stage.addActor(title);
-		
-		///Widgets Background
-		widgetsBackground.setPosition(Gdx.app.getGraphics().getWidth()/2 - widgetsBackground.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2);
+
+		// /Widgets Background
+		widgetsBackground.setPosition(Gdx.app.getGraphics().getWidth() / 2
+				- widgetsBackground.getWidth() / 2, Gdx.app.getGraphics()
+				.getHeight() / 2 - widgetsBackground.getHeight() / 2);
 		stage.addActor(widgetsBackground);
-		
-		///Back Button
-		btnBack.setWidth(widgetsBackground.getWidth()-20);
-		btnBack.setPosition(Gdx.app.getGraphics().getWidth()/2 - widgetsBackground.getWidth()/2 + 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 30);
-		
-		btnBack.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						effect.play(game.getSoundVolume());
-						game.setScreen(new Options(game, sound, effect));
-						return false;	
-					}
-				}
-				
+
+		// /Back Button
+		btnBack.setWidth(widgetsBackground.getWidth() - 20);
+		btnBack.setPosition(Gdx.app.getGraphics().getWidth() / 2
+				- widgetsBackground.getWidth() / 2 + 10, Gdx.app.getGraphics()
+				.getHeight() / 2 - widgetsBackground.getHeight() / 2 + 30);
+
+		btnBack.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent e, float x, float y,
+					int pointer, int button) {
+				effect.play(game.getSoundVolume());
+				game.setScreen(new Options(game, sound, effect));
+				return false;
+			}
+		}
+
 		);
-		stage.addActor(btnBack);	
-		
-		///Fullscreen CheckBox
-		cbxFullscreen.setPosition(Gdx.app.getGraphics().getWidth()/2 - widgetsBackground.getWidth()/2 + 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 40 + btnBack.getHeight());
-		if(game.isFullscreen())
-		{
+		stage.addActor(btnBack);
+
+		// /Fullscreen CheckBox
+		cbxFullscreen.setPosition(Gdx.app.getGraphics().getWidth() / 2
+				- widgetsBackground.getWidth() / 2 + 10, Gdx.app.getGraphics()
+				.getHeight()
+				/ 2
+				- widgetsBackground.getHeight()
+				/ 2
+				+ 40
+				+ btnBack.getHeight());
+		if (game.isFullscreen()) {
 			cbxFullscreen.setChecked(true);
 		}
 		stage.addActor(cbxFullscreen);
-		
-		///Resolution SelectBox 
-		slbResolutions.setPosition(Gdx.app.getGraphics().getWidth()/2 - widgetsBackground.getWidth()/2 + 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 70 + cbxFullscreen.getHeight());
-		slbResolutions.setWidth(widgetsBackground.getWidth()-20);
-		
+
+		// /Resolution SelectBox
+		slbResolutions.setPosition(Gdx.app.getGraphics().getWidth() / 2
+				- widgetsBackground.getWidth() / 2 + 10, Gdx.app.getGraphics()
+				.getHeight()
+				/ 2
+				- widgetsBackground.getHeight()
+				/ 2
+				+ 70
+				+ cbxFullscreen.getHeight());
+		slbResolutions.setWidth(widgetsBackground.getWidth() - 20);
+
 		TAScreenSize[] sizes = new TAScreenSize[Gdx.graphics.getDisplayModes().length];
 		int i = 0;
-		for (DisplayMode d : Gdx.graphics.getDisplayModes())
-		{
+		for (DisplayMode d : Gdx.graphics.getDisplayModes()) {
 			TAScreenSize screen = new TAScreenSize(d.width, d.height);
 			sizes[i] = screen;
 			i++;
 		}
-		
+
 		Arrays.sort(sizes);
-		
+
 		slbResolutions.setItems(sizes);
-		
+
 		i = 0;
-		while(sizes[i].width != Gdx.app.getGraphics().getWidth() && sizes[i].height != Gdx.app.getGraphics().getHeight() && i < Gdx.graphics.getDisplayModes().length)
-		{
+		while (sizes[i].width != Gdx.app.getGraphics().getWidth()
+				&& sizes[i].height != Gdx.app.getGraphics().getHeight()
+				&& i < Gdx.graphics.getDisplayModes().length) {
 			i++;
 		}
-		
+
 		slbResolutions.setSelectedIndex(i);
-		slbResolutions.addListener
-		(
-			new ChangeListener() 
-			{
-				@Override
-				public void changed (ChangeEvent event, Actor actor) 
-				{
-					System.out.println(slbResolutions.getSelected());
-				}
+		slbResolutions.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				System.out.println(slbResolutions.getSelected());
 			}
-		);
-		
+		});
+
 		stage.addActor(slbResolutions);
-		
-		///Resolution Label 
-		lblResolution.setPosition(Gdx.app.getGraphics().getWidth()/2 - widgetsBackground.getWidth()/2 + 10, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2 + 90 + slbResolutions.getHeight());
+
+		// /Resolution Label
+		lblResolution.setPosition(Gdx.app.getGraphics().getWidth() / 2
+				- widgetsBackground.getWidth() / 2 + 10, Gdx.app.getGraphics()
+				.getHeight()
+				/ 2
+				- widgetsBackground.getHeight()
+				/ 2
+				+ 90
+				+ slbResolutions.getHeight());
 		stage.addActor(lblResolution);
 	}
 }

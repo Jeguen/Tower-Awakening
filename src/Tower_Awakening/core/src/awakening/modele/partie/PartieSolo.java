@@ -4,23 +4,22 @@ import awakening.control.moteur.TAGame;
 import awakening.modele.field.Box;
 import awakening.modele.field.Field;
 
-public class PartieSolo extends Partie{
-	
-	
-	public PartieSolo(TAGame game, Field terrain)
-	{
+public class PartieSolo extends Partie {
+
+	public PartieSolo(TAGame game, Field terrain) {
 		super(game);
 		this.terrain = terrain;
 		terrain.creerPlateau();
-		terrain.getSpawns().add(terrain.getBox().get(99));
-		terrain.getBox().get(99).setFieldType(Box.FIELD_SPAWNS);
-		terrain.getSpawns().add(terrain.getBox().get(3));
-		terrain.getBox().get(3).setFieldType(Box.FIELD_SPAWNS);
-		terrain.getSpawns().add(terrain.getBox().get(50));
-		terrain.getBox().get(50).setFieldType(Box.FIELD_SPAWNS);
-		terrain.getSpawns().add(terrain.getBox().get(120));
-		terrain.getBox().get(120).setFieldType(Box.FIELD_SPAWNS);
-		terrain.setFinishBox(terrain.getBox().get(100));
+		terrain.getSpawns().add(
+				terrain.getBox().get(terrain.getBoxIndexByPosition(200, 200)));
+		terrain.getBox().get(terrain.getBoxIndexByPosition(200, 200))
+				.setFieldType(Box.FIELD_SPAWNS);
+		terrain.getSpawns().add(
+				terrain.getBox().get(terrain.getBoxIndexByPosition(150, 20)));
+		terrain.getBox().get(terrain.getBoxIndexByPosition(150, 20))
+				.setFieldType(Box.FIELD_SPAWNS);
+		terrain.setFinishBox(terrain.getBox().get(
+				terrain.getBoxIndexByPosition(10, 20)));
 		terrain.numeroterDistance(terrain.getFinishBox());
 		moteurJeu.start();
 	}

@@ -2,16 +2,15 @@ package awakening.modele.field;
 
 import awakening.modele.toolshop.tower.Tower;
 
-public class Box
-{
-	public static int getNbCaseCreated()
-	{
+public class Box {
+	public static int getNbCaseCreated() {
 		return nbCaseCreated;
 	}
-	public static void setNbCaseCreated(int nbCaseCreated)
-	{
+
+	public static void setNbCaseCreated(int nbCaseCreated) {
 		Box.nbCaseCreated = nbCaseCreated;
 	}
+
 	// **************************************
 	// ************** VARIABLES *************
 	// **************************************
@@ -41,18 +40,17 @@ public class Box
 	// Total of tower which can target this box
 	private int nbTargeted;
 	// To know if we can take this box
-	private boolean isFree=true;
+	private boolean isFree = true;
+
 	// *****************************************
 	// ************** CONSTRUCTORS *************
 	// *****************************************
-	public Box(int x, int y, int[] arrayX, int[] arrayY)
-	{
+	public Box(int x, int y, int[] arrayX, int[] arrayY) {
 		this.id = nbCaseCreated + 1;
 		this.coordX = x;
 		this.coordY = y;
 		// Copy of both array
-		for (int i = 0; i < 6; i++)
-		{
+		for (int i = 0; i < 6; i++) {
 			this.tabCoordX[i] = arrayX[i];
 			this.tabCoordY[i] = arrayY[i];
 		}
@@ -61,98 +59,100 @@ public class Box
 		// As default, a box has a standard handicap : 1
 		this.handicap = 1.2f;
 		// As default, a box is no targeted
-		this.nbTargeted=0;
+		this.nbTargeted = 0;
 	}
-	public int getCoordX()
-	{
+
+	public int getCoordX() {
 		return coordX;
 	}
-	public int getCoordY()
-	{
+
+	public int getCoordY() {
 		return coordY;
 	}
-	public int getFieldType()
-	{
+
+	public int getFieldType() {
 		return fieldType;
 	}
-	public float getHandicap()
-	{
+
+	public float getHandicap() {
 		return handicap;
 	}
+
 	// *****************************************
 	// ********** GETTERS & SETTERS ************
 	// *****************************************
-	public int getID()
-	{
+	public int getID() {
 		return id;
 	}
-	public int getNbTargeted()
-	{
-		return  nbTargeted;
+
+	public int getNbTargeted() {
+		return nbTargeted;
 	}
-	public int getRange()
-	{
+
+	public int getRange() {
 		return range;
 	}
-	public int[] getTabCoordX()
-	{
+
+	public int[] getTabCoordX() {
 		return tabCoordX;
 	}
-	public int[] getTabCoordY()
-	{
+
+	public int[] getTabCoordY() {
 		return tabCoordY;
 	}
-	public Tower getTower()
-	{
+
+	public Tower getTower() {
 		return tower;
 	}
-	public boolean isFree(){
+
+	public boolean isFree() {
 		return isFree;
 	}
-	public void setCoordX(int coordX)
-	{
+
+	public void setCoordX(int coordX) {
 		this.coordX = coordX;
 	}
-	public void setCoordY(int coordY)
-	{
+
+	public void setCoordY(int coordY) {
 		this.coordY = coordY;
 	}
-	public void setFieldType(int fieldType)
-	{
+
+	public void setFieldType(int fieldType) {
 		this.fieldType = fieldType;
-		if(fieldType==FIELD_SPAWNS) isFree=false;
+		if (fieldType == FIELD_SPAWNS)
+			isFree = false;
 	}
-	public void setFree(boolean free)
-	{
-		this.isFree=free;
+
+	public void setFree(boolean free) {
+		this.isFree = free;
 	}
-	public void setHandicap(float handicap)
-	{
+
+	public void setHandicap(float handicap) {
 		this.handicap = handicap;
 	}
-	public void setID(int id)
-	{
+
+	public void setID(int id) {
 		this.id = id;
 	}
-	public void setNbTargeted(int nbTargeted)
-	{
-		this.nbTargeted=nbTargeted;
+
+	public void setNbTargeted(int nbTargeted) {
+		this.nbTargeted = nbTargeted;
 	}
-	public void setRange(int range)
-	{
+
+	public void setRange(int range) {
 		this.range = range;
 	}
-	public void setTabCoordX(int[] tabCoordX)
-	{
+
+	public void setTabCoordX(int[] tabCoordX) {
 		this.tabCoordX = tabCoordX;
 	}
-	public void setTabCoordY(int[] tabCoordY)
-	{
+
+	public void setTabCoordY(int[] tabCoordY) {
 		this.tabCoordY = tabCoordY;
 	}
-	public void setTower(Tower tower)
-	{
+
+	public void setTower(Tower tower) {
 		this.tower = tower;
-		isFree=false;
+		isFree = false;
 	}
 }

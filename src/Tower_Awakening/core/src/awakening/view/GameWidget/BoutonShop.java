@@ -10,85 +10,85 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-
 /**
  * Class derived from Button of libgdx which is design for the ToolShop
+ * 
  * @author S Firegreen
  */
-public class BoutonShop extends Button implements OnHoverableWidget{
+public class BoutonShop extends Button implements OnHoverableWidget {
 
 	private Texture textureNormal;
 	private Texture textureHover;
 	private boolean isOnHover;
-	
-	/** 
-	 * Initialize the design of the button with the image of the Tower which is selected
+
+	/**
+	 * Initialize the design of the button with the image of the Tower which is
+	 * selected
+	 * 
 	 * @param imageTour
 	 * @param width
 	 * @param height
 	 */
-	public BoutonShop(Texture imageTour, float width, float height) 
-	{
-		super(
-				new TextureRegionDrawable(new TextureRegion(imageTour,0,0,imageTour.getWidth(), imageTour.getHeight()))
-			 );
+	public BoutonShop(Texture imageTour, float width, float height) {
+		super(new TextureRegionDrawable(new TextureRegion(imageTour, 0, 0,
+				imageTour.getWidth(), imageTour.getHeight())));
 		this.setWidth(width);
 		this.setHeight(height);
-		Pixmap pixmap = new Pixmap((int)width, (int)height, Format.RGBA4444 );
-		for(int i = 0; i<10;i++)
-		{
-			float color = (float)i/15+0.2f;
+		Pixmap pixmap = new Pixmap((int) width, (int) height, Format.RGBA4444);
+		for (int i = 0; i < 10; i++) {
+			float color = (float) i / 15 + 0.2f;
 			pixmap.setColor(color, color, color, 1);
-			pixmap.drawRectangle(i, i, pixmap.getWidth()-i*2, pixmap.getHeight()-i*2);
+			pixmap.drawRectangle(i, i, pixmap.getWidth() - i * 2,
+					pixmap.getHeight() - i * 2);
 		}
-		textureNormal = new Texture( pixmap );
+		textureNormal = new Texture(pixmap);
 		pixmap.dispose();
-		pixmap = new Pixmap((int)width, (int)height, Format.RGBA4444 );
-		for(int i = 0; i<10;i++)
-		{
-			float color = (float)i/15+0.2f;
-			pixmap.setColor(color+0.3f, color+0.3f, 0.1f, 1);
-			pixmap.drawRectangle(i, i, pixmap.getWidth()-i*2, pixmap.getHeight()-i*2);
+		pixmap = new Pixmap((int) width, (int) height, Format.RGBA4444);
+		for (int i = 0; i < 10; i++) {
+			float color = (float) i / 15 + 0.2f;
+			pixmap.setColor(color + 0.3f, color + 0.3f, 0.1f, 1);
+			pixmap.drawRectangle(i, i, pixmap.getWidth() - i * 2,
+					pixmap.getHeight() - i * 2);
 		}
-		textureHover = new Texture( pixmap );
+		textureHover = new Texture(pixmap);
 		pixmap.dispose();
 	}
-	
+
 	/**
 	 * Draw the button by using a Batch and according the state of the button
 	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		if(isVisible())
-		{
-		if(isOnHover)
-			batch.draw(textureHover, this.getX(), this .getY(),
-				this.getWidth(),this.getHeight());
-		else
-			batch.draw(textureNormal, this.getX(), this .getY(),
-				this.getWidth(),this.getHeight());
-		batch.draw(((TextureRegionDrawable)this.getStyle().up).getRegion()
-				, this.getX() + 10, this .getY() + 10, this.getWidth()-20,this.getHeight()-20);
+		if (isVisible()) {
+			if (isOnHover)
+				batch.draw(textureHover, this.getX(), this.getY(),
+						this.getWidth(), this.getHeight());
+			else
+				batch.draw(textureNormal, this.getX(), this.getY(),
+						this.getWidth(), this.getHeight());
+			batch.draw(
+					((TextureRegionDrawable) this.getStyle().up).getRegion(),
+					this.getX() + 10, this.getY() + 10, this.getWidth() - 20,
+					this.getHeight() - 20);
 		}
 	}
-	
 
 	@Override
-	public void onExitAction()
-	{
-		isOnHover=false;
+	public void onExitAction() {
+		isOnHover = false;
 	}
+
 	@Override
-	public void onHoverAction()
-	{
-		isOnHover=true;
+	public void onHoverAction() {
+		isOnHover = true;
 	}
+
 	@Override
 	public boolean testMousePosition(Vector2 mousePosition) {
 		float deltaX = mousePosition.x - this.getX();
-		float deltaY = Gdx.graphics.getHeight() - mousePosition.y - this.getY() ;
+		float deltaY = Gdx.graphics.getHeight() - mousePosition.y - this.getY();
 		return deltaX < this.getHeight() && deltaY < this.getWidth()
-				&& deltaX > 0 && deltaY > 0;		
+				&& deltaX > 0 && deltaY > 0;
 	}
 
 }

@@ -1,23 +1,22 @@
- // Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
- 
- // Licensed under the Apache License, Version 2.0 (the "License");
- // you may not use this file except in compliance with the License.
- // You may obtain a copy of the License at
- // 
- // http://www.apache.org/licenses/LICENSE-2.0
- // 
- // Unless required by applicable law or agreed to in writing, software
- // distributed under the License is distributed on an "AS IS" BASIS,
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
+// Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package awakening.control.moteur;
- 
+
 import awakening.view.menu.MainMenu;
 
 import com.badlogic.gdx.Game;
-
 
 /**
  * TAGame
@@ -26,31 +25,28 @@ import com.badlogic.gdx.Game;
  *
  */
 public class TAGame extends Game {
- 
+
 	private Settings setting;
-	
+
 	/**
 	 * Constructor
 	 */
-	public TAGame()
-	{
+	public TAGame() {
 		super();
 		setting = new Settings();
 	}
-	
-    @Override
-    public void create() 
-    {
-    	setScreen(new MainMenu(this));
-    }
 
-    /**
+	@Override
+	public void create() {
+		setScreen(new MainMenu(this));
+	}
+
+	/**
 	 * Get Down key
 	 * 
 	 * @return Down key
 	 */
-	public int getDown() 
-	{
+	public int getDown() {
 		return setting.getDown();
 	}
 
@@ -59,8 +55,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Down key's name
 	 */
-	public String getDownKey() 
-	{
+	public String getDownKey() {
 		return setting.getDownKey();
 	}
 
@@ -69,8 +64,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Language
 	 */
-	public String getLanguage() 
-	{
+	public String getLanguage() {
 		return setting.getLanguage();
 	}
 
@@ -79,8 +73,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Left key
 	 */
-	public int getLeft() 
-	{
+	public int getLeft() {
 		return setting.getLeft();
 	}
 
@@ -89,8 +82,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Left key's name
 	 */
-	public String getLeftKey() 
-	{
+	public String getLeftKey() {
 		return setting.getLeftKey();
 	}
 
@@ -99,29 +91,25 @@ public class TAGame extends Game {
 	 * 
 	 * @return Volume
 	 */
-	public float getMusicVolume() 
-	{
+	public float getMusicVolume() {
 		return setting.getMusicVolume();
 	}
-
 
 	/**
 	 * Get Right key
 	 * 
 	 * @return Right key
 	 */
-	public int getRight() 
-	{
+	public int getRight() {
 		return setting.getRight();
 	}
-	
+
 	/**
 	 * Get Right key's name
 	 * 
 	 * @return Right key's name
 	 */
-	public String getRightKey() 
-	{
+	public String getRightKey() {
 		return setting.getRightKey();
 	}
 
@@ -130,8 +118,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Screen size
 	 */
-	public TAScreenSize getSize() 
-	{
+	public TAScreenSize getSize() {
 		return setting.getSize();
 	}
 
@@ -140,8 +127,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Volume
 	 */
-	public float getSoundVolume() 
-	{
+	public float getSoundVolume() {
 		return setting.getSoundVolume();
 	}
 
@@ -150,8 +136,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Up key
 	 */
-	public int getUp() 
-	{
+	public int getUp() {
 		return setting.getUp();
 	}
 
@@ -160,8 +145,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Up key's name
 	 */
-	public String getUpKey() 
-	{
+	public String getUpKey() {
 		return setting.getUpKey();
 	}
 
@@ -170,8 +154,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Zoom In key
 	 */
-	public int getZoomIn() 
-	{
+	public int getZoomIn() {
 		return setting.getZoomIn();
 	}
 
@@ -180,8 +163,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Screen size
 	 */
-	public String getZoomInKey() 
-	{
+	public String getZoomInKey() {
 		return setting.getZoomInKey();
 	}
 
@@ -190,8 +172,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Zoom Out key
 	 */
-	public int getZoomOut() 
-	{
+	public int getZoomOut() {
 		return setting.getZoomOut();
 	}
 
@@ -200,8 +181,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return Zoom Out key's name
 	 */
-	public String getZoomOutKey() 
-	{
+	public String getZoomOutKey() {
 		return setting.getZoomOutKey();
 	}
 
@@ -210,8 +190,7 @@ public class TAGame extends Game {
 	 * 
 	 * @return True if is fullscreen, false otherwhise
 	 */
-	public boolean isFullscreen() 
-	{
+	public boolean isFullscreen() {
 		return setting.isFullscreen();
 	}
 
@@ -220,18 +199,16 @@ public class TAGame extends Game {
 	 * 
 	 * @param down
 	 */
-	public void setDown(int down) 
-	{
+	public void setDown(int down) {
 		setting.setDown(down);
 	}
-	
+
 	/**
 	 * Set Down key's name
 	 * 
 	 * @param downKey
 	 */
-	public void setDownKey(String downKey) 
-	{
+	public void setDownKey(String downKey) {
 		setting.setDownKey(downKey);
 	}
 
@@ -240,8 +217,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param fullscreen
 	 */
-	public void setFullscreen(boolean fullscreen) 
-	{
+	public void setFullscreen(boolean fullscreen) {
 		setting.setFullscreen(fullscreen);
 	}
 
@@ -250,8 +226,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param language
 	 */
-	public void setLanguage(String language) 
-	{
+	public void setLanguage(String language) {
 		setting.setLanguage(language);
 	}
 
@@ -260,8 +235,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param left
 	 */
-	public void setLeft(int left) 
-	{
+	public void setLeft(int left) {
 		setting.setLeft(left);
 	}
 
@@ -270,8 +244,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param leftKey
 	 */
-	public void setLeftKey(String leftKey) 
-	{
+	public void setLeftKey(String leftKey) {
 		setting.setLeftKey(leftKey);
 	}
 
@@ -280,8 +253,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param Volume
 	 */
-	public void setMusicVolume(float musicVolume) 
-	{
+	public void setMusicVolume(float musicVolume) {
 		setting.setMusicVolume(musicVolume);
 	}
 
@@ -290,8 +262,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param right
 	 */
-	public void setRight(int right)
-	{
+	public void setRight(int right) {
 		setting.setRight(right);
 	}
 
@@ -300,8 +271,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param rightKey
 	 */
-	public void setRightKey(String rightKey) 
-	{
+	public void setRightKey(String rightKey) {
 		setting.setRightKey(rightKey);
 	}
 
@@ -311,9 +281,8 @@ public class TAGame extends Game {
 	 * @param w
 	 * @param h
 	 */
-	public void setSize(int w, int h) 
-	{
-		setting.setSize(new TAScreenSize(w,h));
+	public void setSize(int w, int h) {
+		setting.setSize(new TAScreenSize(w, h));
 	}
 
 	/**
@@ -321,19 +290,19 @@ public class TAGame extends Game {
 	 * 
 	 * @param size
 	 */
-	public void setSize(TAScreenSize size) 
-	{
+	public void setSize(TAScreenSize size) {
 		setting.setSize(size);
 	}
 
 	/**
 	 * Set the effect sounds volume
 	 * 
-	 * @param soundVolume volume
+	 * @param soundVolume
+	 *            volume
 	 */
-	public void setSoundVolume(float soundVolume) 
-	{
-		setting.setSoundVolume(soundVolume);;
+	public void setSoundVolume(float soundVolume) {
+		setting.setSoundVolume(soundVolume);
+		;
 	}
 
 	/**
@@ -341,8 +310,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param up
 	 */
-	public void setUp(int up) 
-	{
+	public void setUp(int up) {
 		setting.setUp(up);
 	}
 
@@ -351,8 +319,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param upKey
 	 */
-	public void setUpKey(String upKey) 
-	{
+	public void setUpKey(String upKey) {
 		setting.setUpKey(upKey);
 	}
 
@@ -361,8 +328,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param zoomIn
 	 */
-	public void setZoomIn(int zoomIn) 
-	{
+	public void setZoomIn(int zoomIn) {
 		setting.setZoomIn(zoomIn);
 	}
 
@@ -371,8 +337,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param zoomInKey
 	 */
-	public void setZoomInKey(String zoomInKey) 
-	{
+	public void setZoomInKey(String zoomInKey) {
 		setting.setZoomInKey(zoomInKey);
 	}
 
@@ -381,8 +346,7 @@ public class TAGame extends Game {
 	 * 
 	 * @param zoomOut
 	 */
-	public void setZoomOut(int zoomOut) 
-	{
+	public void setZoomOut(int zoomOut) {
 		setting.setZoomOut(zoomOut);
 	}
 
@@ -391,9 +355,8 @@ public class TAGame extends Game {
 	 * 
 	 * @param zoomOutKey
 	 */
-	public void setZoomOutKey(String zoomOutKey) 
-	{
+	public void setZoomOutKey(String zoomOutKey) {
 		setting.setZoomOutKey(zoomOutKey);
 	}
-	
+
 }

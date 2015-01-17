@@ -1,17 +1,17 @@
- // Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
- // Copyright © 2014, 2015 Swamynathan Candassamy, swamynathan.candassamy@u-psud.fr
- 
- // Licensed under the Apache License, Version 2.0 (the "License");
- // you may not use this file except in compliance with the License.
- // You may obtain a copy of the License at
- // 
- // http://www.apache.org/licenses/LICENSE-2.0
- // 
- // Unless required by applicable law or agreed to in writing, software
- // distributed under the License is distributed on an "AS IS" BASIS,
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
+// Copyright © 2014, 2015 Rodolphe Cargnello, rodolphe.cargnello@gmail.com
+// Copyright © 2014, 2015 Swamynathan Candassamy, swamynathan.candassamy@u-psud.fr
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 package awakening.view.menu;
 
@@ -58,23 +58,22 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  * @author Jeguen
  *
  */
-public class WaitingRoomClient implements Screen
-{
-	///Game
+public class WaitingRoomClient implements Screen {
+	// /Game
 	private TAGame game;
 	private Music sound;
-	private Sound effect;	
-	private Locale[] locales = {Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN};
+	private Sound effect;
+	private Locale[] locales = { Locale.ENGLISH, Locale.FRENCH, Locale.ITALIAN };
 	private ResourceBundle language;
-	
-	///Stage
+
+	// /Stage
 	private Stage stage;
 	private SpriteBatch batch;
 	private Texture background;
 	private OrthographicCamera camera;
 	private StretchViewport view;
-	
-	///Widgets
+
+	// /Widgets
 	private Image widgetsBackground;
 	private Label title;
 	private Skin skin;
@@ -83,134 +82,122 @@ public class WaitingRoomClient implements Screen
 	private ScrollPane scroll;
 	private TextField message;
 	private TextButton btnSend;
-	
+
 	private Socket socket;
-	
+
 	private BufferedReader input;
 	private PrintWriter output;
-	
+
 	private Thread th1;
-	
+
 	/**
 	 * Constructor
 	 * 
-	 * @param game Tower Awakening's Game
-	 * @param sound Main menu's music
-	 * @param effect Button's effect
+	 * @param game
+	 *            Tower Awakening's Game
+	 * @param sound
+	 *            Main menu's music
+	 * @param effect
+	 *            Button's effect
 	 */
-	public WaitingRoomClient(TAGame game, Music sound, Sound effect)
-	{
+	public WaitingRoomClient(TAGame game, Music sound, Sound effect) {
 		this.game = game;
 		this.sound = sound;
 		this.effect = effect;
-		
-		try 
-		{
+
+		try {
 			socket = new Socket(InetAddress.getByName(null), 1134);
-			input = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
-	    	output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-		} 
-		catch (Exception e1) 
-		{
+			input = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+			output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+					socket.getOutputStream())), true);
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		} 
-		
-		th1 = new Thread
-				(
-						new Runnable() 
-						{
-							@Override
-							public void run() 
-							{
-							    try 
-							    {
-							    	while(true)
-							    	{
-							    		String messagePlayer = input.readLine();
-							    		if (messagePlayer != null)
-							    		{
-							    			TextArea t = new TextArea(messagePlayer,skin); 
-											t.setTouchable(Touchable.disabled);
-											chatBox.row();
-											chatBox.add(t).height(75).width(500);
-							    		}
-							    	}
-								} 
-							    catch (IOException e)
-							    {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}			
-							}		
-						}
-				);
-		th1.start();
-		
-		stage = new Stage();
-		
-		try
-		{
-			if(game.getLanguage().equals("ENGLISH"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_en_EN", locales[0]);
-			}
-			else if (game.getLanguage().equals("FRENCH"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_fr_FR", locales[1]);
-			}
-			else if (game.getLanguage().equals("ITALIAN"))
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res_it_IT", locales[2]);
-			}
-			else
-			{
-				language = ResourceBundle.getBundle("awakening.view.menu.res", locales[0]);
-			}
 		}
-		catch(java.util.MissingResourceException e)
-		{
+
+		th1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					while (true) {
+						String messagePlayer = input.readLine();
+						if (messagePlayer != null) {
+							TextArea t = new TextArea(messagePlayer, skin);
+							t.setTouchable(Touchable.disabled);
+							chatBox.row();
+							chatBox.add(t).height(75).width(500);
+						}
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		th1.start();
+
+		stage = new Stage();
+
+		try {
+			if (game.getLanguage().equals("ENGLISH")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_en_EN", locales[0]);
+			} else if (game.getLanguage().equals("FRENCH")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_fr_FR", locales[1]);
+			} else if (game.getLanguage().equals("ITALIAN")) {
+				language = ResourceBundle.getBundle(
+						"awakening.view.menu.res_it_IT", locales[2]);
+			} else {
+				language = ResourceBundle.getBundle("awakening.view.menu.res",
+						locales[0]);
+			}
+		} catch (java.util.MissingResourceException e) {
 			System.out.println("yolo");
 		}
-		
-		///Viewport
-		camera=new OrthographicCamera();
-		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getWidth(), camera);
-		
-		///Background
-		background = new Texture(Gdx.files.internal("img/menu/Background-2.png"));
+
+		// /Viewport
+		camera = new OrthographicCamera();
+		view = new StretchViewport(Gdx.app.getGraphics().getWidth(), Gdx.app
+				.getGraphics().getWidth(), camera);
+
+		// /Background
+		background = new Texture(
+				Gdx.files.internal("img/menu/Background-2.png"));
 		batch = new SpriteBatch();
-		
-		///Skin
+
+		// /Skin
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		
-		///Title
+
+		// /Title
 		title = new Label(language.getString("label_waiting_room"), skin);
-		
-		///Widgets Background
-		widgetsBackground = new Image(new Texture(Gdx.files.internal("img/widget/window_selection.png")));
-		widgetsBackground.setSize(Gdx.app.getGraphics().getWidth() - Gdx.app.getGraphics().getWidth()/8, Gdx.app.getGraphics().getHeight() - Gdx.app.getGraphics().getHeight()/8);
-		
-		///Back Button
+
+		// /Widgets Background
+		widgetsBackground = new Image(new Texture(
+				Gdx.files.internal("img/widget/window_selection.png")));
+		widgetsBackground.setSize(Gdx.app.getGraphics().getWidth()
+				- Gdx.app.getGraphics().getWidth() / 8, Gdx.app.getGraphics()
+				.getHeight() - Gdx.app.getGraphics().getHeight() / 8);
+
+		// /Back Button
 		btnBack = new TextButton(language.getString("button_back"), skin);
-		
-		
-		///ChatBox
+
+		// /ChatBox
 		chatBox = new Table();
 		scroll = new ScrollPane(chatBox);
 		scroll.setForceScroll(false, true);
 		scroll.setFlickScroll(true);
 		scroll.setOverscroll(false, false);
-		
-		///Message
+
+		// /Message
 		message = new TextField("", skin);
-		btnSend = new TextButton(language.getString("button_send"),skin);
-		
+		btnSend = new TextButton(language.getString("button_send"), skin);
+
 	}
-	
+
 	@Override
-	public void dispose() 
-	{
+	public void dispose() {
 		th1.interrupt();
 		stage.dispose();
 		skin.dispose();
@@ -220,130 +207,130 @@ public class WaitingRoomClient implements Screen
 	}
 
 	@Override
-	public void hide() 
-	{
+	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void pause() 
-	{
+	public void pause() {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void render(float delta) 
-	{
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.graphics.setDisplayMode(game.getSize().width, game.getSize().height, game.isFullscreen());
-		
-		///Settings
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
+		Gdx.graphics.setDisplayMode(game.getSize().width,
+				game.getSize().height, game.isFullscreen());
+
+		// /Settings
 		effect.setVolume(0, game.getSoundVolume());
 		sound.setVolume(game.getMusicVolume());
-		
-		///Cursor
+
+		// /Cursor
 		Pixmap pm = new Pixmap(Gdx.files.internal("img/cursor.png"));
 		Gdx.input.setCursorImage(pm, 0, 0);
 		pm.dispose();
-		
-		///Draw Background
+
+		// /Draw Background
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
+		batch.draw(background, 0, 0, Gdx.app.getGraphics().getWidth(), Gdx.app
+				.getGraphics().getHeight());
 		batch.end();
-		
-		///Draw Stage
+
+		// /Draw Stage
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
 	}
 
 	@Override
-	public void resize(int width, int height) 
-	{
+	public void resize(int width, int height) {
 		view.update(width, height);
-		camera.setToOrtho(false,width,height);
+		camera.setToOrtho(false, width, height);
 		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
-	public void resume() 
-	{
+	public void resume() {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void show() 
-	{
+	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		
-		///Title
-		title.setPosition(Gdx.app.getGraphics().getWidth()/2 - title.getWidth()/2, Gdx.app.getGraphics().getHeight() - 30);
+
+		// /Title
+		title.setPosition(
+				Gdx.app.getGraphics().getWidth() / 2 - title.getWidth() / 2,
+				Gdx.app.getGraphics().getHeight() - 30);
 		stage.addActor(title);
-		
-		///Widgets Background
-		widgetsBackground.setPosition(Gdx.app.getGraphics().getWidth()/2 - widgetsBackground.getWidth()/2, Gdx.app.getGraphics().getHeight()/2 - widgetsBackground.getHeight()/2);
+
+		// /Widgets Background
+		widgetsBackground.setPosition(Gdx.app.getGraphics().getWidth() / 2
+				- widgetsBackground.getWidth() / 2, Gdx.app.getGraphics()
+				.getHeight() / 2 - widgetsBackground.getHeight() / 2);
 		stage.addActor(widgetsBackground);
-		
-		///Back Button
+
+		// /Back Button
 		btnBack.setWidth(100);
-		btnBack.setPosition(Gdx.app.getGraphics().getWidth()/2 - btnBack.getWidth()/2, Gdx.app.getGraphics().getHeight() - widgetsBackground.getHeight() + 10);
-		
-		btnBack.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						effect.play(game.getSoundVolume());
-						th1.interrupt();
-						game.setScreen(new MainMenu(game, sound, effect));
-						return false;	
-					}
-				}
-		);
+		btnBack.setPosition(
+				Gdx.app.getGraphics().getWidth() / 2 - btnBack.getWidth() / 2,
+				Gdx.app.getGraphics().getHeight()
+						- widgetsBackground.getHeight() + 10);
+
+		btnBack.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent e, float x, float y,
+					int pointer, int button) {
+				effect.play(game.getSoundVolume());
+				th1.interrupt();
+				game.setScreen(new MainMenu(game, sound, effect));
+				return false;
+			}
+		});
 		stage.addActor(btnBack);
-		
+
 		stage.addActor(btnSend);
 		stage.addActor(message);
-		scroll.setSize(widgetsBackground.getWidth() - ((1/8)*widgetsBackground.getWidth()), widgetsBackground.getHeight() - widgetsBackground.getHeight()/2);
-		scroll.setPosition(Gdx.app.getGraphics().getWidth()/2 - scroll.getWidth()/2, Gdx.app.getGraphics().getHeight()/2  - scroll.getHeight()/2);
+		scroll.setSize(widgetsBackground.getWidth()
+				- ((1 / 8) * widgetsBackground.getWidth()),
+				widgetsBackground.getHeight() - widgetsBackground.getHeight()
+						/ 2);
+		scroll.setPosition(
+				Gdx.app.getGraphics().getWidth() / 2 - scroll.getWidth() / 2,
+				Gdx.app.getGraphics().getHeight() / 2 - scroll.getHeight() / 2);
 		stage.addActor(scroll);
-		
-btnSend.setPosition(500, 30);
-		
-		message.setPosition(btnBack.getX() -message.getWidth()/2, btnBack.getY()+ btnBack.getHeight() + 5);
+
+		btnSend.setPosition(500, 30);
+
+		message.setPosition(btnBack.getX() - message.getWidth() / 2,
+				btnBack.getY() + btnBack.getHeight() + 5);
 		btnSend.setWidth(100);
-		btnSend.setPosition(message.getX()+message.getWidth(), message.getY());
-		btnSend.addListener
-		(
-				new ClickListener() 
-				{
-					@Override
-					public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
-					{
-						if (!message.getText().equals(""))
-						{
-							TextArea t = new TextArea("Client : " + message.getText(),skin); 
-							t.setTouchable(Touchable.disabled);
-							
-							chatBox.row();
-							chatBox.add(t).height(75).width(500);
-							if(output != null)
-							{
-								output.println(t.getText());
-							}
-							message.setText("");
-						}
-						
-						return false;	
+		btnSend.setPosition(message.getX() + message.getWidth(), message.getY());
+		btnSend.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent e, float x, float y,
+					int pointer, int button) {
+				if (!message.getText().equals("")) {
+					TextArea t = new TextArea("Client : " + message.getText(),
+							skin);
+					t.setTouchable(Touchable.disabled);
+
+					chatBox.row();
+					chatBox.add(t).height(75).width(500);
+					if (output != null) {
+						output.println(t.getText());
 					}
+					message.setText("");
 				}
-		);
-		
-		
+
+				return false;
+			}
+		});
+
 	}
 }

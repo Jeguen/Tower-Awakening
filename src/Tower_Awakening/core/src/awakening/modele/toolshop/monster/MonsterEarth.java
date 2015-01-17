@@ -4,71 +4,59 @@ import java.io.File;
 
 import ta.shape3D.mesh.MeshTA;
 
+public class MonsterEarth extends Monster {
 
-public class MonsterEarth extends Monster
-{
-	
-	public MonsterEarth(int id, int lifePoint, String name, float speedAttack, float vitesseDeplacement, boolean visible, String facSheet,
-	            float buildCost, int gainGold, int damage)
-	{
-		super(id, lifePoint, name, speedAttack, vitesseDeplacement, visible, facSheet, buildCost, gainGold, damage);
+	public MonsterEarth(int id, int lifePoint, String name, float speedAttack,
+			float vitesseDeplacement, boolean visible, String facSheet,
+			float buildCost, int gainGold, int damage) {
+		super(id, lifePoint, name, speedAttack, vitesseDeplacement, visible,
+				facSheet, buildCost, gainGold, damage);
 	}
-	public MonsterEarth(MeshTA m)
-	{
+
+	public MonsterEarth(MeshTA m) {
 		super(m);
 	}
-	public MonsterEarth(String string)
-	{
+
+	public MonsterEarth(String string) {
 		super();
 		this.load(new File(string));
 	}
-	
+
 	public MonsterEarth() {
 		super();
 	}
-	
+
 	@Override
-	public void crazyMove()
-	{
+	public void crazyMove() {
 	}
-	
+
 	@Override
-	public void normalMove()
-	{
+	public void normalMove() {
 		float deltaX = Math.abs(getX() - path.get(boxDestination).getCoordX());
 		float deltaY = Math.abs(getZ() - path.get(boxDestination).getCoordY());
-		if(deltaX * deltaX + deltaY * deltaY <0.2f)
-		{
-			this.setAbsolutePosition(path.get(boxDestination).getCoordX(), 0, path.get(boxDestination).getCoordY());
-			if(boxDestination<path.size()-1)
-			{
+		if (deltaX * deltaX + deltaY * deltaY < 0.2f) {
+			this.setAbsolutePosition(path.get(boxDestination).getCoordX(), 0,
+					path.get(boxDestination).getCoordY());
+			if (boxDestination < path.size() - 1) {
 				setActualBox(path.get(boxDestination));
 				boxDestination++;
-				System.out.println("boxActuel : " + boxActuel.getCoordX() + " " + boxActuel.getCoordY());
+				System.out.println("boxActuel : " + boxActuel.getCoordX() + " "
+						+ boxActuel.getCoordY());
 
 				dx = (path.get(boxDestination).getCoordX() - this.getX()) / 100f;
 				dy = (path.get(boxDestination).getCoordY() - this.getZ()) / 100f;
+			} else {
+				isArrived = true;
 			}
-			else 
-			{
-				isArrived=true;
-			}
-		}
-		else if(boxDestination>0)
-		{
+		} else if (boxDestination > 0) {
 			this.translate(dx, 0, dy);
-		}
-		else
-		{
-			if(path.size()>1)
-			{
+		} else {
+			if (path.size() > 1) {
 				boxDestination++;
 				dx = (path.get(boxDestination).getCoordX() - this.getX()) / 100f;
 				dy = (path.get(boxDestination).getCoordY() - this.getZ()) / 100f;
-			}
-			else 
-			{
-				isArrived=true;
+			} else {
+				isArrived = true;
 			}
 		}
 	}

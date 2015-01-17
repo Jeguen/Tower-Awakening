@@ -6,7 +6,7 @@ public class PartieMulti extends Partie {
 
 	public PartieMulti(TAGame game) {
 		super(game);
-	
+
 	}
 
 }
